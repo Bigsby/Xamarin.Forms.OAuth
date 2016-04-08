@@ -1,5 +1,4 @@
-﻿using System;
-using Xamarin.Forms.OAuth.ViewModels;
+﻿using Xamarin.Forms.OAuth.ViewModels;
 
 namespace Xamarin.Forms.OAuth
 {
