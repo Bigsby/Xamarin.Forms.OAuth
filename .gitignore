@@ -234,3 +234,6 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+# Allow for local config with keys, connection string, etc.
+*local.config
