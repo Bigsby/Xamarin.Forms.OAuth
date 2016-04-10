@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Xamarin.Forms.OAuth
+namespace Xamarin.Forms.OAuth.Views
 {
     internal class WebOAuthPage : ContentPage
     {

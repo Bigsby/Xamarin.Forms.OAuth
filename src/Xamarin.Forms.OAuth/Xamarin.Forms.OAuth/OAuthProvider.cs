@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using Xamarin.Forms.OAuth.Providers;
 
@@ -13,10 +14,25 @@ namespace Xamarin.Forms.OAuth
             RedirectUrl = redirectUrl;
         }
 
+        public const string NameProperty = "Name";
+        public const string LogoProperty = "Logo";
+        public abstract string Name { get; }
+        public virtual ImageSource Logo
+        {
+            get
+            {
+                var size = Device.GetNamedSize(NamedSize.Large, new Label());
+                return ImageSource.FromResource(
+                    typeof(OAuthProvider).GetTypeInfo().Assembly.GetName().Name 
+                    + 
+                    $".Providers.Logos.{Name}{size}x{size}.png");
+            }
+        }
+
         protected string ClientId { get; private set; }
         internal string RedirectUrl { get; private set; }
 
-        internal virtual string RetrieveTõken(string url)
+        internal virtual string RetrieveToken(string url)
         {
             var match = TokenExpression.Match(url);
 
@@ -35,7 +51,7 @@ namespace Xamarin.Forms.OAuth
 
         protected abstract string AuthoizationUrl { get; }
         protected abstract string GraphUrl { get; }
-        public abstract string Name { get; }
+
         internal virtual string IdPropertyName { get { return "id"; } }
         internal virtual string NamePropertyName { get { return "name"; } }
 

@@ -9,11 +9,17 @@ namespace OAuthTestApp
         {
             Content = new Button {
                 Text = "Authenticate",
+                VerticalOptions = LayoutOptions.Center,
+                HorizontalOptions = LayoutOptions.Center,
                 Command = new Command(async () => HandleResult(await OAuthAuthenticator.Authenticate()))
             };
         }
 
         private void HandleResult(AuthenticatonResult result)
-        { }
+        {
+            Device.BeginInvokeOnMainThread(() => Application.Current.MainPage = new ResultPage(
+                result.Account,
+                async () => HandleResult(await OAuthAuthenticator.Authenticate())));
+        }
     }
 }

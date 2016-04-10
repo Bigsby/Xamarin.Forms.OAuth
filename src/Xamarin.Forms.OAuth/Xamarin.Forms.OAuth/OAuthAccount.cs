@@ -7,6 +7,7 @@
             Id = id;
             DisplayName = displayName;
             Provider = provider;
+            AccessToken = token;
         }
 
         public string Id { get; private set; }

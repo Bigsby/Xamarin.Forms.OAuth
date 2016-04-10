@@ -1,0 +1,14 @@
+﻿{
+  /* To uses this test app set this values and rename the file to KeysLocal.json*/
+  "Facebook": {
+    "ClientId": "FacebookAppId"
+  },
+  "Google": {
+    "ClientId": "GoogleClientId",
+    "RedirectUrl": "RedirectUrlConfiguredInGoogleAppConsole"
+  },
+  "Microsoft": {
+    "ClientId": "MicrosoftClientId",
+    "RedirectUrl": "RedirectUrlConfiguredInMicrosoftDeveloperApp"
+  }
+}

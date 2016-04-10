@@ -22,7 +22,6 @@ namespace Xamarin.Forms.OAuth.ViewModels
 
         public OAuthProvider SelectedProvider
         {
-            //get { return null; }
             set
             {
                 if (null == value)

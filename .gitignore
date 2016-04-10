@@ -236,4 +236,5 @@ _Pvt_Extensions
 .fake/
 
 # Allow for local config with keys, connection string, etc.
-*local.config
+*[lL]ocal.config
+*[lL]ocal.json
