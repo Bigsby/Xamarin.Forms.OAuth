@@ -3,7 +3,7 @@ using Xamarin.Forms.OAuth.ViewModels;
 
 namespace Xamarin.Forms.OAuth.Views
 {
-    internal sealed class ProviderSelectionPage : BaseView
+    internal sealed class ProviderSelectionPage : BaseView, IBackHandlingView
     {
         private readonly ProviderSelectionViewModel _viewModel;
 
@@ -66,23 +66,21 @@ namespace Xamarin.Forms.OAuth.Views
         {
             return new Command(p => _viewModel.SelectedProvider = (OAuthProvider)p);
         }
+
+        public void HandleBack()
+        {
+            _viewModel.Cancel.Execute(null);
+        }
     }
 
     internal class ProviderButton : Grid
     {
         private readonly Label _text;
         private readonly Image _image;
-        //private readonly Button _button;
 
         public ProviderButton()
         {
             BackgroundColor = Color.FromHex("909090");
-            //_button = new Button
-            //{
-            //    Command = new Command(() => Command?.Execute(BindingContext))
-            //};
-
-            //Children.Add(_button);
 
             _text = new Label
             {

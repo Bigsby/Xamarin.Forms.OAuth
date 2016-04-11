@@ -1,10 +1,6 @@
-﻿using System;
-
+﻿
 using Android.App;
 using Android.Content.PM;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using Android.OS;
 
 namespace OAuthTestApp.Droid
@@ -18,6 +14,12 @@ namespace OAuthTestApp.Droid
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App());
+        }
+
+        public override void OnBackPressed()
+        {
+            if (!App.HandleBackButton())
+                base.OnBackPressed();
         }
     }
 }

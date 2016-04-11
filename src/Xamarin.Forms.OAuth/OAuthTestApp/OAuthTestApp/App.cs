@@ -8,6 +8,7 @@ using System.Text;
 
 using Xamarin.Forms;
 using Xamarin.Forms.OAuth;
+using Xamarin.Forms.OAuth.Views;
 
 namespace OAuthTestApp
 {
@@ -42,6 +43,16 @@ namespace OAuthTestApp
             if (providersConfig.ContainsKey(_microsoft))
                 OAuthAuthenticator.AddPRovider(OAuthProvider.Microsoft(providersConfig[_microsoft].ClientId,
                     providersConfig[_microsoft].RedirectUrl));
+        }
+
+        public static bool HandleBackButton()
+        {
+            if (!(Current.MainPage is IBackHandlingView))
+                return false;
+
+            (Current.MainPage as IBackHandlingView).HandleBack();
+            return true;
+
         }
     }
 

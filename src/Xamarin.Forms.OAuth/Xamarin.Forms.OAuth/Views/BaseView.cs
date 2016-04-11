@@ -1,6 +1,6 @@
 ﻿namespace Xamarin.Forms.OAuth.Views
 {
-    public abstract class BaseView : ContentPage
+    internal abstract class BaseView : ContentPage
     {
         public BaseView()
         {
@@ -9,5 +9,10 @@
                 new Thickness(0, 5, 0, 0), 
                 new Thickness(0, 10, 0, 0));
         }
+    }
+
+    public interface IBackHandlingView
+    {
+        void HandleBack();
     }
 }

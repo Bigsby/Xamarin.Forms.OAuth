@@ -2,18 +2,20 @@
 
 namespace Xamarin.Forms.OAuth.Views
 {
-    internal class WebOAuthPage : BaseView
+    internal class WebOAuthPage : BaseView, IBackHandlingView
     {
         private readonly Func<string, bool> _redirectCheck;
         private readonly Button _backButton;
         private readonly WebView _webView;
         private readonly ActivityIndicator _activityIndicator;
+        private readonly Action _back;
         private bool _done = false;
 
         public WebOAuthPage(string url, Action back, Func<string, bool> redirectCheck)
             : base()
         {
             _redirectCheck = redirectCheck;
+            _back = back;
 
             var grid = new Grid();
             grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
@@ -22,7 +24,7 @@ namespace Xamarin.Forms.OAuth.Views
             grid.Children.Add(_backButton = new Button
             {
                 Text = "Back",
-                Command = new Command(back),
+                Command = new Command(_back),
                 IsVisible = false
             });
 
@@ -59,6 +61,11 @@ namespace Xamarin.Forms.OAuth.Views
                 _done = true;
                 Done?.Invoke(this, new WebOAuthPageDoneEventArgs(url));
             }
+        }
+
+        public void HandleBack()
+        {
+            _back?.Invoke();
         }
 
         internal event EventHandler<WebOAuthPageDoneEventArgs> Done;
