@@ -4,7 +4,7 @@ Xamarin.Forms library to authenticate against OAuth endpoints
 
 # Usage
 
-To use this library two steps are needed:
+To use this library, only two steps are needed:
 
 
 ## 1. Add your providers
@@ -37,4 +37,4 @@ else
 {
   var errorMessage = authenticationResult.ErrorMessage;
 }
-´´´
+```
