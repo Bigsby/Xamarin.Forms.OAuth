@@ -44,10 +44,16 @@ namespace Xamarin.Forms.OAuth
                     return AuthenticatonResult.Failed("No provider selected.");
 
                 var token = string.Empty;
-                
+                var backPressed = false;
+
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    var webView = new WebOAuthPage(provider.GetAuthorizationUrl(), url => CheckRedirect(url, provider));
+                    var webView = new WebOAuthPage(provider.GetAuthorizationUrl(),
+                        () => {
+                            backPressed = true;
+                            _awaiter.Set();
+                        },
+                        url => CheckRedirect(url, provider));
                     webView.Done += (s, e) =>
                     {
                         token = provider.RetrieveToken(e.Url);
@@ -60,6 +66,9 @@ namespace Xamarin.Forms.OAuth
                 _awaiter.Reset();
 
                 Device.BeginInvokeOnMainThread(() => Application.Current.MainPage.IsVisible = false);
+
+                if (backPressed)
+                    return AuthenticatonResult.Failed("Cancelled");
 
                 var client = new HttpClient();
                 var response = await client.GetStringAsync(provider.BuildGraphUrl(token));

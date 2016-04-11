@@ -6,7 +6,7 @@ namespace OAuthTestApp
 {
     public class ResultPage : ContentPage
     {
-        public ResultPage(OAuthAccount account, Action returnCallback)
+        public ResultPage(AuthenticatonResult result, Action returnCallback)
         {
             var stack = new StackLayout
             {
@@ -14,31 +14,47 @@ namespace OAuthTestApp
                 HorizontalOptions = LayoutOptions.Center
             };
 
-            stack.Children.Add(new Label
+            if (result)
             {
-                Text = $"Provider: {account.Provider}"
-            });
+                stack.Children.Add(new Label
+                {
+                    Text = $"Provider: {result.Account.Provider}"
+                });
 
-            stack.Children.Add(new Label
-            {
-                Text = $"Id: {account.Id}"
-            });
+                stack.Children.Add(new Label
+                {
+                    Text = $"Id: {result.Account.Id}"
+                });
 
-            stack.Children.Add(new Label
-            {
-                Text = $"Name: {account.DisplayName}"
-            });
+                stack.Children.Add(new Label
+                {
+                    Text = $"Name: {result.Account.DisplayName}"
+                });
 
-            stack.Children.Add(new Label
+                stack.Children.Add(new Label
+                {
+                    Text = $"Access Token: {result.Account.AccessToken}"
+                });
+            }
+            else
             {
-                Text = $"Access Token: {account.AccessToken}"
-            });
+                stack.Children.Add(new Label
+                {
+                    Text = "Authentication failed!"
+                });
+
+                stack.Children.Add(new Label
+                {
+                    Text = $"Reason: {result.ErrorMessage}"
+                });
+            }
 
             stack.Children.Add(new Button
             {
                 Text = "Back",
                 Command = new Command(returnCallback)
             });
+
             Content = stack;
         }
     }

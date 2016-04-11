@@ -27,5 +27,10 @@
 
         public bool Success { get; private set; }
         public string ErrorMessage { get; private set; }
+
+        public static implicit operator bool(AuthenticatonResult result)
+        {
+            return result.Success;
+        }
     }
 }

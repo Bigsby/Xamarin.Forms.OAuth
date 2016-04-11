@@ -41,6 +41,7 @@
     <Compile Include="OAuthProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\CustomOAuthProvider.cs" />
+    <Compile Include="Views\BaseView.cs" />
     <Compile Include="Views\ProviderSelectionPage.cs" />
     <Compile Include="Providers\FacebookOAuthProvider.cs" />
     <Compile Include="Providers\GoogleOAuthProvider.cs" />

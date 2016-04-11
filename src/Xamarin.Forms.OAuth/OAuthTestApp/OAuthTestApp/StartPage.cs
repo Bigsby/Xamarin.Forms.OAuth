@@ -18,7 +18,7 @@ namespace OAuthTestApp
         private void HandleResult(AuthenticatonResult result)
         {
             Device.BeginInvokeOnMainThread(() => Application.Current.MainPage = new ResultPage(
-                result.Account,
+                result,
                 async () => HandleResult(await OAuthAuthenticator.Authenticate())));
         }
     }
