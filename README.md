@@ -4,10 +4,17 @@ Xamarin.Forms library to authenticate against OAuth endpoints
 
 # Usage
 
-To use this library, only two steps are needed:
+To use this library, only three steps are needed:
 
 
-## 1. Add your providers
+## 1. Add reference
+Use Package Manager Console to install the library in your Xamrain.Forms (Portable) project.
+```bat
+PM> Install-Package Xamarin.Forms.OAuth 
+´´´
+[NuGet Link](https://www.nuget.org/packages/Xamarin.Forms.OAuth/)
+
+## 2. Add your providers
 For instance, in your App.cs file, add your providers:
 ```cs
 public App()
@@ -21,7 +28,7 @@ public App()
 }
 ```
 
-## 2. Call for authentication when you need it:
+## 3. Call for authentication when you need it:
 ```cs
 var authenticationResult = await OAuthAuthenticator.Authenticate();
 
