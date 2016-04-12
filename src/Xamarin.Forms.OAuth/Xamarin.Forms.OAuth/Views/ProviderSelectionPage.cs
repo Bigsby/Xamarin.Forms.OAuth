@@ -80,7 +80,7 @@ namespace Xamarin.Forms.OAuth.Views
 
         public ProviderButton()
         {
-            BackgroundColor = Color.FromHex("909090");
+            BackgroundColor = Color.FromHex("B0B0B0");
 
             _text = new Label
             {
