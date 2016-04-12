@@ -11,7 +11,7 @@ To use this library, only three steps are needed:
 Use Package Manager Console to install the library in your Xamrain.Forms (Portable) project.
 ```bat
 PM> Install-Package Xamarin.Forms.OAuth 
-´´´
+```
 [NuGet Link](https://www.nuget.org/packages/Xamarin.Forms.OAuth/)
 
 ## 2. Add your providers
