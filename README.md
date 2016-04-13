@@ -48,3 +48,10 @@ else
   var errorMessage = authenticationResult.ErrorMessage;
 }
 ```
+
+
+# Future Features
+These are the features that will be impleneted next:
+* Wrap list of providers in ScrollView
+* Implement refresh token
+* Add more providers ([list](https://en.wikipedia.org/wiki/List_of_OAuth_providers))
