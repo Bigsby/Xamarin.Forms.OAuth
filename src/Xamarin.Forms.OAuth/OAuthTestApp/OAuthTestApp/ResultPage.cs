@@ -1,13 +1,17 @@
 ﻿using System;
 using Xamarin.Forms;
 using Xamarin.Forms.OAuth;
+using Xamarin.Forms.OAuth.Views;
 
 namespace OAuthTestApp
 {
-    public class ResultPage : ContentPage
+    public class ResultPage : ContentPage, IBackHandlingView
     {
+        private readonly Action _returnCallback;
         public ResultPage(AuthenticatonResult result, Action returnCallback)
         {
+            _returnCallback = returnCallback;
+
             var stack = new StackLayout
             {
                 VerticalOptions = LayoutOptions.Center,
@@ -56,6 +60,11 @@ namespace OAuthTestApp
             });
 
             Content = stack;
+        }
+
+        public void HandleBack()
+        {
+            _returnCallback?.Invoke();
         }
     }
 }
