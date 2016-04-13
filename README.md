@@ -28,6 +28,9 @@ public App()
 }
 ```
 
+
+# Screenshot
+![alt text](Screenshots/W10MobileScreenshot.png "Windows 10 Mobile")
 ## 3. Call for authentication when you need it:
 ```cs
 var authenticationResult = await OAuthAuthenticator.Authenticate();
