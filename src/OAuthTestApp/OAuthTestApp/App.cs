@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Xamarin.Forms;
 using Xamarin.Forms.OAuth;
@@ -26,21 +27,54 @@ namespace OAuthTestApp
 
         private static void LoadProviders()
         {
-            var names = typeof(App).GetTypeInfo().Assembly.GetManifestResourceNames();
             var assembly = typeof(App).GetTypeInfo().Assembly;
             var json = new StreamReader(assembly.GetManifestResourceStream(assembly.GetName().Name + ".KeysLocal.json")).ReadToEnd();
             _providerConfigs = JsonConvert.DeserializeObject<Dictionary<string, AppConfig>>(json);
 
-            if (_providerConfigs.ContainsKey(_facebook))
-                OAuthAuthenticator.AddPRovider(OAuthProviders.Facebook(_providerConfigs[_facebook].ClientId));
+            if (null == _providerConfigs || !_providerConfigs.Any())
+                return;
 
-            if (_providerConfigs.ContainsKey(_google))
-                OAuthAuthenticator.AddPRovider(OAuthProviders.Google(_providerConfigs[_google].ClientId,
-                    _providerConfigs[_google].RedirectUrl));
+            AddProvidersDynamically();
+            //if (_providerConfigs.ContainsKey(_facebook))
+            //    OAuthAuthenticator.AddPRovider(OAuthProviders.Facebook(_providerConfigs[_facebook].ClientId));
 
-            if (_providerConfigs.ContainsKey(_microsoft))
-                OAuthAuthenticator.AddPRovider(OAuthProviders.Microsoft(_providerConfigs[_microsoft].ClientId,
-                    _providerConfigs[_microsoft].RedirectUrl));
+            //if (_providerConfigs.ContainsKey(_google))
+            //    OAuthAuthenticator.AddPRovider(OAuthProviders.Google(_providerConfigs[_google].ClientId,
+            //        _providerConfigs[_google].RedirectUrl));
+
+            //if (_providerConfigs.ContainsKey(_microsoft))
+            //    OAuthAuthenticator.AddPRovider(OAuthProviders.Microsoft(_providerConfigs[_microsoft].ClientId,
+            //        _providerConfigs[_microsoft].RedirectUrl));
+        }
+
+        private static TypeInfo _providersType;
+
+        private static void AddProvidersDynamically()
+        {
+            _providersType = typeof(OAuthProviders).GetTypeInfo();
+
+            foreach (var config in _providerConfigs)
+            {
+                var mi = _providersType.GetDeclaredMethod(config.Key);
+
+                var args = new List<object> { config.Value.ClientId };
+
+                if (!string.IsNullOrEmpty(config.Value.RedirectUrl))
+                    args.Add(config.Value.RedirectUrl);
+
+                args.Add(null); // necessary because of parameter > params string[] scopes
+
+                var provider = mi?.Invoke(null, args.ToArray()) as OAuthProvider;
+
+                if (null != provider)
+                    OAuthAuthenticator.AddPRovider(provider);
+            }
+        }
+
+        
+        private static MethodInfo GetProviderMethod(string name)
+        {
+            return _providersType.GetDeclaredMethod(name);
         }
 
         public static bool HandleBackButton()

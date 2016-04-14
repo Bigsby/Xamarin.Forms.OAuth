@@ -17,16 +17,18 @@
             };
         }
 
-        public static AuthenticatonResult Failed(string errorMessage)
+        public static AuthenticatonResult Failed(string error, string errorDescription = null)
         {
             return new AuthenticatonResult(false)
             {
-                ErrorMessage = errorMessage
+                Error = error,
+                ErrorDescription = errorDescription
             };
         }
 
         public bool Success { get; private set; }
-        public string ErrorMessage { get; private set; }
+        public string Error { get; private set; }
+        public string ErrorDescription { get; private set; }
 
         public static implicit operator bool(AuthenticatonResult result)
         {

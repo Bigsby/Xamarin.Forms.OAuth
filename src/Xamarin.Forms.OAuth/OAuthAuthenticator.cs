@@ -45,7 +45,7 @@ namespace Xamarin.Forms.OAuth
                 if (null == provider)
                     return AuthenticatonResult.Failed("No provider selected.");
 
-                OAuthAccessToken accessToken = null;
+                OAuthResponse oAuthResponse = null;
                 var backPressed = false;
 
                 Device.BeginInvokeOnMainThread(() =>
@@ -58,7 +58,7 @@ namespace Xamarin.Forms.OAuth
                         url => CheckRedirect(url, provider));
                     webView.Done += (s, e) =>
                     {
-                        accessToken = provider.RetrieveToken(e.Url);
+                        oAuthResponse = provider.GetOAuthResponse(e.Url);
                         _awaiter.Set();
                     };
                     Application.Current.MainPage = webView;
@@ -72,12 +72,15 @@ namespace Xamarin.Forms.OAuth
                 if (backPressed)
                     return AuthenticatonResult.Failed("Cancelled");
 
+                if (!oAuthResponse)
+                    return AuthenticatonResult.Failed(oAuthResponse.Error, oAuthResponse.ErrorDescription);
+
                 var client = new HttpClient();
-                var response = await client.GetStringAsync(provider.BuildGraphUrl(accessToken.Token));
+                var response = await client.GetStringAsync(provider.BuildGraphUrl(oAuthResponse.Token.Token));
 
                 var id = GetJsonValue(response, provider.IdPropertyName);
                 var name = GetJsonValue(response, provider.NamePropertyName);
-                return AuthenticatonResult.Successful(id, name, provider, accessToken);
+                return AuthenticatonResult.Successful(id, name, provider, oAuthResponse.Token);
             });
         }
 

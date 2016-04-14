@@ -35,13 +35,32 @@ namespace Xamarin.Forms.OAuth
 
         private static Regex _tokenRegex = new Regex("^.*access_token=([^&]+)");
         private static Regex _expiresRegex = new Regex("expires_in=(\\d+)");
+        private static Regex _errorRegex = new Regex("error=([^&]+)");
+        private static Regex _errorDescriptionRegex = new Regex("error_description=([^&]+)");
 
-        internal virtual OAuthAccessToken RetrieveToken(string url)
+        internal virtual OAuthResponse GetOAuthResponse(string url)
         {
-            return new OAuthAccessToken(
+            var errorMatch = _errorRegex.Match(url);
+            if (errorMatch.Success)
+            {
+                var errorDescriptionMatch = _errorDescriptionRegex.Match(url);
+                return new OAuthResponse(errorMatch.Groups[1].Value,
+                    errorDescriptionMatch.Success ?
+                        errorDescriptionMatch.Groups[1].Value
+                        :
+                        null
+                    );
+            }
+
+            var expiresMatch = _expiresRegex.Match(url);
+
+            return new OAuthResponse(new OAuthAccessToken(
                     _tokenRegex.Match(url).Groups[1].Value,
-                    DateTime.Now + TimeSpan.FromSeconds(double.Parse(_expiresRegex.Match(url).Groups[1].Value))
-                );
+                    expiresMatch.Success ?
+                        DateTime.Now + TimeSpan.FromSeconds(double.Parse(expiresMatch.Groups[1].Value))
+                        :
+                        DateTime.MinValue
+                ));
         }
 
         internal string GetAuthorizationUrl()

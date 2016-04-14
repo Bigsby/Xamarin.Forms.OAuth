@@ -49,8 +49,14 @@ namespace OAuthTestApp
 
                 stack.Children.Add(new Label
                 {
-                    Text = $"Reason: {result.ErrorMessage}"
+                    Text = $"Reason: {result.Error}"
                 });
+
+                if (!string.IsNullOrEmpty(result.ErrorDescription))
+                    stack.Children.Add(new Label
+                    {
+                        Text = $"Description: {result.ErrorDescription}"
+                    });
             }
 
             stack.Children.Add(new Button
