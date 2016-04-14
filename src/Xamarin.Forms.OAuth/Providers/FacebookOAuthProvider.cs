@@ -2,27 +2,26 @@
 {
     public sealed class FacebookOAuthProvider : OAuthProvider
     {
-        private const string _authorizationUrl = "https://www.facebook.com/dialog/oauth?response_type=token&";
+        // This URL is provided in documentation as mandatory for desktop apps (Manually retrieved tokens)
         private const string _redirectUrl = "https://www.facebook.com/connect/login_success.html";
 
-        internal FacebookOAuthProvider(string appId)
-            : base(appId, 
-                  _redirectUrl)
+        internal FacebookOAuthProvider(string appId, params string[] scopes)
+            : base(appId, _redirectUrl, scopes)
         { }
-
-        protected override string AuthoizationUrl
-        {
-            get
-            {
-                return "https://www.facebook.com/dialog/oauth?response_type=token&";
-            }
-        }
 
         public override string Name
         {
             get
             {
                 return "Facebook";
+            }
+        }
+
+        protected override string AuthoizationUrl
+        {
+            get
+            {
+                return "https://www.facebook.com/dialog/oauth";
             }
         }
 

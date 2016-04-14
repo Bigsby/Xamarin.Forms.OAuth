@@ -37,7 +37,7 @@ namespace OAuthTestApp
 
                 stack.Children.Add(new Label
                 {
-                    Text = $"Access Token: {result.Account.AccessToken}"
+                    Text = $"Token Expires: {result.Account.AccessToken.Expires.ToString("yyyy-MM-dd HH:mm:ss")}"
                 });
             }
             else

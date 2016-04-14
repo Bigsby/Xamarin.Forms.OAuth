@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AuthenticationResult.cs" />
+    <Compile Include="OAuthAccessToken.cs" />
     <Compile Include="OAuthAccount.cs" />
     <Compile Include="OAuthAuthenticator.cs" />
     <Compile Include="OAuthProvider.cs" />
@@ -76,18 +77,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Providers\Logos\Facebook.png" />
-    <EmbeddedResource Include="Providers\Logos\Google.png" />
-    <EmbeddedResource Include="Providers\Logos\Microsoft.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Providers\Logos\Facebook32x32.png">
+    <EmbeddedResource Include="Providers\Logos\Facebook.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Providers\Logos\Google32x32.png">
+    <EmbeddedResource Include="Providers\Logos\Google.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Providers\Logos\Microsoft32x32.png">
+    <EmbeddedResource Include="Providers\Logos\Microsoft.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

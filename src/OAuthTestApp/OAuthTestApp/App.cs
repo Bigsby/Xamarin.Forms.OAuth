@@ -1,11 +1,7 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-
 using Xamarin.Forms;
 using Xamarin.Forms.OAuth;
 using Xamarin.Forms.OAuth.Views;
@@ -18,6 +14,8 @@ namespace OAuthTestApp
         private const string _google = "Google";
         private const string _microsoft = "Microsoft";
 
+        private static Dictionary<string, AppConfig> _providerConfigs;
+
         public App()
         {
             LoadProviders();
@@ -26,23 +24,23 @@ namespace OAuthTestApp
             MainPage = new StartPage();
         }
 
-        private void LoadProviders()
+        private static void LoadProviders()
         {
             var names = typeof(App).GetTypeInfo().Assembly.GetManifestResourceNames();
             var assembly = typeof(App).GetTypeInfo().Assembly;
             var json = new StreamReader(assembly.GetManifestResourceStream(assembly.GetName().Name + ".KeysLocal.json")).ReadToEnd();
-            var providersConfig = JsonConvert.DeserializeObject<Dictionary<string, AppConfig>>(json);
+            _providerConfigs = JsonConvert.DeserializeObject<Dictionary<string, AppConfig>>(json);
 
-            if (providersConfig.ContainsKey(_facebook))
-                OAuthAuthenticator.AddPRovider(OAuthProvider.Facebook(providersConfig[_facebook].ClientId));
+            if (_providerConfigs.ContainsKey(_facebook))
+                OAuthAuthenticator.AddPRovider(OAuthProvider.Facebook(_providerConfigs[_facebook].ClientId));
 
-            if (providersConfig.ContainsKey(_google))
-                OAuthAuthenticator.AddPRovider(OAuthProvider.Google(providersConfig[_google].ClientId,
-                    providersConfig[_google].RedirectUrl));
+            if (_providerConfigs.ContainsKey(_google))
+                OAuthAuthenticator.AddPRovider(OAuthProvider.Google(_providerConfigs[_google].ClientId,
+                    _providerConfigs[_google].RedirectUrl));
 
-            if (providersConfig.ContainsKey(_microsoft))
-                OAuthAuthenticator.AddPRovider(OAuthProvider.Microsoft(providersConfig[_microsoft].ClientId,
-                    providersConfig[_microsoft].RedirectUrl));
+            if (_providerConfigs.ContainsKey(_microsoft))
+                OAuthAuthenticator.AddPRovider(OAuthProvider.Microsoft(_providerConfigs[_microsoft].ClientId,
+                    _providerConfigs[_microsoft].RedirectUrl));
         }
 
         public static bool HandleBackButton()
@@ -53,6 +51,14 @@ namespace OAuthTestApp
             (Current.MainPage as IBackHandlingView).HandleBack();
             return true;
 
+        }
+
+        internal static AppConfig GetProviderConfig(string providerName)
+        {
+            return _providerConfigs.ContainsKey(providerName) ?
+                _providerConfigs[providerName]
+                :
+                null;
         }
     }
 

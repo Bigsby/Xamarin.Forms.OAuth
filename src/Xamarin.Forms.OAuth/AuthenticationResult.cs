@@ -9,7 +9,7 @@
 
         public OAuthAccount Account { get; private set; }
 
-        public static AuthenticatonResult Successful(string id, string displayName, string provider, string token)
+        public static AuthenticatonResult Successful(string id, string displayName, OAuthProvider provider, OAuthAccessToken token)
         {
             return new AuthenticatonResult(true)
             {

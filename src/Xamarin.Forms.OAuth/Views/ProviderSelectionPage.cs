@@ -15,7 +15,7 @@ namespace Xamarin.Forms.OAuth.Views
 
             var label = new Label
             {
-                Text = "Select Provider",
+                Text = OAuthAuthenticator.ProviderSelectText,
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.Center
             };
@@ -55,8 +55,13 @@ namespace Xamarin.Forms.OAuth.Views
                 button.BindingContext = provider;
             }
 
-            Grid.SetRow(providerStack, 2);
-            grid.Children.Add(providerStack);
+            var scrollView = new ScrollView
+            {
+                Content = providerStack
+            };
+
+            Grid.SetRow(scrollView, 2);
+            grid.Children.Add(scrollView);
 
             Padding = fontSize;
             Content = grid;
@@ -77,6 +82,7 @@ namespace Xamarin.Forms.OAuth.Views
     {
         private readonly Label _text;
         private readonly Image _image;
+        private const double _imageMargin = 2;
 
         public ProviderButton()
         {
@@ -90,13 +96,15 @@ namespace Xamarin.Forms.OAuth.Views
             };
             var fontSize = Device.GetNamedSize(NamedSize.Large, _text);
             _text.FontSize = fontSize;
+            var imageSize = (fontSize * 2) - _imageMargin;
 
             _image = new Image
             {
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.End,
-                HeightRequest = fontSize * 2,
-                WidthRequest = fontSize * 2,
+                HeightRequest = imageSize,
+                WidthRequest = imageSize,
+                Aspect = Aspect.AspectFit,
                 InputTransparent = true
             };
 

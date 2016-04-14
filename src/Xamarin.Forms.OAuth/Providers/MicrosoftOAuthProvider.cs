@@ -2,9 +2,8 @@
 {
     public sealed class MicrosoftOAuthProvider : OAuthProvider
     {
-        private const string _autorizationUrl = "https://login.live.com/oauth20_authorize.srf?response_type=token&scope=wl.signin,wl.basic&";
-        public MicrosoftOAuthProvider(string clientId, string redirectUrl)
-            : base(clientId, redirectUrl)
+        public MicrosoftOAuthProvider(string clientId, string redirectUrl, params string[] scopes)
+            : base(clientId, redirectUrl, scopes)
         { }
 
         public override string Name
@@ -15,11 +14,19 @@
             }
         }
 
+        protected override string[] MandatoryScopes
+        {
+            get
+            {
+                return new[] { "wl.signin", "wl.basic" };
+            }
+        }
+
         protected override string AuthoizationUrl
         {
             get
             {
-                return "https://login.live.com/oauth20_authorize.srf?response_type=token&scope=wl.signin,wl.basic&";
+                return "https://login.live.com/oauth20_authorize.srf";
             }
         }
 
