@@ -68,3 +68,5 @@ else
 # Future Features
 These are the features that will be impleneted next:
 * Add more providers ([list](https://en.wikipedia.org/wiki/List_of_OAuth_providers))
+* Implement token refresh
+* Feel free to point buts or any feature you would like implemented
