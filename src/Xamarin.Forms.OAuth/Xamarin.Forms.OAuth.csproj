@@ -40,8 +40,18 @@
     <Compile Include="OAuthAccount.cs" />
     <Compile Include="OAuthAuthenticator.cs" />
     <Compile Include="OAuthProvider.cs" />
+    <Compile Include="OAuthProviders.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\AmazonOAuthProvider.cs" />
+    <Compile Include="Providers\BoxOAuthProvider.cs" />
     <Compile Include="Providers\CustomOAuthProvider.cs" />
+    <Compile Include="Providers\DropboxOAuthProvider.cs" />
+    <Compile Include="Providers\GitHubOAuthProvider.cs" />
+    <Compile Include="Providers\InstagramOAuthProvider.cs" />
+    <Compile Include="Providers\LinkedInOAuthProvider.cs" />
+    <Compile Include="Providers\ReddItOAuthProvider.cs" />
+    <Compile Include="Providers\StackExchangeOAuthProvider.cs" />
+    <Compile Include="Providers\TwitterOAuthProvider.cs" />
     <Compile Include="Views\BaseView.cs" />
     <Compile Include="Views\ProviderSelectionPage.cs" />
     <Compile Include="Providers\FacebookOAuthProvider.cs" />
@@ -84,6 +94,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Providers\Logos\Microsoft.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Providers\Logos\Amazon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

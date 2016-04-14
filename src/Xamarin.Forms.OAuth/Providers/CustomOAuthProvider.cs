@@ -6,21 +6,29 @@
         private readonly string _authoizationUrl;
         private readonly string _redirectUrl;
         private readonly string _graphUrl;
+        private readonly string _idProperty;
+        private readonly string _nameProperty;
+
         private ImageSource _logo;
 
-        public CustomOAuthProvider(
+        internal CustomOAuthProvider(
             string name,
             string authorizationUrl,
             string redirectUrl,
             string graphUrl,
             string clientId,
-            ImageSource logo = null)
-            : base(clientId, redirectUrl)
+            string idProperty = null,
+            string nameProperty = null,
+            ImageSource logo = null,
+            params string[] scopes)
+            : base(clientId, redirectUrl, scopes)
         {
             _name = name;
             _authoizationUrl = authorizationUrl;
             _redirectUrl = redirectUrl;
             _graphUrl = graphUrl;
+            _idProperty = idProperty;
+            _nameProperty = nameProperty;
             _logo = logo;
         }
 
@@ -53,6 +61,22 @@
             get
             {
                 return _logo;
+            }
+        }
+
+        internal override string IdPropertyName
+        {
+            get
+            {
+                return string.IsNullOrEmpty(_idProperty) ? base.IdPropertyName : _idProperty;
+            }
+        }
+
+        internal override string NamePropertyName
+        {
+            get
+            {
+                return string.IsNullOrEmpty(_nameProperty) ? base.NamePropertyName : _nameProperty;
             }
         }
     }

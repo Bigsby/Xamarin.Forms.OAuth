@@ -71,22 +71,6 @@ namespace Xamarin.Forms.OAuth
             return new Regex($"\"{name}\".*?:.*?\"([^\"]*)\"", RegexOptions.IgnoreCase);
         }
 
-        public static OAuthProvider Facebook(string appId)
-        {
-            return new FacebookOAuthProvider(appId);
-        }
-
-        public static OAuthProvider Google(string clientId, string redirectUrl)
-        {
-            return new GoogleOAuthProvider(clientId, redirectUrl);
-        }
-
-        public static OAuthProvider Microsoft(string clientId, string redirectUrl)
-        {
-            return new MicrosoftOAuthProvider(clientId, redirectUrl);
-        }
-        
-
         private static string GetJsonValue(string json, string name)
         {
             var match = BuildJsonValueRegex(name).Match(json);

@@ -32,14 +32,14 @@ namespace OAuthTestApp
             _providerConfigs = JsonConvert.DeserializeObject<Dictionary<string, AppConfig>>(json);
 
             if (_providerConfigs.ContainsKey(_facebook))
-                OAuthAuthenticator.AddPRovider(OAuthProvider.Facebook(_providerConfigs[_facebook].ClientId));
+                OAuthAuthenticator.AddPRovider(OAuthProviders.Facebook(_providerConfigs[_facebook].ClientId));
 
             if (_providerConfigs.ContainsKey(_google))
-                OAuthAuthenticator.AddPRovider(OAuthProvider.Google(_providerConfigs[_google].ClientId,
+                OAuthAuthenticator.AddPRovider(OAuthProviders.Google(_providerConfigs[_google].ClientId,
                     _providerConfigs[_google].RedirectUrl));
 
             if (_providerConfigs.ContainsKey(_microsoft))
-                OAuthAuthenticator.AddPRovider(OAuthProvider.Microsoft(_providerConfigs[_microsoft].ClientId,
+                OAuthAuthenticator.AddPRovider(OAuthProviders.Microsoft(_providerConfigs[_microsoft].ClientId,
                     _providerConfigs[_microsoft].RedirectUrl));
         }
 

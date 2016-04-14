@@ -29,21 +29,21 @@ namespace OAuthTestApp
                         Text = "Facebook",
                         VerticalOptions = LayoutOptions.Center,
                         HorizontalOptions = LayoutOptions.Center,
-                        Command = new Command(async () => HandleResult(await OAuthAuthenticator.Authenticate(OAuthProvider.Facebook(facebookConfig.ClientId))))
+                        Command = new Command(async () => HandleResult(await OAuthAuthenticator.Authenticate(OAuthProviders.Facebook(facebookConfig.ClientId))))
                     },
                     new Button
                     {
                         Text = "Google",
                         VerticalOptions = LayoutOptions.Center,
                         HorizontalOptions = LayoutOptions.Center,
-                        Command = new Command(async () => HandleResult(await OAuthAuthenticator.Authenticate(OAuthProvider.Google(googleConfig.ClientId, googleConfig.RedirectUrl))))
+                        Command = new Command(async () => HandleResult(await OAuthAuthenticator.Authenticate(OAuthProviders.Google(googleConfig.ClientId, googleConfig.RedirectUrl))))
                     },
                     new Button
                     {
                         Text = "Microsoft",
                         VerticalOptions = LayoutOptions.Center,
                         HorizontalOptions = LayoutOptions.Center,
-                        Command = new Command(async () => HandleResult(await OAuthAuthenticator.Authenticate(OAuthProvider.Microsoft(microsoftConfig.ClientId, microsoftConfig.RedirectUrl))))
+                        Command = new Command(async () => HandleResult(await OAuthAuthenticator.Authenticate(OAuthProviders.Microsoft(microsoftConfig.ClientId, microsoftConfig.RedirectUrl))))
                     }
                 }
             };
