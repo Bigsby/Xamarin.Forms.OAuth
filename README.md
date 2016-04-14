@@ -6,8 +6,7 @@ Xamarin.Forms library to authenticate against OAuth endpoints
 
 To use this library, only three steps are needed:
 
-
-## 1. Add reference
+## 1. Add NuGet Package
 Use Package Manager Console to install the library in your Xamrain.Forms (Portable) project.
 ```bat
 PM> Install-Package Xamarin.Forms.OAuth 
@@ -28,9 +27,6 @@ public App()
 }
 ```
 
-
-# Screenshot
-![alt text](Screenshots/W10MobileScreenshot.png "Windows 10 Mobile")
 ## 3. Call for authentication when you need it:
 ```cs
 var authenticationResult = await OAuthAuthenticator.Authenticate();
@@ -46,12 +42,29 @@ if (authenticationResult)
 else
 {
   var errorMessage = authenticationResult.ErrorMessage;
+  // ...
 }
 ```
 
+## 3a. Inject provider manually
+If only one provider is used or if a custom provider selection outside this library is used, authentication can be invoked with the intended provider:
+```cs
+var authenticationResult = await OAuthAuthenticator.Authenticate(OAuthProvider.Facebook("FacebookAppId"));
+
+if (authenticationResult)
+{
+  // ...
+}
+else
+{
+  var errorMessage = authenticationResult.ErrorMessage;
+  // ...
+}
+```
+
+# Screenshot
+![alt text](Screenshots/W10MobileScreenshot.png "Windows 10 Mobile")
 
 # Future Features
 These are the features that will be impleneted next:
-* Wrap list of providers in ScrollView
-* Implement refresh token
 * Add more providers ([list](https://en.wikipedia.org/wiki/List_of_OAuth_providers))
