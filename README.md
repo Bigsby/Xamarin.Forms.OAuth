@@ -18,9 +18,17 @@ For instance, in your App.cs file, add your providers:
 ```cs
 public App()
 {
-  OAuthAuthenticator.AddPRovider(OAuthProvider.Facebook("FacebookAppId"));
-  OAuthAuthenticator.AddPRovider(OAuthProvider.Google("GoogleClientId", "RedirectUrlConfiguredInGoogleAppConsole"));
-  OAuthAuthenticator.AddPRovider(OAuthProvider.Microsoft("MicrosoftClientId", "RedirectUrlConfiguredInMicrosoftDeveloperApp"));
+  OAuthAuthenticator.AddPRovider(OAuthProviders.Facebook("FacebookAppId"));
+  OAuthAuthenticator.AddPRovider(OAuthProviders.Google("GoogleClientId", "RedirectUrlConfiguredInGoogleAppConsole"));
+  OAuthAuthenticator.AddPRovider(OAuthProviders.Microsoft("MicrosoftClientId", "RedirectUrlConfiguredInMicrosoftDeveloperApp"));
+  
+  OAuthAuthenticator.AddPRovider(OAuthProviders.Custom(
+    "Name", 
+    "https://authorizeUlr", 
+    "http://redirectUrl", 
+    "http://accountUrl", 
+    "ClientId", 
+    logo: ImageSource.FromUri("http://logUrl.png"));
   
   // The root page of your application
   // ...
@@ -65,8 +73,24 @@ else
 # Screenshot
 ![alt text](Screenshots/W10MobileScreenshot.png "Windows 10 Mobile")
 
+# Supported Providers
+
+Here is the list of the OAuth providers suported out-of-the-box (* implemented according to documentation but not tested):
+* Amazon
+* Box
+* Dropbox
+* Facebook
+* GitHub
+* Google
+* Instagram
+* LinkedIn
+* Microsoft
+* ReddIt
+* StackExchange
+* Twitter
+
+
 # Future Features
 These are the features that will be impleneted next:
-* Add more providers ([list](https://en.wikipedia.org/wiki/List_of_OAuth_providers))
 * Implement token refresh
 * Feel free to point buts or any feature you would like implemented
