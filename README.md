@@ -78,12 +78,12 @@ else
 Here is the list of the OAuth providers suported out-of-the-box:
 * Amazon
 * Box
+* Dropbox
 * Facebook
 * Google
 * Microsoft
 
 Implemented but not tested:
-* Dropbox
 * GitHub
 * Instagram
 * LinkedIn
