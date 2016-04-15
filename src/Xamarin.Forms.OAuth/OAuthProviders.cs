@@ -9,9 +9,9 @@ namespace Xamarin.Forms.OAuth
             return new AmazonOAuthProvider(clientId, redirectUrl, scopes);
         }
 
-        public static OAuthProvider Box(string clientId, string redirectUrl, params string[] scopes)
+        public static OAuthProvider Box(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
         {
-            return new BoxOAuthProvider(clientId, redirectUrl, scopes);
+            return new BoxOAuthProvider(clientId, clientSecret, redirectUrl, scopes);
         }
 
         public static OAuthProvider Custom(

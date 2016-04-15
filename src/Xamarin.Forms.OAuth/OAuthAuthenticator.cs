@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -58,7 +59,7 @@ namespace Xamarin.Forms.OAuth
                         url => CheckRedirect(url, provider));
                     webView.Done += (s, e) =>
                     {
-                        oAuthResponse = provider.GetOAuthResponse(e.Url);
+                        oAuthResponse = provider.GetOAuthResponseFromUrl(e.Url);
                         _awaiter.Set();
                     };
                     Application.Current.MainPage = webView;
@@ -76,26 +77,29 @@ namespace Xamarin.Forms.OAuth
                     return AuthenticatonResult.Failed(oAuthResponse.Error, oAuthResponse.ErrorDescription);
 
                 var client = new HttpClient();
+                if (oAuthResponse.IsCode)
+                {
+                    var tokenResponse = await client.PostAsync(provider.TokenUrl, 
+                        BuildHttpContent(provider.BuildTokenContent(oAuthResponse.Code)));
+
+                    var tokenResponseString = await tokenResponse.Content.ReadAsStringAsync();
+
+                    oAuthResponse = provider.GetOAuthResponseFromJson(tokenResponseString);
+
+                    if (!oAuthResponse)
+                        return AuthenticatonResult.Failed(oAuthResponse.Error, oAuthResponse.ErrorDescription);
+                }
+                
                 var response = await client.GetStringAsync(provider.BuildGraphUrl(oAuthResponse.Token.Token));
 
-                var id = GetJsonValue(response, provider.IdPropertyName);
-                var name = GetJsonValue(response, provider.NamePropertyName);
-                return AuthenticatonResult.Successful(id, name, provider, oAuthResponse.Token);
+                var accountData = provider.GetAccountData(response);
+                return AuthenticatonResult.Successful(accountData.Item1, accountData.Item2, provider, oAuthResponse.Token);
             });
         }
 
-        private static Regex TokenExpression = new Regex($"^.*access_token=([^&]*)", RegexOptions.IgnoreCase);
-
-        private static string GetJsonValue(string json, string name)
+        private static HttpContent BuildHttpContent(string content)
         {
-            var match = BuildJsonValueRegex(name).Match(json);
-
-            return match.Success ? match.Groups[1].Value : string.Empty;
-        }
-
-        private static Regex BuildJsonValueRegex(string name)
-        {
-            return new Regex($"\"{name}\".*?:.*?\"([^\"]*)\"", RegexOptions.IgnoreCase);
+            return new StringContent(content, Encoding.UTF8, "application/x-www-form-urlencoded");
         }
 
         private static bool CheckRedirect(string url, OAuthProvider provider)

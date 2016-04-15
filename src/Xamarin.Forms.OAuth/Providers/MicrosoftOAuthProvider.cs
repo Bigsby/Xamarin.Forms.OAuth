@@ -22,7 +22,7 @@
             }
         }
 
-        protected override string AuthoizationUrl
+        protected override string AuthorizeUrl
         {
             get
             {

@@ -2,8 +2,8 @@
 {
     public class BoxOAuthProvider : OAuthProvider
     {
-        internal BoxOAuthProvider(string clientId, string redirectUrl, params string[] scopes)
-            : base(clientId, redirectUrl, scopes)
+        internal BoxOAuthProvider(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
+            : base(clientId, clientSecret, redirectUrl, scopes)
         { }
 
         public override string Name
@@ -14,7 +14,7 @@
             }
         }
 
-        protected override string AuthoizationUrl
+        protected override string AuthorizeUrl
         {
             get
             {
@@ -22,11 +22,27 @@
             }
         }
 
+        internal override string TokenUrl
+        {
+            get
+            {
+                return "https://api.box.com/oauth2/token";
+            }
+        }
+
         protected override string GraphUrl
         {
             get
             {
-                return "https://api.box.com/2.0/users";
+                return "https://api.box.com/2.0/users/me";
+            }
+        }
+
+        internal override bool RequireCode
+        {
+            get
+            {
+                return true;
             }
         }
     }

@@ -49,6 +49,9 @@ namespace OAuthTestApp
 
                 var args = new List<object> { config.Value.ClientId };
 
+                if (!string.IsNullOrEmpty(config.Value.ClientSecret))
+                    args.Add(config.Value.ClientSecret);
+
                 if (!string.IsNullOrEmpty(config.Value.RedirectUrl))
                     args.Add(config.Value.RedirectUrl);
 
@@ -89,6 +92,7 @@ namespace OAuthTestApp
     internal class AppConfig
     {
         public string ClientId { get; set; }
+        public string ClientSecret { get; set; }
         public string RedirectUrl { get; set; }
     }
 }
