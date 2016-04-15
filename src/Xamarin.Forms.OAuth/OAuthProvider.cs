@@ -67,25 +67,29 @@ namespace Xamarin.Forms.OAuth
 
             return new OAuthResponse(new OAuthAccessToken(
                     parameters[_accessTokenParatemeter],
-                    parameters.ContainsKey(_expiresInParameter) ?
-                        DateTime.Now + TimeSpan.FromSeconds(double.Parse(parameters[_expiresInParameter]))
+                    GetExpireDate(parameters.ContainsKey(_expiresInParameter) ?
+                        parameters[_expiresInParameter]
                         :
-                        DateTime.MinValue
+                        string.Empty)
                 ));
         }
 
-        internal virtual OAuthResponse GetOAuthResponseFromJson(string json)
+        internal virtual OAuthResponse GetTokenResponse(string response)
         {
-            var jObject = JObject.Parse(json);
+            if (IsTokenResponseJson)
+            {
+                var jObject = JObject.Parse(response);
 
-            var error = jObject.GetStringValue(_errorParameter);
-            if (!string.IsNullOrEmpty(error))
-                return new OAuthResponse(error, jObject.GetStringValue(_errorDescriptionParameter));
+                var error = jObject.GetStringValue(_errorParameter);
+                if (!string.IsNullOrEmpty(error))
+                    return new OAuthResponse(error, jObject.GetStringValue(_errorDescriptionParameter));
 
-            return new OAuthResponse(new OAuthAccessToken(
-                jObject.GetStringValue(_accessTokenParatemeter),
-                jObject.GetStringValue(_refreshTokenParameter),
-                GetExpireDate(jObject.GetStringValue(_expiresInParameter))));
+                return new OAuthResponse(new OAuthAccessToken(
+                    jObject.GetStringValue(_accessTokenParatemeter),
+                    jObject.GetStringValue(_refreshTokenParameter),
+                    GetExpireDate(jObject.GetStringValue(_expiresInParameter))));
+            }
+            return GetOAuthResponseFromUrl("http://abc.com?" + response);
         }
 
         internal virtual Tuple<string, string> GetAccountData(string json)
@@ -120,18 +124,16 @@ namespace Xamarin.Forms.OAuth
         }
 
         protected abstract string AuthorizeUrl { get; }
-        internal virtual string TokenUrl { get { return string.Empty; } }
+        internal virtual string TokenUrl { get { return null; } }
         protected abstract string GraphUrl { get; }
+
+        internal virtual string APIUserAgent { get { return null; } }
 
         internal virtual string IdPropertyName { get { return "id"; } }
         internal virtual string NamePropertyName { get { return "name"; } }
 
         internal virtual bool RequireCode { get { return false; } }
-
-        //private static Regex BuildJsonValueRegex(string name)
-        //{
-        //    return new Regex($"\"{name}\".*?:.*?\"([^\"]*)\"", RegexOptions.IgnoreCase);
-        //}
+        internal virtual bool IsTokenResponseJson { get { return true; } }
 
         private static Regex _urlParameterExpression = new Regex("(.*)=(.*)");
         private static IDictionary<string, string> ReadReponseParameter(string url)
@@ -155,13 +157,6 @@ namespace Xamarin.Forms.OAuth
 
             return result;
         }
-
-        //private static string GetJsonValue(string json, string name)
-        //{
-        //    var match = BuildJsonValueRegex(name).Match(json);
-
-        //    return match.Success ? match.Groups[1].Value : string.Empty;
-        //}
 
         private static DateTime GetExpireDate(string value)
         {

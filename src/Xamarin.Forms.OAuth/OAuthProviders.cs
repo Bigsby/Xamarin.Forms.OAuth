@@ -47,9 +47,9 @@ namespace Xamarin.Forms.OAuth
             return new FacebookOAuthProvider(appId, scopes);
         }
 
-        public static OAuthProvider GitHub(string clientId, string redirectUrl, params string[] scopes)
+        public static OAuthProvider GitHub(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
         {
-            return new GitHubOAuthProvider(clientId, redirectUrl, scopes);
+            return new GitHubOAuthProvider(clientId, clientSecret, redirectUrl, scopes);
         }
 
         public static OAuthProvider Google(string clientId, string redirectUrl, params string[] scopes)

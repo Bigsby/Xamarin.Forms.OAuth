@@ -78,17 +78,23 @@ namespace Xamarin.Forms.OAuth
                 var client = new HttpClient();
                 if (oAuthResponse.IsCode)
                 {
+                    if (string.IsNullOrEmpty(provider.TokenUrl))
+                        return AuthenticatonResult.Failed("BadImplementation", 
+                            "Provider returns code in authorize request but there is not access token URL.");
+
                     var tokenResponse = await client.PostAsync(provider.TokenUrl, 
                         BuildHttpContent(provider.BuildTokenContent(oAuthResponse.Code)));
 
                     var tokenResponseString = await tokenResponse.Content.ReadAsStringAsync();
 
-                    oAuthResponse = provider.GetOAuthResponseFromJson(tokenResponseString);
+                    oAuthResponse = provider.GetTokenResponse(tokenResponseString);
 
                     if (!oAuthResponse)
                         return AuthenticatonResult.Failed(oAuthResponse.Error, oAuthResponse.ErrorDescription);
                 }
-                
+
+                if (!string.IsNullOrEmpty(provider.APIUserAgent))
+                    client.DefaultRequestHeaders.Add("User-Agent", provider.APIUserAgent);
                 var graphResponse = await client.GetStringAsync(provider.BuildGraphUrl(oAuthResponse.Token.Token));
 
                 var accountData = provider.GetAccountData(graphResponse);
