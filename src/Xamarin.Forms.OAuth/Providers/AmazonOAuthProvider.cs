@@ -26,7 +26,23 @@
         {
             get
             {
-                return "https://api.amazon.com/user/profile/";
+                return "https://api.amazon.com/user/profile";
+            }
+        }
+
+        protected override string[] MandatoryScopes
+        {
+            get
+            {
+                return new[] { "profile" };
+            }
+        }
+
+        internal override string IdPropertyName
+        {
+            get
+            {
+                return "user_id";
             }
         }
     }

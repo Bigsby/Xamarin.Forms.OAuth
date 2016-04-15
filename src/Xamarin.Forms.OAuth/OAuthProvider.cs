@@ -71,7 +71,9 @@ namespace Xamarin.Forms.OAuth
                 :
                 string.Empty;
 
-            return $"{AuthoizationUrl}?response_type=token&client_id={ClientId}&redirect_uri={WebUtility.UrlEncode(RedirectUrl)}{scope}";
+            var responseType = RequireCode ? "code" : "token";
+
+            return $"{AuthoizationUrl}?response_type={responseType}&client_id={ClientId}&redirect_uri={WebUtility.UrlEncode(RedirectUrl)}{scope}";
         }
 
         internal string BuildGraphUrl(string token)
@@ -84,6 +86,8 @@ namespace Xamarin.Forms.OAuth
 
         internal virtual string IdPropertyName { get { return "id"; } }
         internal virtual string NamePropertyName { get { return "name"; } }
+
+        internal virtual bool RequireCode { get { return false; } }
 
         private static Regex BuildJsonValueRegex(string name)
         {
