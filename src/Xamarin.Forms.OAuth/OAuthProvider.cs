@@ -125,7 +125,17 @@ namespace Xamarin.Forms.OAuth
                 :
                 string.Empty;
 
-            return $"grant_type=authorization_code&code={code}&client_id={ClientId}&client_secret={ClientSecret}{redirectContent}";
+            var client = ExcludeClientIdInTokenRequest ?
+                string.Empty
+                :
+                $"&client_id={ClientId}";
+
+            var secret = string.IsNullOrEmpty(ClientSecret) ?
+                string.Empty
+                :
+                $"&client_secret={ClientSecret}";
+
+            return $"grant_type=authorization_code&code={code}{client}{secret}{redirectContent}";
         }
 
         internal virtual string BuildGraphUrl(string token)
@@ -137,7 +147,10 @@ namespace Xamarin.Forms.OAuth
         internal virtual string TokenUrl { get { return null; } }
         protected abstract string GraphUrl { get; }
 
-        internal virtual string APIUserAgent { get { return null; } }
+        internal virtual IEnumerable<KeyValuePair<string, string>> GraphHeaders(OAuthAccessToken token)
+        {
+            return new KeyValuePair<string, string>[0];
+        }
 
         internal virtual string IdPropertyName { get { return "id"; } }
         internal virtual string NamePropertyName { get { return "name"; } }
@@ -145,6 +158,7 @@ namespace Xamarin.Forms.OAuth
         internal virtual bool RequireCode { get { return false; } }
         internal virtual bool IsTokenResponseJson { get { return true; } }
         internal virtual bool IncludeRedirectUrlInTokenRequest { get { return false; } }
+        protected virtual bool ExcludeClientIdInTokenRequest { get { return false; } }
         internal virtual bool IncludeStateInAuthorize { get { return false; } }
 
         private static Regex _urlParameterExpression = new Regex("(.*)=(.*)");
@@ -177,6 +191,8 @@ namespace Xamarin.Forms.OAuth
                 :
                 DateTime.Now + TimeSpan.FromSeconds(double.Parse(value));
         }
+
+        internal virtual string TokenAuthorizationHeader { get { return null; } }
     }
 
     internal static class JObjectExtension

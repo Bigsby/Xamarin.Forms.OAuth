@@ -1,4 +1,6 @@
-﻿namespace Xamarin.Forms.OAuth.Providers
+﻿using System.Collections.Generic;
+
+namespace Xamarin.Forms.OAuth.Providers
 {
     public class GitHubOAuthProvider : OAuthProvider
     {
@@ -54,13 +56,9 @@
             }
         }
 
-        internal override string APIUserAgent
+        internal override IEnumerable<KeyValuePair<string, string>> GraphHeaders(OAuthAccessToken token)
         {
-            get
-            {
-                //TODO: allow value to come from configuration
-                return "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0";
-            }
+            return new[] { new KeyValuePair<string, string>("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0") };
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -75,14 +76,17 @@ namespace Xamarin.Forms.OAuth
                 if (!oAuthResponse)
                     return AuthenticatonResult.Failed(oAuthResponse.Error, oAuthResponse.ErrorDescription);
 
-                var client = new HttpClient();
+                var tokenClient = new HttpClient();
                 if (oAuthResponse.IsCode)
                 {
                     if (string.IsNullOrEmpty(provider.TokenUrl))
                         return AuthenticatonResult.Failed("BadImplementation", 
                             "Provider returns code in authorize request but there is not access token URL.");
 
-                    var tokenResponse = await client.PostAsync(provider.TokenUrl, 
+                    if (!string.IsNullOrEmpty(provider.TokenAuthorizationHeader))
+                        tokenClient.DefaultRequestHeaders.Add("Authorization", provider.TokenAuthorizationHeader);
+
+                    var tokenResponse = await tokenClient.PostAsync(provider.TokenUrl, 
                         BuildHttpContent(provider.BuildTokenContent(oAuthResponse.Code)));
 
                     var tokenResponseString = await tokenResponse.Content.ReadAsStringAsync();
@@ -93,12 +97,23 @@ namespace Xamarin.Forms.OAuth
                         return AuthenticatonResult.Failed(oAuthResponse.Error, oAuthResponse.ErrorDescription);
                 }
 
-                if (!string.IsNullOrEmpty(provider.APIUserAgent))
-                    client.DefaultRequestHeaders.Add("User-Agent", provider.APIUserAgent);
-                var graphResponse = await client.GetStringAsync(provider.BuildGraphUrl(oAuthResponse.Token.Token));
+                try
+                {
+                    var graphClient = new HttpClient();
+                    var graphHeaders = provider.GraphHeaders(oAuthResponse.Token);
 
-                var accountData = provider.GetAccountData(graphResponse);
-                return AuthenticatonResult.Successful(accountData.Item1, accountData.Item2, provider, oAuthResponse.Token);
+                    foreach (var header in graphHeaders)
+                        graphClient.DefaultRequestHeaders.Add(header.Key, header.Value);
+
+                    var graphResponse = await graphClient.GetStringAsync(provider.BuildGraphUrl(oAuthResponse.Token.Token));
+
+                    var accountData = provider.GetAccountData(graphResponse);
+                    return AuthenticatonResult.Successful(accountData.Item1, accountData.Item2, provider, oAuthResponse.Token);
+                }
+                catch (Exception ex)
+                {
+                    return AuthenticatonResult.Failed(ex.Message, ex.StackTrace);
+                }
             });
         }
 
