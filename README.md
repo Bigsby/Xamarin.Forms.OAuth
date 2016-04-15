@@ -80,11 +80,11 @@ Here is the list of the OAuth providers suported out-of-the-box:
 * Box
 * Dropbox
 * Facebook
+* GitHub
 * Google
 * Microsoft
 
 Implemented but not tested:
-* GitHub
 * Instagram
 * LinkedIn
 * ReddIt
