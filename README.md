@@ -75,16 +75,18 @@ else
 
 # Supported Providers
 
-Here is the list of the OAuth providers suported out-of-the-box (* implemented according to documentation but not tested):
-* Amazon *
+Here is the list of the OAuth providers suported out-of-the-box:
+* Amazon
+* Facebook
+* Google
+* Microsoft
+
+Implemented but not tested:
 * Box *
 * Dropbox *
-* Facebook
 * GitHub *
-* Google
 * Instagram *
 * LinkedIn *
-* Microsoft
 * ReddIt *
 * StackExchange *
 * Twitter *
