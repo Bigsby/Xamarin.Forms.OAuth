@@ -85,9 +85,9 @@ Here is the list of the OAuth providers suported out-of-the-box:
 * Instagram
 * LinkedIn
 * Microsoft
+* ReddIt
 
 Implemented but not tested:
-* ReddIt
 * StackExchange
 * Twitter
 
