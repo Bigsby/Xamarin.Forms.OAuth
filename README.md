@@ -77,19 +77,19 @@ else
 
 Here is the list of the OAuth providers suported out-of-the-box:
 * Amazon
+* Box
 * Facebook
 * Google
 * Microsoft
 
 Implemented but not tested:
-* Box *
-* Dropbox *
-* GitHub *
-* Instagram *
-* LinkedIn *
-* ReddIt *
-* StackExchange *
-* Twitter *
+* Dropbox
+* GitHub
+* Instagram
+* LinkedIn
+* ReddIt
+* StackExchange
+* Twitter
 
 
 # Future Features
