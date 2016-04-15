@@ -29,5 +29,13 @@
                 return "https://api.linkedin.com/v1/people/";
             }
         }
+
+        internal override bool RequireCode
+        {
+            get
+            {
+                return true;
+            }
+        }
     }
 }

@@ -57,9 +57,9 @@ namespace Xamarin.Forms.OAuth
             return new GoogleOAuthProvider(clientId, redirectUrl, scopes);
         }
 
-        public static OAuthProvider Instagram(string clientId, string redirectUrl, params string[] scopes)
+        public static OAuthProvider Instagram(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
         {
-            return new InstagramOAuthProvider(clientId, redirectUrl, scopes);
+            return new InstagramOAuthProvider(clientId, clientSecret, redirectUrl, scopes);
         }
 
         public static OAuthProvider LinkedIn(string clientId, string redirectUrl, params string[] scopes)
