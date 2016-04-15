@@ -82,10 +82,10 @@ Here is the list of the OAuth providers suported out-of-the-box:
 * Facebook
 * GitHub
 * Google
+* Instagram
 * Microsoft
 
 Implemented but not tested:
-* Instagram
 * LinkedIn
 * ReddIt
 * StackExchange
