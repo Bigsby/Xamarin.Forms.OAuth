@@ -110,7 +110,12 @@ namespace Xamarin.Forms.OAuth
 
             var responseType = RequireCode ? "code" : "token";
 
-            return $"{AuthorizeUrl}?response_type={responseType}&client_id={ClientId}&redirect_uri={WebUtility.UrlEncode(RedirectUrl)}{scope}";
+            var state = IncludeStateInAuthorize ?
+                "&state=authentication"
+                :
+                string.Empty;
+
+            return $"{AuthorizeUrl}?response_type={responseType}&client_id={ClientId}&redirect_uri={WebUtility.UrlEncode(RedirectUrl)}{scope}{state}";
         }
 
         internal string BuildTokenContent(string code)
@@ -123,7 +128,7 @@ namespace Xamarin.Forms.OAuth
             return $"grant_type=authorization_code&code={code}&client_id={ClientId}&client_secret={ClientSecret}{redirectContent}";
         }
 
-        internal string BuildGraphUrl(string token)
+        internal virtual string BuildGraphUrl(string token)
         {
             return $"{GraphUrl}?access_token={token}";
         }
@@ -140,6 +145,7 @@ namespace Xamarin.Forms.OAuth
         internal virtual bool RequireCode { get { return false; } }
         internal virtual bool IsTokenResponseJson { get { return true; } }
         internal virtual bool IncludeRedirectUrlInTokenRequest { get { return false; } }
+        internal virtual bool IncludeStateInAuthorize { get { return false; } }
 
         private static Regex _urlParameterExpression = new Regex("(.*)=(.*)");
         private static IDictionary<string, string> ReadReponseParameter(string url)
