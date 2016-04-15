@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Net.Http;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms.OAuth.ViewModels;
@@ -90,9 +89,9 @@ namespace Xamarin.Forms.OAuth
                         return AuthenticatonResult.Failed(oAuthResponse.Error, oAuthResponse.ErrorDescription);
                 }
                 
-                var response = await client.GetStringAsync(provider.BuildGraphUrl(oAuthResponse.Token.Token));
+                var graphResponse = await client.GetStringAsync(provider.BuildGraphUrl(oAuthResponse.Token.Token));
 
-                var accountData = provider.GetAccountData(response);
+                var accountData = provider.GetAccountData(graphResponse);
                 return AuthenticatonResult.Successful(accountData.Item1, accountData.Item2, provider, oAuthResponse.Token);
             });
         }

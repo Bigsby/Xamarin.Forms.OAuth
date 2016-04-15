@@ -29,5 +29,21 @@
                 return "https://api.dropbox.com/1/account/info";
             }
         }
+
+        internal override string IdPropertyName
+        {
+            get
+            {
+                return "uid";
+            }
+        }
+
+        internal override string NamePropertyName
+        {
+            get
+            {
+                return "display_name";
+            }
+        }
     }
 }
