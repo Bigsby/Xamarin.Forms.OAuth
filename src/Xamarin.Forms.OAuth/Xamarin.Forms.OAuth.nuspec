@@ -2,14 +2,15 @@
 <package >
   <metadata>
     <id>Xamarin.Forms.OAuth</id>
-    <version>1.0.2</version>
+    <version>1.1.0</version>
     <title>Xamarin Forms OAuth</title>
     <authors>Bigsby</authors>
     <owners>Bigsby</owners>
+	<projectUrl>https://github.com/Bigsby/Xamarin.Forms.OAuth</projectUrl>
     <iconUrl>http://xamarin.com/content/images/nuget/xamarin.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Library to authenticate Xamarin Forms apps against OAuth providers</description>
-    <releaseNotes>nclude expire date in token, clean provider selection view, allow for provider to injected outside the list, allow for scopes to be injected</releaseNotes>
+    <releaseNotes>Implemented several OAuth providers. Bug fixes and code clean up.</releaseNotes>
     <copyright>Copyright 2016</copyright>
     <tags>Xamarin Xamarin.Forms OAuth Facebook Google Microsoft Live Microsoft.Live</tags>
   </metadata>
