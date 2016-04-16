@@ -77,14 +77,14 @@ namespace Xamarin.Forms.OAuth
             return new ReddItOAuthProvider(clientId, redirectUrl, scopes);
         }
 
-        public static OAuthProvider Twitter(string clientId, string redirectUrl, params string[] scopes)
+        public static OAuthProvider StackExchange(string clientId, string clientSecret, params string[] scopes)
         {
-            return new TwitterOAuthProvider(clientId, redirectUrl, scopes);
+            return new StackExchangeOAuthProvider(clientId, clientSecret, scopes);
         }
 
-        public static OAuthProvider StackExchange(string clientId, params string[] scopes)
-        {
-            return new StackExchangeOAuthProvider(clientId, scopes);
-        }
+        //public static OAuthProvider Twitter(string clientId, string redirectUrl, params string[] scopes)
+        //{
+        //    return new TwitterOAuthProvider(clientId, redirectUrl, scopes);
+        //}
     }
 }

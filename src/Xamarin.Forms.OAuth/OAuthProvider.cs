@@ -100,7 +100,7 @@ namespace Xamarin.Forms.OAuth
                 jObject.GetStringValue(NamePropertyName));
         }
 
-        internal string GetAuthorizationUrl()
+        internal virtual string GetAuthorizationUrl()
         {
             var scopesToInject = MandatoryScopes.Union(_scopes ?? new string[0]).Distinct().ToArray();
             var scope = scopesToInject.Any() ?
@@ -161,8 +161,10 @@ namespace Xamarin.Forms.OAuth
         protected virtual bool ExcludeClientIdInTokenRequest { get { return false; } }
         internal virtual bool IncludeStateInAuthorize { get { return false; } }
 
+        internal virtual void PreAuthenticationProcess() { }
+
         private static Regex _urlParameterExpression = new Regex("(.*)=(.*)");
-        private static IDictionary<string, string> ReadReponseParameter(string url)
+        protected static IDictionary<string, string> ReadReponseParameter(string url)
         {
             var uri = new Uri(url);
             var query = uri.Query.Trim('?');
