@@ -23,6 +23,9 @@ namespace OAuthTestApp
 
             // The root page of your application
             MainPage = new StartPage();
+
+            var customProvider = OAuthProviders.Custom("", "", "", "", "");
+            
         }
 
         private static void LoadProviders()
@@ -51,6 +54,9 @@ namespace OAuthTestApp
 
                 if (!string.IsNullOrEmpty(config.Value.ClientSecret))
                     args.Add(config.Value.ClientSecret);
+
+                if (!string.IsNullOrEmpty(config.Value.TokenSecret))
+                    args.Add(config.Value.TokenSecret);
 
                 if (!string.IsNullOrEmpty(config.Value.RedirectUrl))
                     args.Add(config.Value.RedirectUrl);
@@ -94,5 +100,6 @@ namespace OAuthTestApp
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
         public string RedirectUrl { get; set; }
+        public string TokenSecret { get; set; }
     }
 }

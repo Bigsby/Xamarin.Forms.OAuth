@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
 
 namespace Xamarin.Forms.OAuth.Providers
 {
@@ -7,11 +6,13 @@ namespace Xamarin.Forms.OAuth.Providers
     {
         private const string _redirectUrl = "https://stackexchange.com/oauth/login_success";
         //TODO: Get site from configuration
-        private const string _site = "stackoverflow";
+        private string _site;
 
-        public StackExchangeOAuthProvider(string clientId, string clientSecret, params string[] scopes)
+        public StackExchangeOAuthProvider(string clientId, string clientSecret, string site, params string[] scopes)
             : base(clientId, clientSecret, _redirectUrl, scopes)
-        { }
+        {
+            _site = site;
+        }
 
         public override string Name
         {
@@ -42,12 +43,12 @@ namespace Xamarin.Forms.OAuth.Providers
             return string.Format(GraphUrl, token, ClientSecret, _site);
         }
 
-        internal override Tuple<string, string> GetAccountData(string json)
+        internal override AccountData GetAccountData(string json)
         {
             var jObject = JObject.Parse(json);
             var data = jObject["items"][0] as JObject;
 
-            return new Tuple<string, string>(
+            return new AccountData(
                 data.GetStringValue("user_id"),
                 data.GetStringValue("display_name")
                 );

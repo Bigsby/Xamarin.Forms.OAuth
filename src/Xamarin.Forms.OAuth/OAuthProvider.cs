@@ -5,15 +5,26 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Xamarin.Forms.OAuth
 {
     public abstract class OAuthProvider
     {
+        #region Privet Fields
         private readonly string[] _scopes;
+        private const string _errorParameter = "error";
+        private const string _errorDescriptionParameter = "error_description";
+        private const string _codeParameter = "code";
+        private const string _accessTokenParatemeter = "access_token";
+        private const string _refreshTokenParameter = "refresh_token";
+        private const string _expiresInParameter = "expires_in";
+        private static Regex _urlParameterExpression = new Regex("(.*)=(.*)");
+        #endregion
 
+        #region Constructors
         protected OAuthProvider(string clientId,
-            string redirectUrl, params string[] scopes)
+           string redirectUrl, params string[] scopes)
         {
             ClientId = clientId;
             RedirectUrl = redirectUrl;
@@ -26,7 +37,9 @@ namespace Xamarin.Forms.OAuth
         {
             ClientSecret = clientSecret;
         }
+        #endregion
 
+        #region Public Properties
         public const string NameProperty = "Name";
         public const string LogoProperty = "Logo";
         public abstract string Name { get; }
@@ -37,25 +50,21 @@ namespace Xamarin.Forms.OAuth
                 return ImageSource.FromResource($"{GetType().Namespace}.Logos.{Name}.png", GetType().GetTypeInfo().Assembly);
             }
         }
+        #endregion
 
-        protected string ClientId { get; private set; }
-        protected string ClientSecret { get; private set; }
-        protected virtual string[] MandatoryScopes { get { return new string[0]; } }
+        #region Internal Members
+        internal virtual string GrpahIdProperty { get { return "id"; } }
+        internal virtual string GraphNameProperty { get { return "name"; } }
         internal string RedirectUrl { get; private set; }
-
-        private const string _errorParameter = "error";
-        private const string _errorDescriptionParameter = "error_description";
-        private const string _codeParameter = "code";
-        private const string _accessTokenParatemeter = "access_token";
-        private const string _refreshTokenParameter = "refresh_token";
-        private const string _expiresInParameter = "expires_in";
+        internal virtual string TokenUrl { get { return null; } }
+        internal virtual string TokenAuthorizationHeader { get { return null; } }
 
         internal virtual OAuthResponse GetOAuthResponseFromUrl(string url)
         {
             var parameters = ReadReponseParameter(url);
 
             if (parameters.ContainsKey(_errorParameter))
-                return new OAuthResponse(parameters[_errorParameter],
+                return OAuthResponse.WithError(parameters[_errorParameter],
                     parameters.ContainsKey(_errorDescriptionParameter) ?
                         parameters[_errorDescriptionParameter]
                         :
@@ -63,9 +72,9 @@ namespace Xamarin.Forms.OAuth
                     );
 
             if (parameters.ContainsKey(_codeParameter))
-                return new OAuthResponse(parameters[_codeParameter]);
+                return OAuthResponse.WithCode(parameters[_codeParameter]);
 
-            return new OAuthResponse(new OAuthAccessToken(
+            return OAuthResponse.WithToken(new OAuthAccessToken(
                     parameters[_accessTokenParatemeter],
                     GetExpireDate(parameters.ContainsKey(_expiresInParameter) ?
                         parameters[_expiresInParameter]
@@ -82,9 +91,9 @@ namespace Xamarin.Forms.OAuth
 
                 var error = jObject.GetStringValue(_errorParameter);
                 if (!string.IsNullOrEmpty(error))
-                    return new OAuthResponse(error, jObject.GetStringValue(_errorDescriptionParameter));
+                    return OAuthResponse.WithError(error, jObject.GetStringValue(_errorDescriptionParameter));
 
-                return new OAuthResponse(new OAuthAccessToken(
+                return OAuthResponse.WithToken(new OAuthAccessToken(
                     jObject.GetStringValue(_accessTokenParatemeter),
                     jObject.GetStringValue(_refreshTokenParameter),
                     GetExpireDate(jObject.GetStringValue(_expiresInParameter))));
@@ -92,12 +101,12 @@ namespace Xamarin.Forms.OAuth
             return GetOAuthResponseFromUrl("http://abc.com?" + response);
         }
 
-        internal virtual Tuple<string, string> GetAccountData(string json)
+        internal virtual AccountData GetAccountData(string json)
         {
             var jObject = JObject.Parse(json);
-            return new Tuple<string, string>(
-                jObject.GetStringValue(IdPropertyName),
-                jObject.GetStringValue(NamePropertyName));
+            return new AccountData(
+                jObject.GetStringValue(GrpahIdProperty),
+                jObject.GetStringValue(GraphNameProperty));
         }
 
         internal virtual string GetAuthorizationUrl()
@@ -108,7 +117,7 @@ namespace Xamarin.Forms.OAuth
                 :
                 string.Empty;
 
-            var responseType = RequireCode ? "code" : "token";
+            var responseType = RequiresCode ? "code" : "token";
 
             var state = IncludeStateInAuthorize ?
                 "&state=authentication"
@@ -143,27 +152,37 @@ namespace Xamarin.Forms.OAuth
             return $"{GraphUrl}?access_token={token}";
         }
 
-        protected abstract string AuthorizeUrl { get; }
-        internal virtual string TokenUrl { get { return null; } }
-        protected abstract string GraphUrl { get; }
-
         internal virtual IEnumerable<KeyValuePair<string, string>> GraphHeaders(OAuthAccessToken token)
         {
             return new KeyValuePair<string, string>[0];
         }
 
-        internal virtual string IdPropertyName { get { return "id"; } }
-        internal virtual string NamePropertyName { get { return "name"; } }
+        internal virtual async Task PreAuthenticationProcess() { await Task.FromResult(0); }
 
-        internal virtual bool RequireCode { get { return false; } }
-        internal virtual bool IsTokenResponseJson { get { return true; } }
-        internal virtual bool IncludeRedirectUrlInTokenRequest { get { return false; } }
+        public class AccountData
+        {
+            public AccountData(string id, string name)
+            {
+                Id = id;
+                Name = name;
+            }
+            public string Id { get; private set; }
+            public string Name { get; private set; }
+        }
+        #endregion
+
+        #region Protected Members
+        protected string ClientId { get; private set; }
+        protected string ClientSecret { get; private set; }
+        protected virtual string[] MandatoryScopes { get { return new string[0]; } }
+        protected abstract string AuthorizeUrl { get; }
+        protected abstract string GraphUrl { get; }
+        protected virtual bool RequiresCode { get { return false; } }
         protected virtual bool ExcludeClientIdInTokenRequest { get { return false; } }
-        internal virtual bool IncludeStateInAuthorize { get { return false; } }
+        protected virtual bool IsTokenResponseJson { get { return true; } }
+        protected virtual bool IncludeRedirectUrlInTokenRequest { get { return false; } }
+        protected virtual bool IncludeStateInAuthorize { get { return false; } }
 
-        internal virtual void PreAuthenticationProcess() { }
-
-        private static Regex _urlParameterExpression = new Regex("(.*)=(.*)");
         protected static IDictionary<string, string> ReadReponseParameter(string url)
         {
             var uri = new Uri(url);
@@ -185,7 +204,9 @@ namespace Xamarin.Forms.OAuth
 
             return result;
         }
+        #endregion
 
+        #region Private Members
         private static DateTime GetExpireDate(string value)
         {
             return string.IsNullOrEmpty(value) ?
@@ -193,17 +214,6 @@ namespace Xamarin.Forms.OAuth
                 :
                 DateTime.Now + TimeSpan.FromSeconds(double.Parse(value));
         }
-
-        internal virtual string TokenAuthorizationHeader { get { return null; } }
-    }
-
-    internal static class JObjectExtension
-    {
-        public static string GetStringValue(this JObject jObject, string propertyName)
-        {
-            var token = jObject.GetValue(propertyName);
-
-            return null == token ? string.Empty : token.ToString();
-        }
+        #endregion
     }
 }

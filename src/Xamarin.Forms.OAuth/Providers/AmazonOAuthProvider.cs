@@ -38,7 +38,7 @@
             }
         }
 
-        internal override string IdPropertyName
+        internal override string GrpahIdProperty
         {
             get
             {

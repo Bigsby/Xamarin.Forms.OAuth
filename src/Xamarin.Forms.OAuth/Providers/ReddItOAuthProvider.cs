@@ -43,7 +43,7 @@ namespace Xamarin.Forms.OAuth.Providers
             }
         }
 
-        internal override bool RequireCode
+        protected override bool RequiresCode
         {
             get
             {
@@ -59,7 +59,7 @@ namespace Xamarin.Forms.OAuth.Providers
             }
         }
 
-        internal override bool IncludeStateInAuthorize
+        protected override bool IncludeStateInAuthorize
         {
             get
             {
@@ -67,7 +67,7 @@ namespace Xamarin.Forms.OAuth.Providers
             }
         }
 
-        internal override bool IncludeRedirectUrlInTokenRequest
+        protected override bool IncludeRedirectUrlInTokenRequest
         {
             get
             {

@@ -38,7 +38,7 @@
             }
         }
 
-        internal override bool RequireCode
+        protected override bool RequiresCode
         {
             get
             {

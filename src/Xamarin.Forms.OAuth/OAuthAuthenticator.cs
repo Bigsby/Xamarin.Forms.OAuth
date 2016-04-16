@@ -13,9 +13,18 @@ namespace Xamarin.Forms.OAuth
 {
     public static class OAuthAuthenticator
     {
+        #region Private Fields
         private static readonly ICollection<OAuthProvider> _providers = new List<OAuthProvider>();
         private static readonly ManualResetEvent _awaiter = new ManualResetEvent(false);
         private static string _providerSelectText = "Select Provider";
+        #endregion
+
+        #region Public Methods
+        public static void SetProviderSelectText(string text)
+        {
+            if (!string.IsNullOrEmpty(text))
+                _providerSelectText = text;
+        }
 
         public static void AddPRovider(OAuthProvider provider)
         {
@@ -24,78 +33,34 @@ namespace Xamarin.Forms.OAuth
 
         public static async Task<AuthenticatonResult> Authenticate(OAuthProvider provider = null)
         {
-            if (!_providers.Any())
+            if (null == provider && !_providers.Any())
                 return AuthenticatonResult.Failed("No providers");
 
             return await Task.Run(async () =>
             {
                 if (null == provider)
-                {
-                    var selectionViewModel = new ProviderSelectionViewModel(_providers);
-                    selectionViewModel.ProviderSelected += (s, e) =>
-                    {
-                        provider = e.Provider;
-                        _awaiter.Set();
-                    };
-
-                    Device.BeginInvokeOnMainThread(() =>
-                        Application.Current.MainPage = new ProviderSelectionPage(selectionViewModel));
-                    _awaiter.WaitOne();
-                    _awaiter.Reset();
-                }
+                    provider = await SelectProviderFromList();
 
                 if (null == provider)
                     return AuthenticatonResult.Failed("No provider selected.");
 
-                provider.PreAuthenticationProcess();
+                await provider.PreAuthenticationProcess();
 
-                OAuthResponse oAuthResponse = null;
-                var backPressed = false;
+                var oAuthResponse = await AuthenticateUser(provider);
 
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    var webView = new WebOAuthPage(provider.GetAuthorizationUrl(),
-                        () =>
-                        {
-                            backPressed = true;
-                            _awaiter.Set();
-                        },
-                        url => CheckRedirect(url, provider));
-                    webView.Done += (s, e) =>
-                    {
-                        oAuthResponse = provider.GetOAuthResponseFromUrl(e.Url);
-                        _awaiter.Set();
-                    };
-                    Application.Current.MainPage = webView;
-                });
-
-                _awaiter.WaitOne();
-                _awaiter.Reset();
-
+                //TODO show activity indicator at this point
                 Device.BeginInvokeOnMainThread(() => Application.Current.MainPage.IsVisible = false);
 
-                if (backPressed)
+                if (oAuthResponse.IsCancelled)
                     return AuthenticatonResult.Failed("Cancelled");
 
                 if (!oAuthResponse)
                     return AuthenticatonResult.Failed(oAuthResponse.Error, oAuthResponse.ErrorDescription);
 
-                var tokenClient = new HttpClient();
+               
                 if (oAuthResponse.IsCode)
-                {
-                    if (string.IsNullOrEmpty(provider.TokenUrl))
-                        return AuthenticatonResult.Failed("BadImplementation",
-                            "Provider returns code in authorize request but there is not access token URL.");
-
-                    if (!string.IsNullOrEmpty(provider.TokenAuthorizationHeader))
-                        tokenClient.DefaultRequestHeaders.Add("Authorization", provider.TokenAuthorizationHeader);
-
-                    var tokenResponse = await tokenClient.PostAsync(provider.TokenUrl,
-                        BuildHttpContent(provider.BuildTokenContent(oAuthResponse.Code)));
-
-                    var tokenResponseString = await tokenResponse.Content.ReadAsStringAsync();
-
-                    oAuthResponse = provider.GetTokenResponse(tokenResponseString);
+                { 
+                    oAuthResponse = await GetTokenFromCode(provider, oAuthResponse.Code);
 
                     if (!oAuthResponse)
                         return AuthenticatonResult.Failed(oAuthResponse.Error, oAuthResponse.ErrorDescription);
@@ -103,24 +68,101 @@ namespace Xamarin.Forms.OAuth
 
                 try
                 {
-                    var graphClient = new HttpClient();
-                    var graphHeaders = provider.GraphHeaders(oAuthResponse.Token);
-
-                    foreach (var header in graphHeaders)
-                        graphClient.DefaultRequestHeaders.Add(header.Key, header.Value);
-
-                    var graphResponse = await graphClient.GetAsync(provider.BuildGraphUrl(oAuthResponse.Token.Token));
-
-                    var graphResponseString = await ReadContent(graphResponse.Content);
-
-                    var accountData = provider.GetAccountData(graphResponseString);
-                    return AuthenticatonResult.Successful(accountData.Item1, accountData.Item2, provider, oAuthResponse.Token);
+                    var accountData = await GetAccountData(provider, oAuthResponse.Token);
+                    return AuthenticatonResult.Successful(accountData.Id, accountData.Name, provider, oAuthResponse.Token);
                 }
                 catch (Exception ex)
                 {
                     return AuthenticatonResult.Failed(ex.Message, ex.StackTrace);
                 }
             });
+        }
+        #endregion
+
+        #region Internal Members
+        internal static string ProviderSelectText { get { return _providerSelectText; } }
+        #endregion
+
+        #region Private Methods
+        private static Task<OAuthProvider> SelectProviderFromList()
+        {
+            _awaiter.Reset();
+            OAuthProvider provider = null;
+            var selectionViewModel = new ProviderSelectionViewModel(_providers);
+            selectionViewModel.ProviderSelected += (s, e) =>
+            {
+                provider = e.Provider;
+                _awaiter.Set();
+            };
+
+            Device.BeginInvokeOnMainThread(() =>
+                Application.Current.MainPage = new ProviderSelectionPage(selectionViewModel));
+            _awaiter.WaitOne();
+            _awaiter.Reset();
+
+            return Task.FromResult(provider);
+        }
+
+        private static Task<OAuthResponse> AuthenticateUser(OAuthProvider provider)
+        {
+            _awaiter.Reset();
+            OAuthResponse oAuthResponse = null;
+
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                var webView = new WebOAuthPage(provider.GetAuthorizationUrl(),
+                    () =>
+                    {
+                        oAuthResponse = OAuthResponse.Cancel();
+                        _awaiter.Set();
+                    },
+                    url => CheckRedirect(url, provider));
+                webView.Done += (s, e) =>
+                {
+                    oAuthResponse = provider.GetOAuthResponseFromUrl(e.Url);
+                    _awaiter.Set();
+                };
+                Application.Current.MainPage = webView;
+            });
+
+            _awaiter.WaitOne();
+            _awaiter.Reset();
+
+            return Task.FromResult(oAuthResponse);
+        }
+
+        private static async Task<OAuthResponse> GetTokenFromCode(OAuthProvider provider, string code)
+        {
+            if (string.IsNullOrEmpty(provider.TokenUrl))
+                return OAuthResponse.WithError("BadImplementation",
+                    "Provider returns code in authorize request but there is not access token URL.");
+
+            var tokenClient = new HttpClient();
+
+            if (!string.IsNullOrEmpty(provider.TokenAuthorizationHeader))
+                tokenClient.DefaultRequestHeaders.Add("Authorization", provider.TokenAuthorizationHeader);
+
+            var tokenResponse = await tokenClient.PostAsync(provider.TokenUrl,
+                BuildHttpContent(provider.BuildTokenContent(code)));
+
+            var tokenResponseString = await tokenResponse.Content.ReadAsStringAsync();
+
+            return provider.GetTokenResponse(tokenResponseString);
+        }
+
+        private static async Task<OAuthProvider.AccountData> GetAccountData(OAuthProvider provider, OAuthAccessToken token)
+        {
+            var graphClient = new HttpClient();
+            var graphHeaders = provider.GraphHeaders(token);
+
+            foreach (var header in graphHeaders)
+                graphClient.DefaultRequestHeaders.Add(header.Key, header.Value);
+
+            var graphResponse = await graphClient.GetAsync(provider.BuildGraphUrl(token.Token));
+
+            var graphResponseString = await ReadContent(graphResponse.Content);
+
+            return provider.GetAccountData(graphResponseString);
         }
 
         private static async Task<string> ReadContent(HttpContent content)
@@ -142,13 +184,6 @@ namespace Xamarin.Forms.OAuth
         {
             return url?.StartsWith(provider.RedirectUrl) == true;
         }
-
-        public static void SetProviderSelectText(string text)
-        {
-            if (!string.IsNullOrEmpty(text))
-                _providerSelectText = text;
-        }
-
-        internal static string ProviderSelectText { get { return _providerSelectText; } }
+        #endregion
     }
 }

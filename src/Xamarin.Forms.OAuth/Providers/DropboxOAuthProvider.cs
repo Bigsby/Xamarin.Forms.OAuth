@@ -30,7 +30,7 @@
             }
         }
 
-        internal override string IdPropertyName
+        internal override string GrpahIdProperty
         {
             get
             {
@@ -38,7 +38,7 @@
             }
         }
 
-        internal override string NamePropertyName
+        internal override string GraphNameProperty
         {
             get
             {

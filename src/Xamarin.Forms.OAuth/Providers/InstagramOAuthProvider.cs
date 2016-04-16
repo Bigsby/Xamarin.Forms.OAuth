@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
 
 namespace Xamarin.Forms.OAuth.Providers
 {
@@ -33,7 +32,7 @@ namespace Xamarin.Forms.OAuth.Providers
             }
         }
 
-        internal override bool RequireCode
+        protected override bool RequiresCode
         {
             get
             {
@@ -49,7 +48,7 @@ namespace Xamarin.Forms.OAuth.Providers
             }
         }
 
-        internal override bool IncludeRedirectUrlInTokenRequest
+        protected override bool IncludeRedirectUrlInTokenRequest
         {
             get
             {
@@ -57,13 +56,13 @@ namespace Xamarin.Forms.OAuth.Providers
             }
         }
 
-        internal override Tuple<string, string> GetAccountData(string json)
+        internal override AccountData GetAccountData(string json)
         {
             var jObject = JObject.Parse(json);
 
             var data = jObject.GetValue("data") as JObject;
 
-            return new Tuple<string, string>(
+            return new AccountData(
                 data.GetStringValue("id"),
                 data.GetStringValue("full_name"));
         }

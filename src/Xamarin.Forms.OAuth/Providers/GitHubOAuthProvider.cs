@@ -32,7 +32,7 @@ namespace Xamarin.Forms.OAuth.Providers
             }
         }
 
-        internal override bool RequireCode
+        protected override bool RequiresCode
         {
             get
             {
@@ -48,7 +48,7 @@ namespace Xamarin.Forms.OAuth.Providers
             }
         }
 
-        internal override bool IsTokenResponseJson
+        protected override bool IsTokenResponseJson
         {
             get
             {
@@ -58,6 +58,7 @@ namespace Xamarin.Forms.OAuth.Providers
 
         internal override IEnumerable<KeyValuePair<string, string>> GraphHeaders(OAuthAccessToken token)
         {
+            //TODO: Find correct way in documentation and remove this workaround
             return new[] { new KeyValuePair<string, string>("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0") };
         }
     }

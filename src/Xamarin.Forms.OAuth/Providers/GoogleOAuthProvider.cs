@@ -35,7 +35,7 @@
             get { return "https://www.googleapis.com/plus/v1/people/me"; }
         }
 
-        internal override string NamePropertyName
+        internal override string GraphNameProperty
         {
             get
             {
