@@ -88,9 +88,6 @@ Here is the list of the OAuth providers suported out-of-the-box:
 * ReddIt
 * StackExchange
 
-Implemented but not tested:
-* Twitter
-
 
 # Future Features
 These are the features that will be impleneted next:
