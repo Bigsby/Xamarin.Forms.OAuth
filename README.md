@@ -91,6 +91,13 @@ Here is the list of the OAuth providers suported out-of-the-box:
 
 # Future Features
 These are the features that will be impleneted next:
-* Implement Visual Studio Online Provider
+* Implement more providers:
+  * Visual Studio Online Provider
+  * Slack
+  * Foursquare
+  * Meetup
+  * Salesforce
+  * SoundCloud
 * Implement token refresh
 * Feel free to point buts or any feature you would like implemented
+  [Gitter Room](https://gitter.im/Bigsby/Xamarin.Forms.OAuth)
