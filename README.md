@@ -99,6 +99,7 @@ These are the features that will be impleneted next:
   * Meetup
   * Salesforce
   * SoundCloud
+  * Trello
 * Implement token refresh
 * Feel free to point buts or any feature you would like implemented
   [Gitter Room](https://gitter.im/Bigsby/Xamarin.Forms.OAuth)
