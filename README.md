@@ -1,4 +1,6 @@
 # Xamarin.Forms.OAuth
+
+[![Join the chat at https://gitter.im/Bigsby/Xamarin.Forms.OAuth](https://badges.gitter.im/Bigsby/Xamarin.Forms.OAuth.svg)](https://gitter.im/Bigsby/Xamarin.Forms.OAuth?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Xamarin.Forms library to authenticate against OAuth endpoints
 
 
