@@ -91,5 +91,6 @@ Here is the list of the OAuth providers suported out-of-the-box:
 
 # Future Features
 These are the features that will be impleneted next:
+* Implement Visual Studio Online Provider
 * Implement token refresh
 * Feel free to point buts or any feature you would like implemented
