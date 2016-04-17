@@ -94,6 +94,7 @@ These are the features that will be impleneted next:
 * Implement more providers:
   * Visual Studio Online Provider
   * Slack
+  * Gitter
   * Foursquare
   * Meetup
   * Salesforce
