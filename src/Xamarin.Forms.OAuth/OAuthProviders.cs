@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms.OAuth.Providers;
+﻿using System.Reflection;
+using Xamarin.Forms.OAuth.Providers;
 
 namespace Xamarin.Forms.OAuth
 {
@@ -80,6 +81,11 @@ namespace Xamarin.Forms.OAuth
         public static OAuthProvider StackExchange(string clientId, string clientSecret, string site, params string[] scopes)
         {
             return new StackExchangeOAuthProvider(clientId, clientSecret, site, scopes);
+        }
+
+        public static ImageSource GetProviderLogo(string providerName)
+        {
+            return ImageSource.FromResource($"{typeof(OAuthProvider).Namespace}.Logos.{providerName}.png", typeof(OAuthProvider).GetTypeInfo().Assembly);
         }
     }
 }
