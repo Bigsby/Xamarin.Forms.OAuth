@@ -106,5 +106,4 @@ These are the features that will be impleneted next:
   * Skype for Business
   * Microsft Graph
 * Implement token refresh
-* Feel free to point buts or any feature you would like implemented
-  [![Join the chat at https://gitter.im/Bigsby/Xamarin.Forms.OAuth](https://badges.gitter.im/Bigsby/Xamarin.Forms.OAuth.svg)](https://gitter.im/Bigsby/Xamarin.Forms.OAuth?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+* Feel free to point buts or any feature you would like implemented on  [![Join the chat at https://gitter.im/Bigsby/Xamarin.Forms.OAuth](https://badges.gitter.im/Bigsby/Xamarin.Forms.OAuth.svg)](https://gitter.im/Bigsby/Xamarin.Forms.OAuth?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
