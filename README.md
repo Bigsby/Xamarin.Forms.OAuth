@@ -100,6 +100,10 @@ These are the features that will be impleneted next:
   * Salesforce
   * SoundCloud
   * Trello
+  * PayPal
+  * Atlassian products (JIRA, Bamboo, Bitbucket)
+  * Skype for Business
+  * Microsft Graph
 * Implement token refresh
 * Feel free to point buts or any feature you would like implemented
   [Gitter Room](https://gitter.im/Bigsby/Xamarin.Forms.OAuth)
