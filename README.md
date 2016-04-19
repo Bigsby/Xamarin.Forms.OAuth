@@ -76,11 +76,12 @@ else
 
 # Supported Providers
 
-Here is the list of the OAuth providers suported out-of-the-box (14):
+Here is the list of the OAuth providers suported out-of-the-box (15):
 * Amazon
 * Box
 * Dropbox
 * Facebook
+* Foursquare
 * GitHub
 * Gitter
 * Google
@@ -95,7 +96,6 @@ Here is the list of the OAuth providers suported out-of-the-box (14):
 # Future Features
 These are the features that will be impleneted next:
 * Implement more providers:
-  * Foursquare
   * Meetup
   * Salesforce
   * SoundCloud
