@@ -48,6 +48,7 @@
     <Compile Include="Providers\BoxOAuthProvider.cs" />
     <Compile Include="Providers\CustomOAuthProvider.cs" />
     <Compile Include="Providers\DropboxOAuthProvider.cs" />
+    <Compile Include="Providers\FoursquareOAuthProvider.cs" />
     <Compile Include="Providers\GitHubOAuthProvider.cs" />
     <Compile Include="Providers\GitterOAuthProvider.cs" />
     <Compile Include="Providers\InstagramOAuthProvider.cs" />

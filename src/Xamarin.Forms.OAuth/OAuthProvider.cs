@@ -164,7 +164,7 @@ namespace Xamarin.Forms.OAuth
 
         internal virtual string BuildGraphUrl(string token)
         {
-            return $"{GraphUrl}?access_token={token}";
+            return $"{GraphUrl}?{TokeUrlParameter}={token}";
         }
 
         internal virtual IEnumerable<KeyValuePair<string, string>> GraphHeaders(OAuthAccessToken token)
@@ -203,7 +203,7 @@ namespace Xamarin.Forms.OAuth
         protected virtual string ScopeSeparator { get { return ","; } }
         protected virtual TokenType TokenType { get { return TokenType.Url; } }
         protected virtual TokenResponseSerialization TokenResponseSerialization { get { return TokenResponseSerialization.JSON; } }
-
+        protected virtual string TokeUrlParameter { get { return "access_token"; } }
         protected virtual string AuthorizeResponseType
         {
             get { return RequiresCode ? "code" : "token"; }
