@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -113,38 +114,48 @@ namespace Xamarin.Forms.OAuth
         {
             var scopesToInject = MandatoryScopes.Union(_scopes ?? new string[0]).Distinct().ToArray();
             var scope = scopesToInject.Any() ?
-                "&scope=" + string.Join(",", scopesToInject)
+                "&scope=" + string.Join(ScopeSeparator, scopesToInject)
                 :
                 string.Empty;
-
-            var responseType = RequiresCode ? "code" : "token";
 
             var state = IncludeStateInAuthorize ?
                 "&state=authentication"
                 :
                 string.Empty;
 
-            return $"{AuthorizeUrl}?response_type={responseType}&client_id={ClientId}&redirect_uri={WebUtility.UrlEncode(RedirectUrl)}{scope}{state}";
+            return $"{AuthorizeUrl}?response_type={AuthorizeResponseType}&client_id={ClientId}&redirect_uri={WebUtility.UrlEncode(RedirectUrl)}{scope}{state}";
         }
 
-        internal string BuildTokenContent(string code)
+        internal virtual IEnumerable<KeyValuePair<string, string>> BuildTokenRequestHeaders()
         {
-            var redirectContent = IncludeRedirectUrlInTokenRequest ?
-                $"&redirect_uri={WebUtility.UrlEncode(RedirectUrl)}"
-                :
-                string.Empty;
+            return new KeyValuePair<string, string>[0];
+        }
 
-            var client = ExcludeClientIdInTokenRequest ?
-                string.Empty
-                :
-                $"&client_id={ClientId}";
+        internal virtual string BuildTokenContent(string code)
+        {
+            var fields = BuildTokenRequestFields(code);
 
-            var secret = string.IsNullOrEmpty(ClientSecret) ?
-                string.Empty
-                :
-                $"&client_secret={ClientSecret}";
+            return string.Join("&", fields.Select(pair => $"{pair.Key}={pair.Value}"));
+        }
 
-            return $"grant_type=authorization_code&code={code}{client}{secret}{redirectContent}";
+        protected virtual IEnumerable<KeyValuePair<string, string>> BuildTokenRequestFields(string code)
+        {
+            var fields = new Dictionary<string, string>
+            {
+                { "grant_type", "authorization_code" },
+                { "code", code }
+            };
+
+            if (IncludeRedirectUrlInTokenRequest)
+                fields.Add("redirect_uri", WebUtility.UrlEncode(RedirectUrl));
+
+            if (!ExcludeClientIdInTokenRequest)
+                fields.Add("client_id", ClientId);
+
+            if (!string.IsNullOrEmpty(ClientSecret))
+                fields.Add("client_secret", ClientSecret);
+
+            return fields;
         }
 
         internal virtual string BuildGraphUrl(string token)
@@ -182,6 +193,12 @@ namespace Xamarin.Forms.OAuth
         protected virtual bool IsTokenResponseJson { get { return true; } }
         protected virtual bool IncludeRedirectUrlInTokenRequest { get { return false; } }
         protected virtual bool IncludeStateInAuthorize { get { return false; } }
+        protected virtual string ScopeSeparator { get { return ","; } }
+
+        protected virtual string AuthorizeResponseType
+        {
+            get { return RequiresCode ? "code" : "token"; }
+        }
 
         protected static IDictionary<string, string> ReadReponseParameter(string url)
         {
@@ -204,10 +221,8 @@ namespace Xamarin.Forms.OAuth
 
             return result;
         }
-        #endregion
 
-        #region Private Members
-        private static DateTime GetExpireDate(string value)
+        protected static DateTime GetExpireDate(string value)
         {
             return string.IsNullOrEmpty(value) ?
                 DateTime.MinValue

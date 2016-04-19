@@ -49,10 +49,13 @@
     <Compile Include="Providers\CustomOAuthProvider.cs" />
     <Compile Include="Providers\DropboxOAuthProvider.cs" />
     <Compile Include="Providers\GitHubOAuthProvider.cs" />
+    <Compile Include="Providers\GitterOAuthProvider.cs" />
     <Compile Include="Providers\InstagramOAuthProvider.cs" />
     <Compile Include="Providers\LinkedInOAuthProvider.cs" />
     <Compile Include="Providers\ReddItOAuthProvider.cs" />
+    <Compile Include="Providers\SlackOAuthProvider.cs" />
     <Compile Include="Providers\StackExchangeOAuthProvider.cs" />
+    <Compile Include="Providers\VisualStudioOAuthProvider.cs" />
     <Compile Include="Views\BaseView.cs" />
     <Compile Include="Views\ProviderSelectionPage.cs" />
     <Compile Include="Providers\FacebookOAuthProvider.cs" />

@@ -57,9 +57,9 @@ namespace Xamarin.Forms.OAuth
                 if (!oAuthResponse)
                     return AuthenticatonResult.Failed(oAuthResponse.Error, oAuthResponse.ErrorDescription);
 
-               
+
                 if (oAuthResponse.IsCode)
-                { 
+                {
                     oAuthResponse = await GetTokenFromCode(provider, oAuthResponse.Code);
 
                     if (!oAuthResponse)
@@ -141,6 +141,8 @@ namespace Xamarin.Forms.OAuth
 
             if (!string.IsNullOrEmpty(provider.TokenAuthorizationHeader))
                 tokenClient.DefaultRequestHeaders.Add("Authorization", provider.TokenAuthorizationHeader);
+
+            tokenClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
             var tokenResponse = await tokenClient.PostAsync(provider.TokenUrl,
                 BuildHttpContent(provider.BuildTokenContent(code)));

@@ -53,6 +53,11 @@ namespace Xamarin.Forms.OAuth
             return new GitHubOAuthProvider(clientId, clientSecret, redirectUrl, scopes);
         }
 
+        public static OAuthProvider Gitter(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
+        {
+            return new GitterOAuthProvider(clientId, clientSecret, redirectUrl, scopes);
+        }
+
         public static OAuthProvider Google(string clientId, string redirectUrl, params string[] scopes)
         {
             return new GoogleOAuthProvider(clientId, redirectUrl, scopes);
@@ -78,9 +83,19 @@ namespace Xamarin.Forms.OAuth
             return new ReddItOAuthProvider(clientId, redirectUrl, scopes);
         }
 
+        public static OAuthProvider Slack(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
+        {
+            return new SlackOAuthProvider(clientId, clientSecret, redirectUrl, scopes);
+        }
+
         public static OAuthProvider StackExchange(string clientId, string clientSecret, string site, params string[] scopes)
         {
             return new StackExchangeOAuthProvider(clientId, clientSecret, site, scopes);
+        }
+
+        public static OAuthProvider VisualStudio(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
+        {
+            return new VisualStudioOAuthProvider(clientId, clientSecret, redirectUrl, scopes);
         }
 
         public static ImageSource GetProviderLogo(string providerName)
