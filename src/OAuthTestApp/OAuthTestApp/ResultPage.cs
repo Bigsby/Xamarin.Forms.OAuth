@@ -22,7 +22,7 @@ namespace OAuthTestApp
             {
                 stack.Children.Add(new Label
                 {
-                    Text = $"Provider: {result.Account.Provider}"
+                    Text = $"Provider: {result.Account.ProviderName}"
                 });
 
                 stack.Children.Add(new Label

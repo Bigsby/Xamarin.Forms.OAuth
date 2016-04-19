@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Xamarin.Forms.OAuth.Providers
+﻿namespace Xamarin.Forms.OAuth.Providers
 {
     public class SlackOAuthProvider : OAuthProvider
     {
@@ -51,7 +49,7 @@ namespace Xamarin.Forms.OAuth.Providers
         {
             get
             {
-                return "https://slack.com/api/auth.test?token={0}";
+                return "https://slack.com/api/auth.test";
             }
         }
 
@@ -63,17 +61,20 @@ namespace Xamarin.Forms.OAuth.Providers
             }
         }
 
+        protected override string TokeUrlParameter
+        {
+            get
+            {
+                return "token";
+            }
+        }
+
         internal override string GraphNameProperty
         {
             get
             {
                 return "user";
             }
-        }
-
-        internal override string BuildGraphUrl(string token)
-        {
-            return string.Format(GraphUrl, token);
         }
     }
 }

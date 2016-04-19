@@ -83,10 +83,11 @@ namespace Xamarin.Forms.OAuth.Views
         private readonly Label _text;
         private readonly Image _image;
         private const double _imageMargin = 2;
+        private static Color _background = Color.FromHex("CCCCCC");
 
         public ProviderButton()
         {
-            BackgroundColor = Color.FromHex("B0B0B0");
+            BackgroundColor = _background;
 
             _text = new Label
             {
@@ -139,6 +140,11 @@ namespace Xamarin.Forms.OAuth.Views
         }
 
         public ICommand Command { get; set; }
+
+        internal static void SetBackgroundButton(Color color)
+        {
+            _background = color;
+        }
 
         protected override void OnBindingContextChanged()
         {

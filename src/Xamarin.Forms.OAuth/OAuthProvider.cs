@@ -1,10 +1,13 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -51,6 +54,53 @@ namespace Xamarin.Forms.OAuth
                 return ImageSource.FromResource($"{GetType().Namespace}.Logos.{Name}.png", GetType().GetTypeInfo().Assembly);
             }
         }
+
+        public virtual async Task<T> GetResource<T>(string resourceUrl, OAuthAccessToken token, IEnumerable<KeyValuePair<string, string>> queryParameters = null)
+            where T : class
+        {
+            var url = BuildResourceTokenUrl(resourceUrl, token.Token, queryParameters);
+
+            using (var client = new HttpClient())
+            {
+                var graphHeaders = ResourceHeaders(token);
+
+                foreach (var header in graphHeaders)
+                    client.DefaultRequestHeaders.Add(header.Key, header.Value);
+
+                var response = await client.GetAsync(url);
+
+                return await ReadHttpResponse<T>(response);
+            }
+        }
+
+        public virtual async Task<T> PostResource<T>(string resourceUrl, HttpContent content, OAuthAccessToken token, IEnumerable<KeyValuePair<string, string>> queryParameters = null)
+            where T : class
+        {
+            var url = BuildResourceTokenUrl(resourceUrl, token.Token, queryParameters);
+
+            using (var client = new HttpClient())
+            {
+                var graphHeaders = ResourceHeaders(token);
+
+                foreach (var header in graphHeaders)
+                    client.DefaultRequestHeaders.Add(header.Key, header.Value);
+
+                var response = await client.PostAsync(url, content);
+
+                return await ReadHttpResponse<T>(response);
+            }
+        }
+
+        public class AccountData
+        {
+            public AccountData(string id, string name)
+            {
+                Id = id;
+                Name = name;
+            }
+            public string Id { get; private set; }
+            public string Name { get; private set; }
+        }
         #endregion
 
         #region Internal Members
@@ -62,7 +112,7 @@ namespace Xamarin.Forms.OAuth
 
         internal virtual OAuthResponse GetOAuthResponseFromUrl(string url)
         {
-            var parameters = ReadReponseParameter(url);
+            var parameters = ReadResponseParameter(url);
 
             if (parameters.ContainsKey(_errorParameter))
                 return OAuthResponse.WithError(parameters[_errorParameter],
@@ -84,21 +134,26 @@ namespace Xamarin.Forms.OAuth
                 ));
         }
 
+        private OAuthResponse GetOAuthResponseFromJson(string json)
+        {
+            var jObject = JObject.Parse(json);
+
+            var error = jObject.GetStringValue(_errorParameter);
+            if (!string.IsNullOrEmpty(error))
+                return OAuthResponse.WithError(error, jObject.GetStringValue(_errorDescriptionParameter));
+
+            return OAuthResponse.WithToken(new OAuthAccessToken(
+                jObject.GetStringValue(_accessTokenParatemeter),
+                jObject.GetStringValue(_refreshTokenParameter),
+                GetExpireDate(jObject.GetStringValue(_expiresInParameter))));
+        }
+
         internal virtual OAuthResponse GetTokenResponse(string response)
         {
             switch (TokenResponseSerialization)
             {
                 case TokenResponseSerialization.JSON:
-                    var jObject = JObject.Parse(response);
-
-                    var error = jObject.GetStringValue(_errorParameter);
-                    if (!string.IsNullOrEmpty(error))
-                        return OAuthResponse.WithError(error, jObject.GetStringValue(_errorDescriptionParameter));
-
-                    return OAuthResponse.WithToken(new OAuthAccessToken(
-                        jObject.GetStringValue(_accessTokenParatemeter),
-                        jObject.GetStringValue(_refreshTokenParameter),
-                        GetExpireDate(jObject.GetStringValue(_expiresInParameter))));
+                    return GetOAuthResponseFromJson(response);            
                 case TokenResponseSerialization.Forms:
                     return GetOAuthResponseFromUrl("http://abc.com?" + response);
                 default:
@@ -164,10 +219,16 @@ namespace Xamarin.Forms.OAuth
 
         internal virtual string BuildGraphUrl(string token)
         {
-            return $"{GraphUrl}?{TokeUrlParameter}={token}";
+            switch (TokenType)
+            {
+                case TokenType.Bearer:
+                    return GraphUrl;
+                default:
+                    return BuildResourceTokenUrl(GraphUrl, token);
+            }
         }
 
-        internal virtual IEnumerable<KeyValuePair<string, string>> GraphHeaders(OAuthAccessToken token)
+        internal virtual IEnumerable<KeyValuePair<string, string>> ResourceHeaders(OAuthAccessToken token)
         {
             return TokenType == TokenType.Url ?
                 new KeyValuePair<string, string>[0]
@@ -177,15 +238,48 @@ namespace Xamarin.Forms.OAuth
 
         internal virtual async Task PreAuthenticationProcess() { await Task.FromResult(0); }
 
-        public class AccountData
+        internal static async Task<string> ReadContent(HttpContent content)
         {
-            public AccountData(string id, string name)
+            if (content.Headers.ContentEncoding.Contains("gzip"))
+                return await new StreamReader(new Ionic.Zlib.GZipStream(await content.ReadAsStreamAsync(),
+                    Ionic.Zlib.CompressionMode.Decompress
+                    )).ReadToEndAsync();
+
+            return await content.ReadAsStringAsync();
+        }
+
+        internal bool CheckRedirect(string url)
+        {
+            return url?.StartsWith(RedirectUrl) == true;
+        }
+
+        internal async Task<OAuthResponse> GetTokenFromCode(string code)
+        {
+            if (string.IsNullOrEmpty(TokenUrl))
+                return OAuthResponse.WithError("BadImplementation",
+                    "Provider returns code in authorize request but there is not access token URL.");
+
+            using (var tokenClient = new HttpClient())
             {
-                Id = id;
-                Name = name;
+                if (!string.IsNullOrEmpty(TokenAuthorizationHeader))
+                    tokenClient.DefaultRequestHeaders.Add("Authorization", TokenAuthorizationHeader);
+
+                tokenClient.DefaultRequestHeaders.Add("Accept", "application/json");
+
+                var tokenResponse = await tokenClient.PostAsync(TokenUrl,
+                    BuildHttpContent(BuildTokenContent(code)));
+
+                var tokenResponseString = await tokenResponse.Content.ReadAsStringAsync();
+
+                return GetOAuthResponseFromJson(tokenResponseString);
             }
-            public string Id { get; private set; }
-            public string Name { get; private set; }
+        }
+
+        internal async Task<AccountData> GetAccountData(OAuthAccessToken token)
+        {
+            var graphResponseString = await GetResource<string>(GraphUrl, token);
+
+            return GetAccountData(graphResponseString);
         }
         #endregion
 
@@ -197,7 +291,6 @@ namespace Xamarin.Forms.OAuth
         protected abstract string GraphUrl { get; }
         protected virtual bool RequiresCode { get { return false; } }
         protected virtual bool ExcludeClientIdInTokenRequest { get { return false; } }
-        //protected virtual bool IsTokenResponseJson { get { return true; } }
         protected virtual bool IncludeRedirectUrlInTokenRequest { get { return false; } }
         protected virtual bool IncludeStateInAuthorize { get { return false; } }
         protected virtual string ScopeSeparator { get { return ","; } }
@@ -208,8 +301,9 @@ namespace Xamarin.Forms.OAuth
         {
             get { return RequiresCode ? "code" : "token"; }
         }
+        protected virtual IEnumerable<KeyValuePair<string, string>> ResourceQueryParameters { get { return new KeyValuePair<string, string>[0]; } }
 
-        protected static IDictionary<string, string> ReadReponseParameter(string url)
+        protected static IDictionary<string, string> ReadResponseParameter(string url)
         {
             var uri = new Uri(url);
             var query = uri.Query.Trim('?');
@@ -237,6 +331,47 @@ namespace Xamarin.Forms.OAuth
                 DateTime.MinValue
                 :
                 DateTime.Now + TimeSpan.FromSeconds(double.Parse(value));
+        }
+        #endregion
+
+        #region Private Methods
+        private static HttpContent BuildHttpContent(string content)
+        {
+            return new StringContent(content, Encoding.UTF8, "application/x-www-form-urlencoded");
+        }
+
+        private string BuildResourceTokenUrl(string url, string token, IEnumerable<KeyValuePair<string, string>> queryParameters = null)
+        {
+            var parameters = new List<KeyValuePair<string, string>>(ResourceQueryParameters);
+
+            if (null != queryParameters)
+                parameters.AddRange(queryParameters);
+
+            if (TokenType == TokenType.Url)
+                parameters.Add(new KeyValuePair<string, string>(TokeUrlParameter, token));
+
+            return url +
+                (parameters.Any() ?
+                "?" + string.Join("&", parameters.Select(pair => $"{pair.Key}={pair.Value}"))
+                :
+                string.Empty);
+        }
+
+        private static async Task<T> ReadHttpResponse<T>(HttpResponseMessage response)
+            where T : class
+        {
+            var responseString = await ReadContent(response.Content);
+
+            if (typeof(T) == typeof(string))
+                return responseString as T;
+
+            if (typeof(T) == typeof(JArray))
+                return Task.FromResult(JArray.Parse(responseString)) as T;
+
+            if (typeof(T) == typeof(JObject))
+                return Task.FromResult(JObject.Parse(responseString)) as T;
+
+            return JsonConvert.DeserializeObject<T>(responseString);
         }
         #endregion
     }

@@ -252,9 +252,9 @@ namespace Xamarin.Forms.OAuth.Providers
         {
             _graphHeadersBuilder = builder;
         }
-        internal override IEnumerable<KeyValuePair<string, string>> GraphHeaders(OAuthAccessToken token)
+        internal override IEnumerable<KeyValuePair<string, string>> ResourceHeaders(OAuthAccessToken token)
         {
-            return null == _graphHeadersBuilder ? base.GraphHeaders(token) : _graphHeadersBuilder(token);
+            return null == _graphHeadersBuilder ? base.ResourceHeaders(token) : _graphHeadersBuilder(token);
         }
         #endregion
     }

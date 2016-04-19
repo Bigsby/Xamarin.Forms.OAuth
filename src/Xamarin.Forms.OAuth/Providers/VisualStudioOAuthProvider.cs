@@ -81,13 +81,16 @@ namespace Xamarin.Forms.OAuth.Providers
         {
             get
             {
-                return "https://app.vssps.visualstudio.com/_apis/profile/profiles/me?api-version=1.0";
+                return "https://app.vssps.visualstudio.com/_apis/profile/profiles/me";
             }
         }
 
-        internal override string BuildGraphUrl(string token)
+        protected override IEnumerable<KeyValuePair<string, string>> ResourceQueryParameters
         {
-            return GraphUrl;
+            get
+            {
+                return new[] { new KeyValuePair<string, string>("api-version", "1.0") };
+            }
         }
 
         internal override string GraphNameProperty

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace Xamarin.Forms.OAuth.Providers
 {
@@ -28,7 +29,22 @@ namespace Xamarin.Forms.OAuth.Providers
         {
             get
             {
-                return "https://api.linkedin.com/v1/people/~?oauth2_access_token={0}&format=json";
+                return "https://api.linkedin.com/v1/people/~";
+            }
+        }
+
+        protected override string TokeUrlParameter
+        {
+            get
+            {
+                return "oauth2_access_token";
+            }
+        }
+        protected override IEnumerable<KeyValuePair<string, string>> ResourceQueryParameters
+        {
+            get
+            {
+                return new[] { new KeyValuePair<string, string>("format", "json") };
             }
         }
 
@@ -71,11 +87,6 @@ namespace Xamarin.Forms.OAuth.Providers
             return new AccountData(
                 jObject.GetStringValue("id"),
                 $"{jObject.GetStringValue("firstName")} {jObject.GetStringValue("lastName")}");
-        }
-
-        internal override string BuildGraphUrl(string token)
-        {
-            return string.Format(GraphUrl, token);
         }
     }
 }

@@ -109,9 +109,9 @@ namespace Xamarin.Forms.OAuth.Providers
             }
         }
 
-        internal override IEnumerable<KeyValuePair<string, string>> GraphHeaders(OAuthAccessToken token)
+        internal override IEnumerable<KeyValuePair<string, string>> ResourceHeaders(OAuthAccessToken token)
         {
-            return base.GraphHeaders(token).Union(new[] 
+            return base.ResourceHeaders(token).Union(new[] 
             {
                 //TODO: build User-Agent according to documentation
                 //https://github.com/reddit/reddit/wiki/API

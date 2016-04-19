@@ -1,10 +1,13 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
+using System.Collections.Generic;
 
 namespace Xamarin.Forms.OAuth.Providers
 {
     public sealed class FoursquareOAuthProvider : OAuthProvider
     {
+        //TODO: get version from configuration
+        private const string _version = "20140806";
+
         public FoursquareOAuthProvider(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
             : base(clientId, clientSecret, redirectUrl, scopes)
         { }
@@ -65,11 +68,12 @@ namespace Xamarin.Forms.OAuth.Providers
             }
         }
 
-        internal override string BuildGraphUrl(string token)
+        protected override IEnumerable<KeyValuePair<string, string>> ResourceQueryParameters
         {
-            var url = base.BuildGraphUrl(token);
-
-            return $"{url}&v=20140806";
+            get
+            {
+                return new[] { new KeyValuePair<string, string>("v", _version) } ;
+            }
         }
 
         internal override AccountData GetAccountData(string json)

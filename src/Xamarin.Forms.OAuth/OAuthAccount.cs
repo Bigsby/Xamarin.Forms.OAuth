@@ -6,15 +6,15 @@
         {
             Id = id;
             DisplayName = displayName;
-            ProviderInstance = provider;
+            Provider = provider;
             AccessToken = token;
         }
 
         public string Id { get; private set; }
         public string DisplayName { get; private set; }
-        public string Provider { get { return ProviderInstance.Name; } }
+        public string ProviderName { get { return Provider.Name; } }
         public OAuthAccessToken AccessToken { get; private set; }
-        internal OAuthProvider ProviderInstance { get; private set; }
+        public OAuthProvider Provider { get; private set; }
 
         internal void SetToken(OAuthAccessToken token)
         {
@@ -23,7 +23,7 @@
 
         public override string ToString()
         {
-            return $"{Provider}: {DisplayName} ({Id})";
+            return $"{ProviderName}: {DisplayName} ({Id})";
         }
 
 

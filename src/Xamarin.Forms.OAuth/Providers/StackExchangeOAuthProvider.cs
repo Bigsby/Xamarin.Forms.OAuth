@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace Xamarin.Forms.OAuth.Providers
 {
@@ -34,7 +35,19 @@ namespace Xamarin.Forms.OAuth.Providers
         {
             get
             {
-                return "https://api.stackexchange.com/2.0/me?access_token={0}&key={1}&site={2}";
+                return "https://api.stackexchange.com/2.0/me";
+            }
+        }
+
+        protected override IEnumerable<KeyValuePair<string, string>> ResourceQueryParameters
+        {
+            get
+            {
+                return new[] 
+                {
+                    new KeyValuePair<string, string>("key", ClientSecret),
+                    new KeyValuePair<string, string>("site", _site)
+                };
             }
         }
 
@@ -50,8 +63,7 @@ namespace Xamarin.Forms.OAuth.Providers
 
             return new AccountData(
                 data.GetStringValue("user_id"),
-                data.GetStringValue("display_name")
-                );
+                data.GetStringValue("display_name"));
         }
     }
 }
