@@ -53,6 +53,7 @@
     <Compile Include="Providers\GitterOAuthProvider.cs" />
     <Compile Include="Providers\InstagramOAuthProvider.cs" />
     <Compile Include="Providers\LinkedInOAuthProvider.cs" />
+    <Compile Include="Providers\MeetupOAuthProvider.cs" />
     <Compile Include="Providers\ReddItOAuthProvider.cs" />
     <Compile Include="Providers\SlackOAuthProvider.cs" />
     <Compile Include="Providers\StackExchangeOAuthProvider.cs" />
