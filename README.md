@@ -71,6 +71,13 @@ else
 }
 ```
 
+## 4. Resouce Access
+The account in the result can be used to access the provider's result taking care of all the OAuth parameters injection (Post is also available):
+```cs
+var authenticationResult = await OAuthAuthenticator.Authenticate(OAuthProvider.Facebook("FacebookAppId"));
+var resource = await authenticationResult.Account.GetResource<string>("https://graph.facebook.com/v2.5/me");
+```
+
 # Screenshot
 ![alt text](Screenshots/W10MobileScreenshot.png "Windows 10 Mobile")
 
