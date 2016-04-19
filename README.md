@@ -88,13 +88,12 @@ Here is the list of the OAuth providers suported out-of-the-box:
 * Microsoft
 * ReddIt
 * StackExchange
-
+* Visual Studio Online
+* Slack
 
 # Future Features
 These are the features that will be impleneted next:
 * Implement more providers:
-  * Visual Studio Online Provider
-  * Slack
   * Gitter
   * Foursquare
   * Meetup
