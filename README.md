@@ -76,7 +76,7 @@ else
 
 # Supported Providers
 
-Here is the list of the OAuth providers suported out-of-the-box:
+Here is the list of the OAuth providers suported out-of-the-box (13):
 * Amazon
 * Box
 * Dropbox
@@ -87,9 +87,9 @@ Here is the list of the OAuth providers suported out-of-the-box:
 * LinkedIn
 * Microsoft
 * ReddIt
+* Slack
 * StackExchange
 * Visual Studio Online
-* Slack
 
 # Future Features
 These are the features that will be impleneted next:
@@ -105,4 +105,4 @@ These are the features that will be impleneted next:
   * Skype for Business
   * Microsft Graph
 * Implement token refresh
-* Feel free to point buts or any feature you would like implemented on  [![Join the chat at https://gitter.im/Bigsby/Xamarin.Forms.OAuth](https://badges.gitter.im/Bigsby/Xamarin.Forms.OAuth.svg)](https://gitter.im/Bigsby/Xamarin.Forms.OAuth?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+* Feel free to point buts or any feature or provider you would like implemented on  [![Join the chat at https://gitter.im/Bigsby/Xamarin.Forms.OAuth](https://badges.gitter.im/Bigsby/Xamarin.Forms.OAuth.svg)](https://gitter.im/Bigsby/Xamarin.Forms.OAuth?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
