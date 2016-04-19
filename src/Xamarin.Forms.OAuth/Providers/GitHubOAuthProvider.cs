@@ -48,11 +48,11 @@ namespace Xamarin.Forms.OAuth.Providers
             }
         }
 
-        protected override bool IsTokenResponseJson
+        protected override TokenResponseSerialization TokenResponseSerialization
         {
             get
             {
-                return false;
+                return TokenResponseSerialization.Forms;
             }
         }
 

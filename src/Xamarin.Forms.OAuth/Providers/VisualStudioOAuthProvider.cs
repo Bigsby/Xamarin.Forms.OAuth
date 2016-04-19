@@ -98,9 +98,17 @@ namespace Xamarin.Forms.OAuth.Providers
             }
         }
 
-        internal override IEnumerable<KeyValuePair<string, string>> GraphHeaders(OAuthAccessToken token)
+        protected override TokenType TokenType
         {
-            return new[] { new KeyValuePair<string,string>("Authorization", $"Bearer {token.Token}") };
+            get
+            {
+                return TokenType.Bearer;
+            }
         }
+
+        //internal override IEnumerable<KeyValuePair<string, string>> GraphHeaders(OAuthAccessToken token)
+        //{
+        //    return new[] { new KeyValuePair<string,string>("Authorization", $"Bearer {token.Token}") };
+        //}
     }
 }

@@ -36,7 +36,7 @@ namespace Xamarin.Forms.OAuth.Providers
             _excludeClientIdInTokenRequest = base.ExcludeClientIdInTokenRequest;
             _includeRedirectUrlInTokenRequest = base.IncludeRedirectUrlInTokenRequest;
             _includeStateInAuthorize = base.IncludeStateInAuthorize;
-            _isTokenResponseJson = base.IsTokenResponseJson;
+            _tokenResponseSerialization = base.TokenResponseSerialization;
             _requiresCode = base.RequiresCode;
         }
 
@@ -130,16 +130,16 @@ namespace Xamarin.Forms.OAuth.Providers
             }
         }
 
-        private bool _isTokenResponseJson;
-        public void SetIsTokenResponseJson(bool value)
+        private TokenResponseSerialization _tokenResponseSerialization;
+        public void SetTokenResponseSerialization(TokenResponseSerialization serialzation)
         {
-            _isTokenResponseJson = value;
+            _tokenResponseSerialization = serialzation;
         }
-        protected override bool IsTokenResponseJson
+        protected override TokenResponseSerialization TokenResponseSerialization
         {
             get
             {
-                return _isTokenResponseJson;
+                return _tokenResponseSerialization;
             }
         }
 
@@ -179,6 +179,19 @@ namespace Xamarin.Forms.OAuth.Providers
             get
             {
                 return _tokenUrl;
+            }
+        }
+
+        private TokenType _tokenType;
+        public void SetTokenType(TokenType tokenType)
+        {
+            _tokenType = tokenType;
+        }
+        protected override TokenType TokenType
+        {
+            get
+            {
+                return _tokenType;
             }
         }
         #endregion

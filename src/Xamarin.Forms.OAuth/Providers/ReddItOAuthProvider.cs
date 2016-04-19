@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Xamarin.Forms.OAuth.Providers
@@ -100,15 +101,22 @@ namespace Xamarin.Forms.OAuth.Providers
             return Convert.ToBase64String(dataBytes);
         }
 
+        protected override TokenType TokenType
+        {
+            get
+            {
+                return TokenType.Bearer;
+            }
+        }
+
         internal override IEnumerable<KeyValuePair<string, string>> GraphHeaders(OAuthAccessToken token)
         {
-            return new[] 
+            return base.GraphHeaders(token).Union(new[] 
             {
                 //TODO: build User-Agent according to documentation
                 //https://github.com/reddit/reddit/wiki/API
                 new KeyValuePair<string, string>("User-Agent", Guid.NewGuid().ToString()),
-                new KeyValuePair<string, string>("Authorization", $"bearer {token.Token}")
-            };
+            });
         }
     }
 }

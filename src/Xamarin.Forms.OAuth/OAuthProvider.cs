@@ -40,7 +40,7 @@ namespace Xamarin.Forms.OAuth
         }
         #endregion
 
-        #region Public Properties
+        #region Public Members
         public const string NameProperty = "Name";
         public const string LogoProperty = "Logo";
         public abstract string Name { get; }
@@ -86,20 +86,24 @@ namespace Xamarin.Forms.OAuth
 
         internal virtual OAuthResponse GetTokenResponse(string response)
         {
-            if (IsTokenResponseJson)
+            switch (TokenResponseSerialization)
             {
-                var jObject = JObject.Parse(response);
+                case TokenResponseSerialization.JSON:
+                    var jObject = JObject.Parse(response);
 
-                var error = jObject.GetStringValue(_errorParameter);
-                if (!string.IsNullOrEmpty(error))
-                    return OAuthResponse.WithError(error, jObject.GetStringValue(_errorDescriptionParameter));
+                    var error = jObject.GetStringValue(_errorParameter);
+                    if (!string.IsNullOrEmpty(error))
+                        return OAuthResponse.WithError(error, jObject.GetStringValue(_errorDescriptionParameter));
 
-                return OAuthResponse.WithToken(new OAuthAccessToken(
-                    jObject.GetStringValue(_accessTokenParatemeter),
-                    jObject.GetStringValue(_refreshTokenParameter),
-                    GetExpireDate(jObject.GetStringValue(_expiresInParameter))));
+                    return OAuthResponse.WithToken(new OAuthAccessToken(
+                        jObject.GetStringValue(_accessTokenParatemeter),
+                        jObject.GetStringValue(_refreshTokenParameter),
+                        GetExpireDate(jObject.GetStringValue(_expiresInParameter))));
+                case TokenResponseSerialization.Forms:
+                    return GetOAuthResponseFromUrl("http://abc.com?" + response);
+                default:
+                    return OAuthResponse.WithError("TokenResponseError", "Unknow serialization.");
             }
-            return GetOAuthResponseFromUrl("http://abc.com?" + response);
         }
 
         internal virtual AccountData GetAccountData(string json)
@@ -165,7 +169,10 @@ namespace Xamarin.Forms.OAuth
 
         internal virtual IEnumerable<KeyValuePair<string, string>> GraphHeaders(OAuthAccessToken token)
         {
-            return new KeyValuePair<string, string>[0];
+            return TokenType == TokenType.Url ?
+                new KeyValuePair<string, string>[0]
+                :
+                new[] { new KeyValuePair<string, string>("Authorization", $"Bearer {token.Token}") };
         }
 
         internal virtual async Task PreAuthenticationProcess() { await Task.FromResult(0); }
@@ -190,10 +197,12 @@ namespace Xamarin.Forms.OAuth
         protected abstract string GraphUrl { get; }
         protected virtual bool RequiresCode { get { return false; } }
         protected virtual bool ExcludeClientIdInTokenRequest { get { return false; } }
-        protected virtual bool IsTokenResponseJson { get { return true; } }
+        //protected virtual bool IsTokenResponseJson { get { return true; } }
         protected virtual bool IncludeRedirectUrlInTokenRequest { get { return false; } }
         protected virtual bool IncludeStateInAuthorize { get { return false; } }
         protected virtual string ScopeSeparator { get { return ","; } }
+        protected virtual TokenType TokenType { get { return TokenType.Url; } }
+        protected virtual TokenResponseSerialization TokenResponseSerialization { get { return TokenResponseSerialization.JSON; } }
 
         protected virtual string AuthorizeResponseType
         {
@@ -230,5 +239,17 @@ namespace Xamarin.Forms.OAuth
                 DateTime.Now + TimeSpan.FromSeconds(double.Parse(value));
         }
         #endregion
+    }
+
+    public enum TokenType
+    {
+        Url,
+        Bearer
+    }
+
+    public enum TokenResponseSerialization
+    {
+        JSON,
+        Forms
     }
 }

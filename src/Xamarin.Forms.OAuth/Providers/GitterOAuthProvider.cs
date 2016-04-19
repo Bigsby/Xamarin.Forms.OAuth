@@ -1,4 +1,6 @@
-﻿namespace Xamarin.Forms.OAuth.Providers
+﻿using Newtonsoft.Json.Linq;
+
+namespace Xamarin.Forms.OAuth.Providers
 {
     public class GitterOAuthProvider : OAuthProvider
     {
@@ -54,12 +56,27 @@
             }
         }
 
+        protected override TokenType TokenType
+        {
+            get
+            {
+                return TokenType.Bearer;
+            }
+        }
+
         internal override string GraphNameProperty
         {
             get
             {
                 return "displayName";
             }
+        }
+
+        internal override AccountData GetAccountData(string json)
+        {
+            var jObject = JArray.Parse(json)[0];
+
+            return base.GetAccountData(jObject.ToString());
         }
     }
 }
