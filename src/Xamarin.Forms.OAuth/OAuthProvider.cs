@@ -55,7 +55,7 @@ namespace Xamarin.Forms.OAuth
             }
         }
 
-        public virtual async Task<T> GetResource<T>(string resourceUrl, OAuthAccessToken token, IEnumerable<KeyValuePair<string, string>> queryParameters = null)
+        internal virtual async Task<T> GetResource<T>(string resourceUrl, OAuthAccessToken token, IEnumerable<KeyValuePair<string, string>> queryParameters = null)
             where T : class
         {
             var url = BuildResourceTokenUrl(resourceUrl, token.Token, queryParameters);
@@ -73,7 +73,7 @@ namespace Xamarin.Forms.OAuth
             }
         }
 
-        public virtual async Task<T> PostResource<T>(string resourceUrl, HttpContent content, OAuthAccessToken token, IEnumerable<KeyValuePair<string, string>> queryParameters = null)
+        internal virtual async Task<T> PostResource<T>(string resourceUrl, HttpContent content, OAuthAccessToken token, IEnumerable<KeyValuePair<string, string>> queryParameters = null)
             where T : class
         {
             var url = BuildResourceTokenUrl(resourceUrl, token.Token, queryParameters);

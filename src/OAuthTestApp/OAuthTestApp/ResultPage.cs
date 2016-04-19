@@ -10,8 +10,6 @@ namespace OAuthTestApp
         private readonly Action _returnCallback;
         public ResultPage(AuthenticatonResult result, Action returnCallback)
         {
-            _returnCallback = returnCallback;
-
             var stack = new StackLayout
             {
                 VerticalOptions = LayoutOptions.Center,
