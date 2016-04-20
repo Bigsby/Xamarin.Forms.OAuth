@@ -145,12 +145,6 @@ namespace Xamarin.Forms.OAuth
             get { return _scopes; }
         }
 
-        //public string TokenAuthorizationHeader
-        //{
-        //    internal get { return _tokenAuthorizationHeader; }
-        //    set { _tokenAuthorizationHeader = value; }
-        //}
-
         public IEnumerable<KeyValuePair<string, string>> TokenAuthorizationHeaders
         {
             internal get { return _tokenAuthorizationHeaders; }

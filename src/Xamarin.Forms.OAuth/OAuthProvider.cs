@@ -37,50 +37,15 @@ namespace Xamarin.Forms.OAuth
         #region Public Members
         public const string NameProperty = "Name";
         public const string LogoProperty = "Logo";
-        public string Name { get { return _definition.Name; } }
+        public string Name { get { return Definition.Name; } }
         public ImageSource Logo
         {
             get
             {
-                return _definition.Logo ?? ImageSource.FromResource($"{GetType().Namespace}.Logos.{Name}.png", GetType().GetTypeInfo().Assembly);
+                return Definition.Logo ?? ImageSource.FromResource($"{GetType().Namespace}.Logos.{Name}.png", GetType().GetTypeInfo().Assembly);
             }
         }
 
-        internal virtual async Task<T> GetResource<T>(string resourceUrl, OAuthAccessToken token, IEnumerable<KeyValuePair<string, string>> queryParameters = null)
-            where T : class
-        {
-            var url = BuildResourceTokenUrl(resourceUrl, token.Token, queryParameters);
-
-            using (var client = new HttpClient())
-            {
-                var graphHeaders = ResourceHeaders(token);
-
-                foreach (var header in graphHeaders)
-                    client.DefaultRequestHeaders.Add(header.Key, header.Value);
-
-                var response = await client.GetAsync(url);
-
-                return await ReadHttpResponse<T>(response);
-            }
-        }
-
-        internal virtual async Task<T> PostResource<T>(string resourceUrl, HttpContent content, OAuthAccessToken token, IEnumerable<KeyValuePair<string, string>> queryParameters = null)
-            where T : class
-        {
-            var url = BuildResourceTokenUrl(resourceUrl, token.Token, queryParameters);
-
-            using (var client = new HttpClient())
-            {
-                var graphHeaders = ResourceHeaders(token);
-
-                foreach (var header in graphHeaders)
-                    client.DefaultRequestHeaders.Add(header.Key, header.Value);
-
-                var response = await client.PostAsync(url, content);
-
-                return await ReadHttpResponse<T>(response);
-            }
-        }
 
         public class AccountData
         {
@@ -119,23 +84,45 @@ namespace Xamarin.Forms.OAuth
                 ));
         }
 
-        private OAuthResponse GetOAuthResponseFromJson(string json)
+        internal virtual async Task<T> GetResource<T>(string resourceUrl, OAuthAccessToken token, IEnumerable<KeyValuePair<string, string>> queryParameters = null)
+            where T : class
         {
-            var jObject = JObject.Parse(json);
+            var url = BuildResourceTokenUrl(resourceUrl, token.Token, queryParameters);
 
-            var error = jObject.GetStringValue(_errorParameter);
-            if (!string.IsNullOrEmpty(error))
-                return OAuthResponse.WithError(error, jObject.GetStringValue(_errorDescriptionParameter));
+            using (var client = new HttpClient())
+            {
+                var graphHeaders = ResourceHeaders(token);
 
-            return OAuthResponse.WithToken(new OAuthAccessToken(
-                jObject.GetStringValue(_accessTokenParatemeter),
-                jObject.GetStringValue(_refreshTokenParameter),
-                GetExpireDate(jObject.GetStringValue(_expiresInParameter))));
+                foreach (var header in graphHeaders)
+                    client.DefaultRequestHeaders.Add(header.Key, header.Value);
+
+                var response = await client.GetAsync(url);
+
+                return await ReadHttpResponse<T>(response);
+            }
+        }
+
+        internal virtual async Task<T> PostResource<T>(string resourceUrl, HttpContent content, OAuthAccessToken token, IEnumerable<KeyValuePair<string, string>> queryParameters = null)
+            where T : class
+        {
+            var url = BuildResourceTokenUrl(resourceUrl, token.Token, queryParameters);
+
+            using (var client = new HttpClient())
+            {
+                var graphHeaders = ResourceHeaders(token);
+
+                foreach (var header in graphHeaders)
+                    client.DefaultRequestHeaders.Add(header.Key, header.Value);
+
+                var response = await client.PostAsync(url, content);
+
+                return await ReadHttpResponse<T>(response);
+            }
         }
 
         internal virtual OAuthResponse GetTokenResponse(string response)
         {
-            switch (_definition.TokenResponseSerialization)
+            switch (Definition.TokenResponseSerialization)
             {
                 case TokenResponseSerialization.JSON:
                     return GetOAuthResponseFromJson(response);            
@@ -150,24 +137,24 @@ namespace Xamarin.Forms.OAuth
         {
             var jObject = JObject.Parse(json);
             return new AccountData(
-                jObject.GetStringValue(_definition.GraphIdProperty),
-                jObject.GetStringValue(_definition.GraphNameProperty));
+                jObject.GetStringValue(Definition.GraphIdProperty),
+                jObject.GetStringValue(Definition.GraphNameProperty));
         }
 
         internal virtual string GetAuthorizationUrl()
         {
-            var scopesToInject = _definition.MandatoryScopes.Union(_definition.Scopes ?? new string[0]).Distinct().ToArray();
+            var scopesToInject = Definition.MandatoryScopes.Union(Definition.Scopes ?? new string[0]).Distinct().ToArray();
             var scope = scopesToInject.Any() ?
-                "&scope=" + string.Join(_definition.ScopeSeparator, scopesToInject)
+                "&scope=" + string.Join(Definition.ScopeSeparator, scopesToInject)
                 :
                 string.Empty;
 
-            var state = _definition.IncludeStateInAuthorize ?
+            var state = Definition.IncludeStateInAuthorize ?
                 "&state=authentication"
                 :
                 string.Empty;
 
-            return $"{_definition.AuthorizeUrl}?response_type={_definition.AuthorizeResponseType}&client_id={_definition.ClientId}&redirect_uri={WebUtility.UrlEncode(_definition.RedirectUrl)}{scope}{state}";
+            return $"{Definition.AuthorizeUrl}?response_type={Definition.AuthorizeResponseType}&client_id={Definition.ClientId}&redirect_uri={WebUtility.UrlEncode(Definition.RedirectUrl)}{scope}{state}";
         }
 
         internal virtual IEnumerable<KeyValuePair<string, string>> BuildTokenRequestHeaders()
@@ -182,40 +169,20 @@ namespace Xamarin.Forms.OAuth
             return string.Join("&", fields.Select(pair => $"{pair.Key}={pair.Value}"));
         }
 
-        protected virtual IEnumerable<KeyValuePair<string, string>> BuildTokenRequestFields(string code)
-        {
-            var fields = new Dictionary<string, string>
-            {
-                { "grant_type", "authorization_code" },
-                { "code", code }
-            };
-
-            if (_definition.IncludeRedirectUrlInTokenRequest)
-                fields.Add("redirect_uri", WebUtility.UrlEncode(_definition.RedirectUrl));
-
-            if (!_definition.ExcludeClientIdInTokenRequest)
-                fields.Add("client_id", _definition.ClientId);
-
-            if (!string.IsNullOrEmpty(_definition.ClientSecret))
-                fields.Add("client_secret", _definition.ClientSecret);
-
-            return fields;
-        }
-
         internal virtual string BuildGraphUrl(string token)
         {
-            switch (_definition.TokenType)
+            switch (Definition.TokenType)
             {
                 case TokenType.Bearer:
-                    return _definition.GraphUrl;
+                    return Definition.GraphUrl;
                 default:
-                    return BuildResourceTokenUrl(_definition.GraphUrl, token);
+                    return BuildResourceTokenUrl(Definition.GraphUrl, token);
             }
         }
 
         internal virtual IEnumerable<KeyValuePair<string, string>> ResourceHeaders(OAuthAccessToken token)
         {
-            return _definition.TokenType == TokenType.Url ?
+            return Definition.TokenType == TokenType.Url ?
                 new KeyValuePair<string, string>[0]
                 :
                 new[] { new KeyValuePair<string, string>("Authorization", $"Bearer {token.Token}") };
@@ -235,12 +202,12 @@ namespace Xamarin.Forms.OAuth
 
         internal bool CheckRedirect(string url)
         {
-            return url?.StartsWith(_definition.RedirectUrl) == true;
+            return url?.StartsWith(Definition.RedirectUrl) == true;
         }
 
         internal async Task<OAuthResponse> GetTokenFromCode(string code)
         {
-            if (string.IsNullOrEmpty(_definition.TokenUrl))
+            if (string.IsNullOrEmpty(Definition.TokenUrl))
                 return OAuthResponse.WithError("BadImplementation",
                     "Provider returns code in authorize request but there is not access token URL.");
 
@@ -253,7 +220,7 @@ namespace Xamarin.Forms.OAuth
 
                 tokenClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
-                var tokenResponse = await tokenClient.PostAsync(_definition.TokenUrl,
+                var tokenResponse = await tokenClient.PostAsync(Definition.TokenUrl,
                     BuildHttpContent(BuildTokenContent(code)));
 
                 var tokenResponseString = await tokenResponse.Content.ReadAsStringAsync();
@@ -264,7 +231,7 @@ namespace Xamarin.Forms.OAuth
 
         internal async Task<AccountData> GetAccountData(OAuthAccessToken token)
         {
-            var graphResponseString = await GetResource<string>(_definition.GraphUrl, token);
+            var graphResponseString = await GetResource<string>(Definition.GraphUrl, token);
 
             return GetAccountData(graphResponseString);
         }
@@ -272,6 +239,26 @@ namespace Xamarin.Forms.OAuth
 
         #region Protected Members
         protected OAuthProviderDefinition Definition { get { return _definition; } }
+
+        protected virtual IEnumerable<KeyValuePair<string, string>> BuildTokenRequestFields(string code)
+        {
+            var fields = new Dictionary<string, string>
+            {
+                { "grant_type", "authorization_code" },
+                { "code", code }
+            };
+
+            if (Definition.IncludeRedirectUrlInTokenRequest)
+                fields.Add("redirect_uri", WebUtility.UrlEncode(Definition.RedirectUrl));
+
+            if (!Definition.ExcludeClientIdInTokenRequest)
+                fields.Add("client_id", Definition.ClientId);
+
+            if (!string.IsNullOrEmpty(Definition.ClientSecret))
+                fields.Add("client_secret", Definition.ClientSecret);
+
+            return fields;
+        }
 
         protected static IDictionary<string, string> ReadResponseParameter(string url)
         {
@@ -302,9 +289,32 @@ namespace Xamarin.Forms.OAuth
                 :
                 DateTime.Now + TimeSpan.FromSeconds(double.Parse(value));
         }
+
+        protected string BuildUrl(string url, IEnumerable<KeyValuePair<string, string>> queryParameters)
+        {
+            return url +
+               (queryParameters.Any() ?
+               "?" + string.Join("&", queryParameters.Select(pair => $"{pair.Key}={pair.Value}"))
+               :
+               string.Empty);
+        }
         #endregion
 
         #region Private Methods
+        private OAuthResponse GetOAuthResponseFromJson(string json)
+        {
+            var jObject = JObject.Parse(json);
+
+            var error = jObject.GetStringValue(_errorParameter);
+            if (!string.IsNullOrEmpty(error))
+                return OAuthResponse.WithError(error, jObject.GetStringValue(_errorDescriptionParameter));
+
+            return OAuthResponse.WithToken(new OAuthAccessToken(
+                jObject.GetStringValue(_accessTokenParatemeter),
+                jObject.GetStringValue(_refreshTokenParameter),
+                GetExpireDate(jObject.GetStringValue(_expiresInParameter))));
+        }
+
         private static HttpContent BuildHttpContent(string content)
         {
             return new StringContent(content, Encoding.UTF8, "application/x-www-form-urlencoded");
@@ -312,19 +322,15 @@ namespace Xamarin.Forms.OAuth
 
         private string BuildResourceTokenUrl(string url, string token, IEnumerable<KeyValuePair<string, string>> queryParameters = null)
         {
-            var parameters = new List<KeyValuePair<string, string>>(_definition.ResourceQueryParameters);
+            var parameters = new List<KeyValuePair<string, string>>(Definition.ResourceQueryParameters);
 
             if (null != queryParameters)
                 parameters.AddRange(queryParameters);
 
-            if (_definition.TokenType == TokenType.Url)
-                parameters.Add(new KeyValuePair<string, string>(_definition.TokeUrlParameter, token));
+            if (Definition.TokenType == TokenType.Url)
+                parameters.Add(new KeyValuePair<string, string>(Definition.TokeUrlParameter, token));
 
-            return url +
-                (parameters.Any() ?
-                "?" + string.Join("&", parameters.Select(pair => $"{pair.Key}={pair.Value}"))
-                :
-                string.Empty);
+            return BuildUrl(url, parameters);
         }
 
         private static async Task<T> ReadHttpResponse<T>(HttpResponseMessage response)
