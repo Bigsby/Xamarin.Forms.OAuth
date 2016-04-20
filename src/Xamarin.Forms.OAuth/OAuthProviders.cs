@@ -85,9 +85,9 @@ namespace Xamarin.Forms.OAuth
             return new StackExchangeOAuthProvider(clientId, clientSecret, site, scopes);
         }
 
-        public static OAuthProvider Trello(string clientId, string clientSecret, params string[] scopes)
+        public static OAuthProvider Trello(string clientId, string clientSecret, string applicationName, params string[] scopes)
         {
-            return new TrelloOAuthProvider(clientId, clientSecret, scopes);
+            return new TrelloOAuthProvider(clientId, clientSecret, applicationName, scopes);
         }
 
         public static OAuthProvider VisualStudio(string clientId, string clientSecret, string redirectUrl, params string[] scopes)

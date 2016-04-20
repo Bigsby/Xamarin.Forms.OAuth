@@ -69,6 +69,11 @@
     "ClientSecret": "clientSecret",
     "RedirectUrl": "stackoverflow" //will be used as site parameter
   },
+  "Trello": {
+    "ClientId": "clientId",
+    "ClientSecret": "clientSecret",
+    "RedirectUrl": "applicationName" //will be user as application name parameter
+  },
   "VisualStudio": {
     "ClientId": "clientId",
     "ClientSecret": "clientSecret",
