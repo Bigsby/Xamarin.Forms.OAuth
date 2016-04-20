@@ -24,34 +24,42 @@ namespace Xamarin.Forms.OAuth
         private const string _refreshTokenParameter = "refresh_token";
         private const string _expiresInParameter = "expires_in";
         private static Regex _urlParameterExpression = new Regex("(.*)=(.*)");
+        private readonly OAuthProviderDefinition _definition;
+
         #endregion
 
         #region Constructors
-        protected OAuthProvider(string clientId,
-           string redirectUrl, params string[] scopes)
+
+        protected OAuthProvider(OAuthProviderDefinition definition)
         {
-            ClientId = clientId;
-            RedirectUrl = redirectUrl;
-            _scopes = scopes;
+            _definition = definition;
         }
 
-        protected OAuthProvider(string clientId, string clientSecret,
-            string redirectUrl, params string[] scopes)
-            : this(clientId, redirectUrl, scopes)
-        {
-            ClientSecret = clientSecret;
-        }
+        //protected OAuthProvider(string clientId,
+        //   string redirectUrl, params string[] scopes)
+        //{
+        //    ClientId = clientId;
+        //    RedirectUrl = redirectUrl;
+        //    _scopes = scopes;
+        //}
+
+        //protected OAuthProvider(string clientId, string clientSecret,
+        //    string redirectUrl, params string[] scopes)
+        //    : this(clientId, redirectUrl, scopes)
+        //{
+        //    ClientSecret = clientSecret;
+        //}
         #endregion
 
         #region Public Members
         public const string NameProperty = "Name";
         public const string LogoProperty = "Logo";
-        public abstract string Name { get; }
+        public string Name { get { return _definition.Name; } }
         public virtual ImageSource Logo
         {
             get
             {
-                return ImageSource.FromResource($"{GetType().Namespace}.Logos.{Name}.png", GetType().GetTypeInfo().Assembly);
+                return _definition.Logo ?? ImageSource.FromResource($"{GetType().Namespace}.Logos.{Name}.png", GetType().GetTypeInfo().Assembly);
             }
         }
 
@@ -374,17 +382,5 @@ namespace Xamarin.Forms.OAuth
             return JsonConvert.DeserializeObject<T>(responseString);
         }
         #endregion
-    }
-
-    public enum TokenType
-    {
-        Url,
-        Bearer
-    }
-
-    public enum TokenResponseSerialization
-    {
-        JSON,
-        Forms
     }
 }
