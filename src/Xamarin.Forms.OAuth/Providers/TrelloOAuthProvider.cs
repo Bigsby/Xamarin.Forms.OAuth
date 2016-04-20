@@ -1,4 +1,6 @@
-﻿namespace Xamarin.Forms.OAuth.Providers
+﻿using System.Collections.Generic;
+
+namespace Xamarin.Forms.OAuth.Providers
 {
     public sealed class TrelloOAuthProvider : OAuthProvider
     {
@@ -20,7 +22,7 @@
 
         internal override string GetAuthorizationUrl()
         {
-            return base.GetAuthorizationUrl();
+            return BuildUrl(Definition.AuthorizeUrl, new KeyValuePair<string, string>[] { });
         }
     }
 }
