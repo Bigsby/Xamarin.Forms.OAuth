@@ -1,14 +1,83 @@
 ﻿{
-  /* To uses this test app set these values and rename the file to KeysLocal.json */
+  // Links for the app management for each provider in repository wiki in GitHub
+  // https://github.com/Bigsby/Xamarin.Forms.OAuth/wiki
+  "Amazon": {
+    "ClientId": "clientId",
+    "RedirectUrl": "redirectUrl"
+  },
+  "Box": {
+    "ClientId": "clientId",
+    "ClientSecret": "clientSecret",
+    "RedirectUrl": "redirectUrl"
+  },
+  "Dropbox": {
+    "ClientId": "clientId",
+    "RedirectUrl": "redirectUrl"
+  },
   "Facebook": {
-    "ClientId": "FacebookAppId"
+    "ClientId": "clientId"
+  },
+  "Foursquare": {
+    "ClientId": "clientId",
+    "ClientSecret": "clientSecret",
+    "RedirectUrl": "redirectUrl"
+  },
+  "GitHub": {
+    "ClientId": "clientId",
+    "ClientSecret": "clientSecret",
+    "RedirectUrl": "redirectUrl"
+  },
+  "Gitter": {
+    "ClientId": "clientId",
+    "ClientSecret": "clientSecret",
+    "RedirectUrl": "redirectUrl"
   },
   "Google": {
-    "ClientId": "GoogleClientId",
-    "RedirectUrl": "RedirectUrlConfiguredInGoogleAppConsole"
+    "ClientId": "clientId",
+    "RedirectUrl": "redirectUrl"
+  },
+  "Instagram": {
+    "ClientId": "clientId",
+    "ClientSecret": "clientSecret",
+    "RedirectUrl": "redirectUrl"
+  },
+  "LinkedIn": {
+    "ClientId": "clientId",
+    "ClientSecret": "clientSecret",
+    "RedirectUrl": "redirectUrl"
+  },
+  "Meetup": {
+    "ClientId": "clientId",
+    "ClientSecret": "clientSecret",
+    "RedirectUrl": "redirectUrl"
   },
   "Microsoft": {
-    "ClientId": "MicrosoftClientId",
-    "RedirectUrl": "RedirectUrlConfiguredInMicrosoftDeveloperApp"
+    "ClientId": "clientId",
+    "RedirectUrl": "redirectUrl"
+  },
+  "ReddIt": {
+    "ClientId": "clientId",
+    "RedirectUrl": "redirectUrl"
+  },
+  "Slack": {
+    "ClientId": "clientId",
+    "ClientSecret": "clientSecret",
+    "RedirectUrl": "redirectUrl"
+  },
+  "StackExchange": {
+    "ClientId": "clientId",
+    "ClientSecret": "clientSecret",
+    "RedirectUrl": "stackoverflow" //will be used as site parameter
+  },
+  "VisualStudio": {
+    "ClientId": "clientId",
+    "ClientSecret": "clientSecret",
+    "RedirectUrl": "redirectUrl",
+    "Scopes": [
+      // The scopes bellow are purely e.g.
+      // This list has to match precisely the list configured for the app
+      "vso.build_execute",
+      "vso.chat_manage"
+    ]
   }
 }
