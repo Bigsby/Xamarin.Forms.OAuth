@@ -41,6 +41,7 @@
     <Compile Include="OAuthAccount.cs" />
     <Compile Include="OAuthAuthenticator.cs" />
     <Compile Include="OAuthProvider.cs" />
+    <Compile Include="OAuthProviderDefinition.cs" />
     <Compile Include="OAuthProviders.cs" />
     <Compile Include="OAuthResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

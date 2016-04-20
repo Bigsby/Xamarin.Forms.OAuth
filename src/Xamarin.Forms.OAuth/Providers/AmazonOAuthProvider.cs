@@ -1,49 +1,21 @@
 ﻿namespace Xamarin.Forms.OAuth.Providers
 {
-    public class AmazonOAuthProvider : OAuthProvider
+    public sealed class AmazonOAuthProvider : OAuthProvider
     {
-        public AmazonOAuthProvider(string clientId, string redirectUrl, params string[] scopes)
-            : base(clientId, redirectUrl, scopes)
+        internal AmazonOAuthProvider(string clientId, string redirectUrl, params string[] scopes)
+            : base(new OAuthProviderDefinition(
+                "Amazon",
+                "https://www.amazon.com/ap/oa",
+                null,
+                "https://api.amazon.com/user/profile",
+                clientId,
+                null,
+                redirectUrl,
+                scopes)
+            {
+                MandatoryScopes = new[] { "profile" },
+                GrpahIdProperty = "user_id",
+            })
         { }
-
-        public override string Name
-        {
-            get
-            {
-                return "Amazon";
-            }
-        }
-
-        protected override string AuthorizeUrl
-        {
-            get
-            {
-                return "https://www.amazon.com/ap/oa";
-            }
-        }
-
-        protected override string GraphUrl
-        {
-            get
-            {
-                return "https://api.amazon.com/user/profile";
-            }
-        }
-
-        protected override string[] MandatoryScopes
-        {
-            get
-            {
-                return new[] { "profile" };
-            }
-        }
-
-        internal override string GrpahIdProperty
-        {
-            get
-            {
-                return "user_id";
-            }
-        }
     }
 }

@@ -55,7 +55,7 @@ namespace Xamarin.Forms.OAuth
         public const string NameProperty = "Name";
         public const string LogoProperty = "Logo";
         public string Name { get { return _definition.Name; } }
-        public virtual ImageSource Logo
+        public ImageSource Logo
         {
             get
             {
@@ -112,10 +112,10 @@ namespace Xamarin.Forms.OAuth
         #endregion
 
         #region Internal Members
-        internal virtual string GrpahIdProperty { get { return "id"; } }
-        internal virtual string GraphNameProperty { get { return "name"; } }
-        internal string RedirectUrl { get; private set; }
-        internal virtual string TokenUrl { get { return null; } }
+        //internal virtual string GrpahIdProperty { get { return "id"; } }
+        //internal virtual string GraphNameProperty { get { return "name"; } }
+        //internal string RedirectUrl { get; private set; }
+        //internal virtual string TokenUrl { get { return null; } }
         internal virtual string TokenAuthorizationHeader { get { return null; } }
 
         internal virtual OAuthResponse GetOAuthResponseFromUrl(string url)
@@ -158,7 +158,7 @@ namespace Xamarin.Forms.OAuth
 
         internal virtual OAuthResponse GetTokenResponse(string response)
         {
-            switch (TokenResponseSerialization)
+            switch (_definition.TokenResponseSerialization)
             {
                 case TokenResponseSerialization.JSON:
                     return GetOAuthResponseFromJson(response);            
@@ -173,24 +173,24 @@ namespace Xamarin.Forms.OAuth
         {
             var jObject = JObject.Parse(json);
             return new AccountData(
-                jObject.GetStringValue(GrpahIdProperty),
-                jObject.GetStringValue(GraphNameProperty));
+                jObject.GetStringValue(_definition.GrpahIdProperty),
+                jObject.GetStringValue(_definition.GraphNameProperty));
         }
 
         internal virtual string GetAuthorizationUrl()
         {
-            var scopesToInject = MandatoryScopes.Union(_scopes ?? new string[0]).Distinct().ToArray();
+            var scopesToInject = _definition.MandatoryScopes.Union(_scopes ?? new string[0]).Distinct().ToArray();
             var scope = scopesToInject.Any() ?
-                "&scope=" + string.Join(ScopeSeparator, scopesToInject)
+                "&scope=" + string.Join(_definition.ScopeSeparator, scopesToInject)
                 :
                 string.Empty;
 
-            var state = IncludeStateInAuthorize ?
+            var state = _definition.IncludeStateInAuthorize ?
                 "&state=authentication"
                 :
                 string.Empty;
 
-            return $"{AuthorizeUrl}?response_type={AuthorizeResponseType}&client_id={ClientId}&redirect_uri={WebUtility.UrlEncode(RedirectUrl)}{scope}{state}";
+            return $"{_definition.AuthorizeUrl}?response_type={_definition.AuthorizeResponseType}&client_id={_definition.ClientId}&redirect_uri={WebUtility.UrlEncode(_definition.RedirectUrl)}{scope}{state}";
         }
 
         internal virtual IEnumerable<KeyValuePair<string, string>> BuildTokenRequestHeaders()
@@ -213,26 +213,26 @@ namespace Xamarin.Forms.OAuth
                 { "code", code }
             };
 
-            if (IncludeRedirectUrlInTokenRequest)
-                fields.Add("redirect_uri", WebUtility.UrlEncode(RedirectUrl));
+            if (_definition.IncludeRedirectUrlInTokenRequest)
+                fields.Add("redirect_uri", WebUtility.UrlEncode(_definition.RedirectUrl));
 
-            if (!ExcludeClientIdInTokenRequest)
-                fields.Add("client_id", ClientId);
+            if (!_definition.ExcludeClientIdInTokenRequest)
+                fields.Add("client_id", _definition.ClientId);
 
-            if (!string.IsNullOrEmpty(ClientSecret))
-                fields.Add("client_secret", ClientSecret);
+            if (!string.IsNullOrEmpty(_definition.ClientSecret))
+                fields.Add("client_secret", _definition.ClientSecret);
 
             return fields;
         }
 
         internal virtual string BuildGraphUrl(string token)
         {
-            switch (TokenType)
+            switch (_definition.TokenType)
             {
                 case TokenType.Bearer:
-                    return GraphUrl;
+                    return _definition.GraphUrl;
                 default:
-                    return BuildResourceTokenUrl(GraphUrl, token);
+                    return BuildResourceTokenUrl(_definition.GraphUrl, token);
             }
         }
 
@@ -258,12 +258,12 @@ namespace Xamarin.Forms.OAuth
 
         internal bool CheckRedirect(string url)
         {
-            return url?.StartsWith(RedirectUrl) == true;
+            return url?.StartsWith(_definition.RedirectUrl) == true;
         }
 
         internal async Task<OAuthResponse> GetTokenFromCode(string code)
         {
-            if (string.IsNullOrEmpty(TokenUrl))
+            if (string.IsNullOrEmpty(_definition.TokenUrl))
                 return OAuthResponse.WithError("BadImplementation",
                     "Provider returns code in authorize request but there is not access token URL.");
 
@@ -274,7 +274,7 @@ namespace Xamarin.Forms.OAuth
 
                 tokenClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
-                var tokenResponse = await tokenClient.PostAsync(TokenUrl,
+                var tokenResponse = await tokenClient.PostAsync(_definition.TokenUrl,
                     BuildHttpContent(BuildTokenContent(code)));
 
                 var tokenResponseString = await tokenResponse.Content.ReadAsStringAsync();
@@ -285,31 +285,31 @@ namespace Xamarin.Forms.OAuth
 
         internal async Task<AccountData> GetAccountData(OAuthAccessToken token)
         {
-            var graphResponseString = await GetResource<string>(GraphUrl, token);
+            var graphResponseString = await GetResource<string>(_definition.GraphUrl, token);
 
             return GetAccountData(graphResponseString);
         }
         #endregion
 
         #region Protected Members
-        protected string ClientId { get; private set; }
-        protected string ClientSecret { get; private set; }
-        protected virtual string[] MandatoryScopes { get { return new string[0]; } }
-        protected abstract string AuthorizeUrl { get; }
-        protected abstract string GraphUrl { get; }
-        protected virtual bool RequiresCode { get { return false; } }
-        protected virtual bool ExcludeClientIdInTokenRequest { get { return false; } }
-        protected virtual bool IncludeRedirectUrlInTokenRequest { get { return false; } }
-        protected virtual bool IncludeStateInAuthorize { get { return false; } }
-        protected virtual string ScopeSeparator { get { return ","; } }
-        protected virtual TokenType TokenType { get { return TokenType.Url; } }
-        protected virtual TokenResponseSerialization TokenResponseSerialization { get { return TokenResponseSerialization.JSON; } }
-        protected virtual string TokeUrlParameter { get { return "access_token"; } }
-        protected virtual string AuthorizeResponseType
-        {
-            get { return RequiresCode ? "code" : "token"; }
-        }
-        protected virtual IEnumerable<KeyValuePair<string, string>> ResourceQueryParameters { get { return new KeyValuePair<string, string>[0]; } }
+        //protected string ClientId { get; private set; }
+        //protected string ClientSecret { get; private set; }
+        //protected virtual string[] MandatoryScopes { get { return new string[0]; } }
+        //protected abstract string AuthorizeUrl { get; }
+        //protected abstract string GraphUrl { get; }
+        //protected virtual bool RequiresCode { get { return false; } }
+        //protected virtual bool ExcludeClientIdInTokenRequest { get { return false; } }
+        //protected virtual bool IncludeRedirectUrlInTokenRequest { get { return false; } }
+        //protected virtual bool IncludeStateInAuthorize { get { return false; } }
+        //protected virtual string ScopeSeparator { get { return ","; } }
+        //protected virtual TokenType TokenType { get { return TokenType.Url; } }
+        //protected virtual TokenResponseSerialization TokenResponseSerialization { get { return TokenResponseSerialization.JSON; } }
+        //protected virtual string TokeUrlParameter { get { return "access_token"; } }
+        //protected virtual string AuthorizeResponseType
+        //{
+        //    get { return RequiresCode ? "code" : "token"; }
+        //}
+        //protected virtual IEnumerable<KeyValuePair<string, string>> ResourceQueryParameters { get { return new KeyValuePair<string, string>[0]; } }
 
         protected static IDictionary<string, string> ReadResponseParameter(string url)
         {

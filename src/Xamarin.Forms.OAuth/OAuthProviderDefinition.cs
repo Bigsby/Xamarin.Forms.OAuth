@@ -26,7 +26,9 @@ namespace Xamarin.Forms.OAuth
             string tokenUrl,
             string graphUrl,
             string clientId,
-            string clientSecret)
+            string clientSecret,
+            string redirectUrl, 
+            params string[] scopes)
         {
             Name = name;
             AuthorizeUrl = authorizeUrl;
@@ -34,6 +36,9 @@ namespace Xamarin.Forms.OAuth
             GraphUrl = graphUrl;
             ClientId = clientId;
             ClientSecret = ClientSecret;
+            RedirectUrl = redirectUrl;
+            _scopes = scopes;
+
         }
 
         internal string Name { get; private set; }
@@ -41,6 +46,7 @@ namespace Xamarin.Forms.OAuth
         internal string TokenUrl { get; private set; }
         internal string ClientId { get; private set; }
         internal string ClientSecret { get; private set; }
+        internal string RedirectUrl { get; private set; }
         internal string GraphUrl { get; private set; }
 
         public bool ExcludeClientIdInTokenRequest
@@ -133,10 +139,9 @@ namespace Xamarin.Forms.OAuth
             set { _graphNameProperty = value; }
         }
 
-        public string[] Scopes
+        internal string[] Scopes
         {
-            internal get { return _scopes; }
-            set { _scopes = value; }
+            get { return _scopes; }
         }
     }
 

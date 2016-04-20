@@ -6,28 +6,16 @@
         private const string _redirectUrl = "https://www.facebook.com/connect/login_success.html";
 
         internal FacebookOAuthProvider(string appId, params string[] scopes)
-            : base(appId, _redirectUrl, scopes)
+            : base(new OAuthProviderDefinition(
+                "Facebook",
+                "https://www.facebook.com/dialog/oauth",
+                null,
+                "https://graph.facebook.com/v2.5/me",
+                appId,
+                null,
+                _redirectUrl,
+                scopes
+                ))
         { }
-
-        public override string Name
-        {
-            get
-            {
-                return "Facebook";
-            }
-        }
-
-        protected override string AuthorizeUrl
-        {
-            get
-            {
-                return "https://www.facebook.com/dialog/oauth";
-            }
-        }
-
-        protected override string GraphUrl
-        {
-            get { return "https://graph.facebook.com/v2.5/me"; }
-        }
     }
 }
