@@ -5,113 +5,45 @@ using System.Text;
 
 namespace Xamarin.Forms.OAuth.Providers
 {
-    public class ReddItOAuthProvider : OAuthProvider
+    public sealed class ReddItOAuthProvider : OAuthProvider
     {
         //TODO: add duration parameter in Authorize to get refresh_token
         internal ReddItOAuthProvider(string clientId, string redirectUrl, params string[] scopes)
-            : base(clientId, redirectUrl, scopes)
+            : base(new OAuthProviderDefinition(
+                "ReddIt",
+                "https://www.reddit.com/api/v1/authorize",
+                "https://www.reddit.com/api/v1/access_token",
+                "https://oauth.reddit.com/api/v1/me",
+                clientId,
+                null,
+                redirectUrl,
+                scopes)
+            {
+                MandatoryScopes = new[] { "identity" },
+                RequiresCode = true,
+                IncludeStateInAuthorize = true,
+                IncludeRedirectUrlInTokenRequest = true,
+                ExcludeClientIdInTokenRequest = true,
+                TokenType = TokenType.Bearer,
+                TokenAuthorizationHeaders = new[] 
+                {
+                    new KeyValuePair<string, string>("Authorization", $"Basic {BuildAuthenticationData(clientId, null)}")
+                }
+            })
         { }
 
-        public override string Name
+        private static string BuildAuthenticationData(string clientId, string clientSecret)
         {
-            get
-            {
-                return "ReddIt";
-            }
-        }
-
-        protected override string AuthorizeUrl
-        {
-            get
-            {
-                return "https://www.reddit.com/api/v1/authorize";
-            }
-        }
-
-        protected override string GraphUrl
-        {
-            get
-            {
-                return "https://oauth.reddit.com/api/v1/me";
-            }
-        }
-
-        protected override string[] MandatoryScopes
-        {
-            get
-            {
-                return new[] { "identity" };
-            }
-        }
-
-        protected override bool RequiresCode
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        internal override string TokenUrl
-        {
-            get
-            {
-                return "https://www.reddit.com/api/v1/access_token";
-            }
-        }
-
-        protected override bool IncludeStateInAuthorize
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        protected override bool IncludeRedirectUrlInTokenRequest
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        protected override bool ExcludeClientIdInTokenRequest
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        internal override string TokenAuthorizationHeader
-        {
-            get
-            {
-                return $"Basic {BuildAuthenticationData()}";
-            }
-        }
-
-        private string BuildAuthenticationData()
-        {
-            var data = $"{ClientId}:{ClientSecret}";
+            var data = $"{clientId}:{clientSecret}";
 
             var dataBytes = Encoding.UTF8.GetBytes(data);
 
             return Convert.ToBase64String(dataBytes);
         }
 
-        protected override TokenType TokenType
-        {
-            get
-            {
-                return TokenType.Bearer;
-            }
-        }
-
         internal override IEnumerable<KeyValuePair<string, string>> ResourceHeaders(OAuthAccessToken token)
         {
-            return base.ResourceHeaders(token).Union(new[] 
+            return base.ResourceHeaders(token).Union(new[]
             {
                 //TODO: build User-Agent according to documentation
                 //https://github.com/reddit/reddit/wiki/API

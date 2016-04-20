@@ -3,82 +3,26 @@ using Newtonsoft.Json.Linq;
 
 namespace Xamarin.Forms.OAuth.Providers
 {
-    public class LinkedInOAuthProvider : OAuthProvider
+    public sealed class LinkedInOAuthProvider : OAuthProvider
     {
-        public LinkedInOAuthProvider(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
-            : base(clientId, clientSecret, redirectUrl, scopes)
+        internal LinkedInOAuthProvider(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
+            : base(new OAuthProviderDefinition(
+                "LinkedIn",
+                "https://www.linkedin.com/uas/oauth2/authorization",
+                "https://www.linkedin.com/uas/oauth2/accessToken",
+                "https://api.linkedin.com/v1/people/~",
+                clientId,
+                clientSecret,
+                redirectUrl,
+                scopes)
+            {
+                TokeUrlParameter = "oauth2_access_token",
+                ResourceQueryParameters = new[] { new KeyValuePair<string, string>("format", "json") },
+                IncludeStateInAuthorize = true,
+                RequiresCode = true,
+                IncludeRedirectUrlInTokenRequest = true
+            })
         { }
-
-        public override string Name
-        {
-            get
-            {
-                return "LinkedIn";
-            }
-        }
-
-        protected override string AuthorizeUrl
-        {
-            get
-            {
-                return "https://www.linkedin.com/uas/oauth2/authorization";
-            }
-        }
-
-        protected override string GraphUrl
-        {
-            get
-            {
-                return "https://api.linkedin.com/v1/people/~";
-            }
-        }
-
-        protected override string TokeUrlParameter
-        {
-            get
-            {
-                return "oauth2_access_token";
-            }
-        }
-        protected override IEnumerable<KeyValuePair<string, string>> ResourceQueryParameters
-        {
-            get
-            {
-                return new[] { new KeyValuePair<string, string>("format", "json") };
-            }
-        }
-
-        protected override bool IncludeStateInAuthorize
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        protected override bool RequiresCode
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        internal override string TokenUrl
-        {
-            get
-            {
-                return "https://www.linkedin.com/uas/oauth2/accessToken";
-            }
-        }
-
-        protected override bool IncludeRedirectUrlInTokenRequest
-        {
-            get
-            {
-                return true;
-            }
-        }
 
         internal override AccountData GetAccountData(string json)
         {

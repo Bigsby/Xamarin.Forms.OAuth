@@ -2,60 +2,24 @@
 
 namespace Xamarin.Forms.OAuth.Providers
 {
-    public class InstagramOAuthProvider : OAuthProvider
+    public sealed class InstagramOAuthProvider : OAuthProvider
     {
         internal InstagramOAuthProvider(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
-            : base(clientId, clientSecret, redirectUrl, scopes)
+            : base(new OAuthProviderDefinition(
+                "Instagram",
+                "https://api.instagram.com/oauth/authorize",
+                "https://api.instagram.com/oauth/access_token",
+                "https://api.instagram.com/v1/users/self",
+                clientId,
+                clientSecret,
+                redirectUrl,
+                scopes)
+            {
+                RequiresCode = true,
+                IncludeRedirectUrlInTokenRequest = true
+            })
         { }
-
-        public override string Name
-        {
-            get
-            {
-                return "Instagram";
-            }
-        }
-
-        protected override string AuthorizeUrl
-        {
-            get
-            {
-                return "https://api.instagram.com/oauth/authorize";
-            }
-        }
-
-        protected override string GraphUrl
-        {
-            get
-            {
-                return "https://api.instagram.com/v1/users/self";
-            }
-        }
-
-        protected override bool RequiresCode
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        internal override string TokenUrl
-        {
-            get
-            {
-                return " https://api.instagram.com/oauth/access_token";
-            }
-        }
-
-        protected override bool IncludeRedirectUrlInTokenRequest
-        {
-            get
-            {
-                return true;
-            }
-        }
-
+          
         internal override AccountData GetAccountData(string json)
         {
             var jObject = JObject.Parse(json);

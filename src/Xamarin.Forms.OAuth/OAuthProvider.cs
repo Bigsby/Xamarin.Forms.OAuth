@@ -16,7 +16,6 @@ namespace Xamarin.Forms.OAuth
     public abstract class OAuthProvider
     {
         #region Privet Fields
-        private readonly string[] _scopes;
         private const string _errorParameter = "error";
         private const string _errorDescriptionParameter = "error_description";
         private const string _codeParameter = "code";
@@ -28,27 +27,11 @@ namespace Xamarin.Forms.OAuth
 
         #endregion
 
-        #region Constructors
-
+        #region Constructor
         protected OAuthProvider(OAuthProviderDefinition definition)
         {
             _definition = definition;
         }
-
-        //protected OAuthProvider(string clientId,
-        //   string redirectUrl, params string[] scopes)
-        //{
-        //    ClientId = clientId;
-        //    RedirectUrl = redirectUrl;
-        //    _scopes = scopes;
-        //}
-
-        //protected OAuthProvider(string clientId, string clientSecret,
-        //    string redirectUrl, params string[] scopes)
-        //    : this(clientId, redirectUrl, scopes)
-        //{
-        //    ClientSecret = clientSecret;
-        //}
         #endregion
 
         #region Public Members
@@ -112,12 +95,6 @@ namespace Xamarin.Forms.OAuth
         #endregion
 
         #region Internal Members
-        //internal virtual string GrpahIdProperty { get { return "id"; } }
-        //internal virtual string GraphNameProperty { get { return "name"; } }
-        //internal string RedirectUrl { get; private set; }
-        //internal virtual string TokenUrl { get { return null; } }
-        internal virtual string TokenAuthorizationHeader { get { return null; } }
-
         internal virtual OAuthResponse GetOAuthResponseFromUrl(string url)
         {
             var parameters = ReadResponseParameter(url);
@@ -173,13 +150,13 @@ namespace Xamarin.Forms.OAuth
         {
             var jObject = JObject.Parse(json);
             return new AccountData(
-                jObject.GetStringValue(_definition.GrpahIdProperty),
+                jObject.GetStringValue(_definition.GraphIdProperty),
                 jObject.GetStringValue(_definition.GraphNameProperty));
         }
 
         internal virtual string GetAuthorizationUrl()
         {
-            var scopesToInject = _definition.MandatoryScopes.Union(_scopes ?? new string[0]).Distinct().ToArray();
+            var scopesToInject = _definition.MandatoryScopes.Union(_definition.Scopes ?? new string[0]).Distinct().ToArray();
             var scope = scopesToInject.Any() ?
                 "&scope=" + string.Join(_definition.ScopeSeparator, scopesToInject)
                 :
@@ -238,7 +215,7 @@ namespace Xamarin.Forms.OAuth
 
         internal virtual IEnumerable<KeyValuePair<string, string>> ResourceHeaders(OAuthAccessToken token)
         {
-            return TokenType == TokenType.Url ?
+            return _definition.TokenType == TokenType.Url ?
                 new KeyValuePair<string, string>[0]
                 :
                 new[] { new KeyValuePair<string, string>("Authorization", $"Bearer {token.Token}") };
@@ -269,8 +246,10 @@ namespace Xamarin.Forms.OAuth
 
             using (var tokenClient = new HttpClient())
             {
-                if (!string.IsNullOrEmpty(TokenAuthorizationHeader))
-                    tokenClient.DefaultRequestHeaders.Add("Authorization", TokenAuthorizationHeader);
+                if (Definition.TokenAuthorizationHeaders.Any())
+                    foreach (var header in Definition.TokenAuthorizationHeaders)
+                        tokenClient.DefaultRequestHeaders.Add(header.Key, header.Value);
+                    //tokenClient.DefaultRequestHeaders.Add("Authorization", Definition.TokenAuthorizationHeader);
 
                 tokenClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
@@ -292,24 +271,7 @@ namespace Xamarin.Forms.OAuth
         #endregion
 
         #region Protected Members
-        //protected string ClientId { get; private set; }
-        //protected string ClientSecret { get; private set; }
-        //protected virtual string[] MandatoryScopes { get { return new string[0]; } }
-        //protected abstract string AuthorizeUrl { get; }
-        //protected abstract string GraphUrl { get; }
-        //protected virtual bool RequiresCode { get { return false; } }
-        //protected virtual bool ExcludeClientIdInTokenRequest { get { return false; } }
-        //protected virtual bool IncludeRedirectUrlInTokenRequest { get { return false; } }
-        //protected virtual bool IncludeStateInAuthorize { get { return false; } }
-        //protected virtual string ScopeSeparator { get { return ","; } }
-        //protected virtual TokenType TokenType { get { return TokenType.Url; } }
-        //protected virtual TokenResponseSerialization TokenResponseSerialization { get { return TokenResponseSerialization.JSON; } }
-        //protected virtual string TokeUrlParameter { get { return "access_token"; } }
-        //protected virtual string AuthorizeResponseType
-        //{
-        //    get { return RequiresCode ? "code" : "token"; }
-        //}
-        //protected virtual IEnumerable<KeyValuePair<string, string>> ResourceQueryParameters { get { return new KeyValuePair<string, string>[0]; } }
+        protected OAuthProviderDefinition Definition { get { return _definition; } }
 
         protected static IDictionary<string, string> ReadResponseParameter(string url)
         {
@@ -350,13 +312,13 @@ namespace Xamarin.Forms.OAuth
 
         private string BuildResourceTokenUrl(string url, string token, IEnumerable<KeyValuePair<string, string>> queryParameters = null)
         {
-            var parameters = new List<KeyValuePair<string, string>>(ResourceQueryParameters);
+            var parameters = new List<KeyValuePair<string, string>>(_definition.ResourceQueryParameters);
 
             if (null != queryParameters)
                 parameters.AddRange(queryParameters);
 
-            if (TokenType == TokenType.Url)
-                parameters.Add(new KeyValuePair<string, string>(TokeUrlParameter, token));
+            if (_definition.TokenType == TokenType.Url)
+                parameters.Add(new KeyValuePair<string, string>(_definition.TokeUrlParameter, token));
 
             return url +
                 (parameters.Any() ?

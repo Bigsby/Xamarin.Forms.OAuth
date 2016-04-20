@@ -2,45 +2,20 @@
 {
     public sealed class GoogleOAuthProvider : OAuthProvider
     {
-        public GoogleOAuthProvider(string clientId, string redirectUrl, params string[] scopes)
-            : base(clientId, redirectUrl, scopes)
+        internal GoogleOAuthProvider(string clientId, string redirectUrl, params string[] scopes)
+            : base(new OAuthProviderDefinition(
+                "Google",
+                "https://accounts.google.com/o/oauth2/v2/auth",
+                null,
+                "https://www.googleapis.com/plus/v1/people/me",
+                clientId,
+                null,
+                redirectUrl,
+                scopes)
+            {
+                MandatoryScopes = new[] { "profile" },
+                GraphNameProperty = "displayName"
+            })
         { }
-
-        public override string Name
-        {
-            get
-            {
-                return "Google";
-            }
-        }
-
-        protected override string[] MandatoryScopes
-        {
-            get
-            {
-                return new[] { "profile" };
-            }
-        }
-
-        protected override string AuthorizeUrl
-        {
-            get
-            {
-                return "https://accounts.google.com/o/oauth2/v2/auth";
-            }
-        }
-
-        protected override string GraphUrl
-        {
-            get { return "https://www.googleapis.com/plus/v1/people/me"; }
-        }
-
-        internal override string GraphNameProperty
-        {
-            get
-            {
-                return "displayName";
-            }
-        }
     }
 }

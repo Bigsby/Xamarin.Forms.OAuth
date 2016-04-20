@@ -15,27 +15,9 @@ namespace Xamarin.Forms.OAuth
             return new BoxOAuthProvider(clientId, clientSecret, redirectUrl, scopes);
         }
 
-        public static OAuthProvider Custom(
-            string name,
-            string authorizationUrl,
-            string redirectUrl,
-            string graphUrl,
-            string clientId,
-            string idProperty = null,
-            string nameProperty = null,
-            ImageSource logo = null,
-            params string[] scopes)
+        public static OAuthProvider Custom(OAuthProviderDefinition definition)
         {
-            return new CustomOAuthProvider(
-                name,
-                authorizationUrl,
-                redirectUrl,
-                graphUrl,
-                clientId,
-                idProperty,
-                nameProperty,
-                logo,
-                scopes);
+            return new CustomOAuthProvider(definition);
         }
 
         public static OAuthProvider Dropbox(string clientId, string redirectUrl, params string[] scopes)

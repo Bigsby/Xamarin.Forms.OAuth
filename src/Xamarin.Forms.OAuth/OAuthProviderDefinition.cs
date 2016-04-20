@@ -18,6 +18,8 @@ namespace Xamarin.Forms.OAuth
         private ImageSource _logo;
         private string _graphIdProperty = "id";
         private string _graphNameProperty = "name";
+        //private string _tokenAuthorizationHeader = null;
+        private IEnumerable<KeyValuePair<string, string>> _tokenAuthorizationHeaders = new KeyValuePair<string, string>[0];
         private string[] _scopes;
 
         public OAuthProviderDefinition(
@@ -35,10 +37,9 @@ namespace Xamarin.Forms.OAuth
             TokenUrl = tokenUrl;
             GraphUrl = graphUrl;
             ClientId = clientId;
-            ClientSecret = ClientSecret;
+            ClientSecret = clientSecret;
             RedirectUrl = redirectUrl;
             _scopes = scopes;
-
         }
 
         internal string Name { get; private set; }
@@ -127,7 +128,7 @@ namespace Xamarin.Forms.OAuth
             set { _logo = value; }
         }
 
-        public string GrpahIdProperty
+        public string GraphIdProperty
         {
             internal get { return _graphIdProperty; }
             set { _graphIdProperty = value; }
@@ -142,6 +143,18 @@ namespace Xamarin.Forms.OAuth
         internal string[] Scopes
         {
             get { return _scopes; }
+        }
+
+        //public string TokenAuthorizationHeader
+        //{
+        //    internal get { return _tokenAuthorizationHeader; }
+        //    set { _tokenAuthorizationHeader = value; }
+        //}
+
+        public IEnumerable<KeyValuePair<string, string>> TokenAuthorizationHeaders
+        {
+            internal get { return _tokenAuthorizationHeaders; }
+            set { _tokenAuthorizationHeaders = value; }
         }
     }
 

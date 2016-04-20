@@ -2,37 +2,20 @@
 {
     public sealed class MicrosoftOAuthProvider : OAuthProvider
     {
-        public MicrosoftOAuthProvider(string clientId, string redirectUrl, params string[] scopes)
-            : base(clientId, redirectUrl, scopes)
+        internal MicrosoftOAuthProvider(string clientId, string redirectUrl, params string[] scopes)
+            : base(new OAuthProviderDefinition(
+                "Microsoft",
+                "https://login.live.com/oauth20_authorize.srf",
+                null,
+                "https://apis.live.net/v5.0/me",
+                clientId,
+                null,
+                redirectUrl,
+                scopes)
+            {
+                MandatoryScopes = new[] { "wl.signin", "wl.basic" },
+
+            })
         { }
-
-        public override string Name
-        {
-            get
-            {
-                return "Microsoft";
-            }
-        }
-
-        protected override string[] MandatoryScopes
-        {
-            get
-            {
-                return new[] { "wl.signin", "wl.basic" };
-            }
-        }
-
-        protected override string AuthorizeUrl
-        {
-            get
-            {
-                return "https://login.live.com/oauth20_authorize.srf";
-            }
-        }
-
-        protected override string GraphUrl
-        {
-            get { return "https://apis.live.net/v5.0/me"; }
-        }
     }
 }

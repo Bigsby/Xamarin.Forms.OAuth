@@ -3,57 +3,36 @@ using Newtonsoft.Json.Linq;
 
 namespace Xamarin.Forms.OAuth.Providers
 {
-    public class StackExchangeOAuthProvider : OAuthProvider
+    public sealed class StackExchangeOAuthProvider : OAuthProvider
     {
         private const string _redirectUrl = "https://stackexchange.com/oauth/login_success";
         //TODO: Get site from configuration
         private string _site;
 
-        public StackExchangeOAuthProvider(string clientId, string clientSecret, string site, params string[] scopes)
-            : base(clientId, clientSecret, _redirectUrl, scopes)
+        internal StackExchangeOAuthProvider(string clientId, string clientSecret, string site, params string[] scopes)
+            : base(new OAuthProviderDefinition(
+                "StackExchange",
+                "https://stackexchange.com/oauth/dialog",
+                null,
+                "https://api.stackexchange.com/2.0/me",
+                clientId,
+                clientSecret,
+                _redirectUrl,
+                scopes)
+            {
+                ResourceQueryParameters = new[]
+                {
+                    new KeyValuePair<string, string>("key", clientSecret),
+                    new KeyValuePair<string, string>("site", site)
+                }
+            })
         {
             _site = site;
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "StackExchange";
-            }
-        }
-
-        protected override string AuthorizeUrl
-        {
-            get
-            {
-                return "https://stackexchange.com/oauth/dialog";
-            }
-        }
-
-        protected override string GraphUrl
-        {
-            get
-            {
-                return "https://api.stackexchange.com/2.0/me";
-            }
-        }
-
-        protected override IEnumerable<KeyValuePair<string, string>> ResourceQueryParameters
-        {
-            get
-            {
-                return new[] 
-                {
-                    new KeyValuePair<string, string>("key", ClientSecret),
-                    new KeyValuePair<string, string>("site", _site)
-                };
-            }
-        }
-
         internal override string BuildGraphUrl(string token)
         {
-            return string.Format(GraphUrl, token, ClientSecret, _site);
+            return string.Format(Definition.GraphUrl, token, Definition.ClientSecret, _site);
         }
 
         internal override AccountData GetAccountData(string json)

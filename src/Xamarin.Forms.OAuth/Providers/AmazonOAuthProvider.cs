@@ -14,7 +14,7 @@
                 scopes)
             {
                 MandatoryScopes = new[] { "profile" },
-                GrpahIdProperty = "user_id",
+                GraphIdProperty = "user_id",
             })
         { }
     }

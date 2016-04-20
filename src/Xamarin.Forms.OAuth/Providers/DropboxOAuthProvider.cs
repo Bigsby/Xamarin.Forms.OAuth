@@ -13,7 +13,7 @@
                 redirectUrl,
                 scopes)
             {
-                GrpahIdProperty = "uid",
+                GraphIdProperty = "uid",
                 GraphNameProperty = "display_name"
             })
         { }
