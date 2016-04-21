@@ -13,8 +13,8 @@ namespace Xamarin.Forms.OAuth.Providers
                 "Foursquare",
                 "https://foursquare.com/oauth2/authenticate",
                 "https://foursquare.com/oauth2/access_token",
+                null, // does not provide token refreshing
                 "https://api.foursquare.com/v2/users/self",
-                null,
                 clientId,
                 clientSecret,
                 redirectUrl,

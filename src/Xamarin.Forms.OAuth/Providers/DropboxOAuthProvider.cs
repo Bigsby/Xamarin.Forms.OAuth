@@ -7,7 +7,7 @@
                 "Dropbox",
                 "https://www.dropbox.com/1/oauth2/authorize",
                 "https://api.dropboxapi.com/1/oauth2/token",
-                null,
+                null, //does not refresh tokens
                 "https://api.dropbox.com/1/account/info",
                 clientId,
                 clientSecret,
