@@ -2,12 +2,14 @@
 {
     public sealed class AmazonOAuthProvider : OAuthProvider
     {
+        private const string _tokenUrl = "https://api.amazon.com/auth/o2/token";
+
         internal AmazonOAuthProvider(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
             : base(new OAuthProviderDefinition(
                 "Amazon",
                 "https://www.amazon.com/ap/oa",
-                "https://api.amazon.com/auth/o2/token",
-                "https://api.amazon.com/auth/o2/token",
+                _tokenUrl,
+                _tokenUrl,
                 "https://api.amazon.com/user/profile",
                 clientId,
                 clientSecret,

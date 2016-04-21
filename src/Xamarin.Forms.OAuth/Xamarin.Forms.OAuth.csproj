@@ -64,6 +64,7 @@
     <Compile Include="Providers\TrelloOAuthProvider.cs" />
     <Compile Include="Providers\VisualStudioOAuthProvider.cs" />
     <Compile Include="Views\BaseView.cs" />
+    <Compile Include="Views\ProgressView.cs" />
     <Compile Include="Views\ProviderSelectionPage.cs" />
     <Compile Include="Providers\FacebookOAuthProvider.cs" />
     <Compile Include="Providers\GoogleOAuthProvider.cs" />

@@ -18,6 +18,7 @@ namespace Xamarin.Forms.OAuth
 
         public string Token { get; private set; }
         public string RefreshToken { get; private set; }
+        public string Type { get; set; }
         public DateTime? Expires { get; private set; }
         public bool IsRefreshable { get { return !string.IsNullOrEmpty(RefreshToken); } }
     }

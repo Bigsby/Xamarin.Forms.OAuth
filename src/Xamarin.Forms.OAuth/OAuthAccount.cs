@@ -17,7 +17,7 @@ namespace Xamarin.Forms.OAuth
         public string Id { get; private set; }
         public string DisplayName { get; private set; }
         public string ProviderName { get { return Provider.Name; } }
-        public bool RefreshesToken { get { return Provider.RefreshesToken(); } }
+        public bool RefreshesToken { get { return AccessToken?.Expires.HasValue == true && Provider.RefreshesToken(); } }
         public OAuthAccessToken AccessToken { get; private set; }
         private OAuthProvider Provider { get; set; }
 

@@ -2,7 +2,7 @@
 
 namespace Xamarin.Forms.OAuth.Views
 {
-    internal class WebOAuthPage : BaseView, IBackHandlingView
+    internal sealed  class WebOAuthPage : BaseView, IBackHandlingView
     {
         private readonly Func<string, bool> _redirectCheck;
         private readonly Button _backButton;

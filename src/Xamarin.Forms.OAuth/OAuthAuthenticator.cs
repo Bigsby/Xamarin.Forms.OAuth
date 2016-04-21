@@ -54,7 +54,7 @@ namespace Xamarin.Forms.OAuth
                     var oAuthResponse = await AuthenticateUser(provider);
 
                     //TODO show activity indicator at this point
-                    Device.BeginInvokeOnMainThread(() => Application.Current.MainPage.IsVisible = false);
+                    Device.BeginInvokeOnMainThread(() => Application.Current.MainPage = new ProgressView());
 
                     if (oAuthResponse.IsCancelled)
                         return AuthenticatonResult.Failed("Cancelled");
