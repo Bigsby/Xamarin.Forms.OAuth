@@ -45,7 +45,7 @@ namespace OAuthTestApp
 
             foreach (var config in _providerConfigs)
             {
-                var mi = _providersType.GetDeclaredMethod(config.Key);
+                var mis = _providersType.GetDeclaredMethods(config.Key);
 
                 var args = new List<object> { config.Value.ClientId };
 
@@ -60,6 +60,8 @@ namespace OAuthTestApp
 
                 args.Add(config.Value.Scopes);
 
+                var mi = GetMethodToRun(mis, args);
+
                 var provider = mi?.Invoke(null, args.ToArray()) as OAuthProvider;
 
                 if (null != provider)
@@ -67,6 +69,22 @@ namespace OAuthTestApp
             }
         }
 
+        private static MethodInfo GetMethodToRun(IEnumerable<MethodInfo> methods, IEnumerable<object> parameters)
+        {
+            if (!methods.Any())
+                return null;
+
+            if (methods.Count() == 1)
+                return methods.First();
+
+            var parameterCount = parameters.Count();
+
+            foreach (var method in methods)
+                if (method.GetParameters().Count() == parameterCount)
+                    return method;
+
+            return null;
+        }
         
         private static MethodInfo GetProviderMethod(string name)
         {

@@ -8,8 +8,13 @@ namespace OAuthTestApp
     public class ResultPage : ContentPage, IBackHandlingView
     {
         private readonly Action _returnCallback;
+        private readonly Label _expireLabel = new Label();
+        private readonly OAuthAccount _account;
+
         public ResultPage(AuthenticatonResult result, Action returnCallback)
         {
+            _returnCallback = returnCallback;
+
             var stack = new StackLayout
             {
                 VerticalOptions = LayoutOptions.Center,
@@ -18,25 +23,43 @@ namespace OAuthTestApp
 
             if (result)
             {
+                _account = result.Account;
+
                 stack.Children.Add(new Label
                 {
-                    Text = $"Provider: {result.Account.ProviderName}"
+                    Text = $"Provider: {_account.ProviderName}"
                 });
 
                 stack.Children.Add(new Label
                 {
-                    Text = $"Id: {result.Account.Id}"
+                    Text = $"Id: {_account.Id}"
                 });
 
                 stack.Children.Add(new Label
                 {
-                    Text = $"Name: {result.Account.DisplayName}"
+                    Text = $"Name: {_account.DisplayName}"
                 });
 
-                stack.Children.Add(new Label
+                var token = _account.AccessToken;
+
+                if (token.Expires.HasValue)
                 {
-                    Text = $"Token Expires: {result.Account.AccessToken.Expires.ToString("yyyy-MM-dd HH:mm:ss")}"
-                });
+                    SetExpireText();
+                    stack.Children.Add(_expireLabel);
+                }
+
+                if (result.Account.RefreshesToken)
+                    stack.Children.Add(new Button
+                    {
+                        Text = "Refresh Token",
+                        Command = new Command(async () =>
+                        {
+                            var response = await result.Account.RefreshToken();
+
+                            if (response)
+                                SetExpireText();
+                        })
+                    });
             }
             else
             {
@@ -57,6 +80,8 @@ namespace OAuthTestApp
                     });
             }
 
+
+
             stack.Children.Add(new Button
             {
                 Text = "Back",
@@ -69,6 +94,11 @@ namespace OAuthTestApp
         public void HandleBack()
         {
             _returnCallback?.Invoke();
+        }
+
+        private void SetExpireText()
+        {
+            _expireLabel.Text = $"Token Expires: {_account.AccessToken.Expires?.ToString("yyyy-MM-dd HH:mm:ss")}";
         }
     }
 }
