@@ -70,6 +70,11 @@ namespace Xamarin.Forms.OAuth
             return new MicrosoftOAuthProvider(clientId, redirectUrl, scopes);
         }
 
+        public static OAuthProvider PayPal(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
+        {
+            return new PayPalOAuthProvider(clientId, clientSecret, redirectUrl, scopes);
+        }
+
         public static OAuthProvider ReddIt(string clientId, string redirectUrl, params string[] scopes)
         {
             return new ReddItOAuthProvider(clientId, redirectUrl, scopes);

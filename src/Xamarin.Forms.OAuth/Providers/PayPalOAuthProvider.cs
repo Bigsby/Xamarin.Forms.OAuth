@@ -5,7 +5,7 @@ namespace Xamarin.Forms.OAuth.Providers
     public sealed class PayPalOAuthProvider : OAuthProvider
     {
         //TODO: Allow for sandbox definition
-        public PayPalOAuthProvider(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
+        internal PayPalOAuthProvider(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
             : base(new OAuthProviderDefinition(
                 "PayPal",
                 "https://www.paypal.com/webapps/auth/protocol/openidconnect/v1/authorize",
