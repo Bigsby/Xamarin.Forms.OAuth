@@ -70,6 +70,7 @@ namespace Xamarin.Forms.OAuth
 
     public enum TokenType
     {
+        Unknown,
         Url,
         Bearer
     }

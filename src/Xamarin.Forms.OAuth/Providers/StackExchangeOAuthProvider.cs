@@ -32,11 +32,6 @@ namespace Xamarin.Forms.OAuth.Providers
             _site = site;
         }
 
-        internal override string BuildGraphUrl(string token)
-        {
-            return string.Format(Definition.GraphUrl, token, Definition.ClientSecret, _site);
-        }
-
         internal override AccountData ReadAccountData(string json)
         {
             var jObject = JObject.Parse(json);

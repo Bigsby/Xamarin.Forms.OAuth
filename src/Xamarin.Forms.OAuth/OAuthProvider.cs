@@ -20,6 +20,7 @@ namespace Xamarin.Forms.OAuth
         private const string _errorDescriptionParameter = "error_description";
         private const string _codeParameter = "code";
         private const string _accessTokenParatemeter = "access_token";
+        private const string _tokenTypeParameter = "token_type";
         private const string _refreshTokenParameter = "refresh_token";
         private const string _expiresInParameter = "expires_in";
         private static Regex _urlParameterExpression = new Regex("(.*)=(.*)");
@@ -74,8 +75,17 @@ namespace Xamarin.Forms.OAuth
             if (parameters.ContainsKey(_codeParameter))
                 return OAuthResponse.WithCode(parameters[_codeParameter]);
 
+            var tokenTypeValue = parameters.ContainsKey(_tokenTypeParameter)
+                ?
+                parameters[_tokenTypeParameter]
+                : string.Empty;
+
             return OAuthResponse.WithToken(new OAuthAccessToken(
                     parameters[Definition.TokenResponseUrlParameter],
+                    "bearer".Equals(tokenTypeValue, StringComparison.OrdinalIgnoreCase) ?
+                    TokenType.Bearer
+                    :
+                    TokenType.Url,
                     GetExpireDate(parameters.ContainsKey(_expiresInParameter) ?
                         parameters[_expiresInParameter]
                         :
@@ -86,7 +96,7 @@ namespace Xamarin.Forms.OAuth
         internal virtual async Task<T> GetResource<T>(string resourceUrl, OAuthAccessToken token, IEnumerable<KeyValuePair<string, string>> queryParameters = null)
             where T : class
         {
-            var url = BuildResourceTokenUrl(resourceUrl, token.Token, queryParameters);
+            var url = BuildResourceTokenUrl(resourceUrl, token, queryParameters);
 
             using (var client = new HttpClient())
             {
@@ -104,7 +114,7 @@ namespace Xamarin.Forms.OAuth
         internal virtual async Task<T> PostResource<T>(string resourceUrl, HttpContent content, OAuthAccessToken token, IEnumerable<KeyValuePair<string, string>> queryParameters = null)
             where T : class
         {
-            var url = BuildResourceTokenUrl(resourceUrl, token.Token, queryParameters);
+            var url = BuildResourceTokenUrl(resourceUrl, token, queryParameters);
 
             using (var client = new HttpClient())
             {
@@ -163,20 +173,9 @@ namespace Xamarin.Forms.OAuth
             return new KeyValuePair<string, string>[0];
         }
 
-        internal virtual string BuildGraphUrl(string token)
-        {
-            switch (Definition.TokenType)
-            {
-                case TokenType.Bearer:
-                    return Definition.GraphUrl;
-                default:
-                    return BuildResourceTokenUrl(Definition.GraphUrl, token);
-            }
-        }
-
         internal virtual IEnumerable<KeyValuePair<string, string>> ResourceHeaders(OAuthAccessToken token)
         {
-            return Definition.TokenType == TokenType.Url ?
+            return token.Type == TokenType.Url ?
                 new KeyValuePair<string, string>[0]
                 :
                 new[] { new KeyValuePair<string, string>("Authorization", $"Bearer {token.Token}") };
@@ -218,7 +217,7 @@ namespace Xamarin.Forms.OAuth
             
             return await GetToken(Definition.RefreshTokenUrl,
                 new KeyValuePair<string,string>[0],
-                BuildRefreshTokenRequestFields(token.RefreshToken));
+                BuildRefreshTokenRequestFields(token.RefreshToken ?? token.Token));
         }
 
         internal bool RefreshesToken()
@@ -367,11 +366,15 @@ namespace Xamarin.Forms.OAuth
 
             return OAuthResponse.WithToken(new OAuthAccessToken(
                 jObject.GetStringValue(_accessTokenParatemeter),
+                "bearer".Equals(jObject.GetStringValue(_tokenTypeParameter), StringComparison.OrdinalIgnoreCase) ?
+                    TokenType.Bearer
+                    :
+                    TokenType.Unknown,
                 jObject.GetStringValue(_refreshTokenParameter),
                 GetExpireDate(jObject.GetStringValue(_expiresInParameter))));
         }
 
-        private string BuildResourceTokenUrl(string url, string token, IEnumerable<KeyValuePair<string, string>> queryParameters = null)
+        private string BuildResourceTokenUrl(string url, OAuthAccessToken token, IEnumerable<KeyValuePair<string, string>> queryParameters = null)
         {
             var parameters = new List<KeyValuePair<string, string>>(Definition.ResourceQueryParameters);
 
@@ -379,7 +382,7 @@ namespace Xamarin.Forms.OAuth
                 parameters.AddRange(queryParameters);
 
             if (Definition.TokenType == TokenType.Url)
-                parameters.Add(new KeyValuePair<string, string>(Definition.TokenRequestUrlParameter, token));
+                parameters.Add(new KeyValuePair<string, string>(Definition.TokenRequestUrlParameter, token.Token));
 
             return BuildUrl(url, parameters);
         }

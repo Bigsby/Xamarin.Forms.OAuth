@@ -10,16 +10,6 @@ namespace Xamarin.Forms.OAuth.Providers
         { }
 
         #region Method Overriding
-        private Func<string, string> _graphUrlBuilder;
-        public void SetGraphUrlBuilder(Func<string, string> graphUrlBuilder)
-        {
-            _graphUrlBuilder = graphUrlBuilder;
-        }
-        internal override string BuildGraphUrl(string token)
-        {
-            return null == _graphUrlBuilder ? base.BuildGraphUrl(token) : _graphUrlBuilder(token);
-        }
-
         private Func<string, AccountData> _accountDataGetter;
         public void SetAccountDataGetter(Func<string, AccountData> getter)
         {
