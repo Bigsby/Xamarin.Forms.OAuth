@@ -10,23 +10,23 @@ namespace Xamarin.Forms.OAuth.Providers
                 "https://gitter.im/login/oauth/authorize",
                 "https://gitter.im/login/oauth/token",
                 "https://api.gitter.im/v1/user",
+                null,
                 clientId,
                 clientSecret,
                 redirectUrl,
                 scopes)
             {
-                RequiresCode = true,
                 IncludeRedirectUrlInTokenRequest = true,
                 TokenType = TokenType.Bearer,
                 GraphNameProperty = "displayName"
             })
         { }
 
-        internal override AccountData GetAccountData(string json)
+        internal override AccountData ReadAccountData(string json)
         {
             var jObject = JArray.Parse(json)[0];
 
-            return base.GetAccountData(jObject.ToString());
+            return base.ReadAccountData(jObject.ToString());
         }
     }
 }

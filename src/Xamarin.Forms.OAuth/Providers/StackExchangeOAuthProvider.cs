@@ -15,11 +15,13 @@ namespace Xamarin.Forms.OAuth.Providers
                 "https://stackexchange.com/oauth/dialog",
                 null,
                 "https://api.stackexchange.com/2.0/me",
+                null,
                 clientId,
                 clientSecret,
                 _redirectUrl,
                 scopes)
             {
+                AuthorizationType = AuthorizationType.Token,
                 ResourceQueryParameters = new[]
                 {
                     new KeyValuePair<string, string>("key", clientSecret),
@@ -35,7 +37,7 @@ namespace Xamarin.Forms.OAuth.Providers
             return string.Format(Definition.GraphUrl, token, Definition.ClientSecret, _site);
         }
 
-        internal override AccountData GetAccountData(string json)
+        internal override AccountData ReadAccountData(string json)
         {
             var jObject = JObject.Parse(json);
             var data = jObject["items"][0] as JObject;

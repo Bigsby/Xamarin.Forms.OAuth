@@ -11,12 +11,12 @@ namespace Xamarin.Forms.OAuth.Providers
                 "https://www.paypal.com/webapps/auth/protocol/openidconnect/v1/authorize",
                 "https://api.paypal.com/v1/oauth2/token",
                 "https://api.paypal.com/v1/identity/openidconnect/userinfo/",
+                null,
                 clientId,
                 clientSecret,
                 redirectUrl,
                 scopes)
             {
-                RequiresCode = true,
                 TokenType = TokenType.Bearer,
                 MandatoryScopes = new[] {"openid", "profile", "email" },
                 ScopeSeparator = "%20",

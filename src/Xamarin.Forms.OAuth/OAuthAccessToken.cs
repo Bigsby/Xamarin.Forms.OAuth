@@ -4,13 +4,13 @@ namespace Xamarin.Forms.OAuth
 {
     public class OAuthAccessToken
     {
-        internal OAuthAccessToken(string token, DateTime expires)
+        internal OAuthAccessToken(string token, DateTime? expires)
         {
             Token = token;
             Expires = expires;
         }
 
-        internal OAuthAccessToken(string token, string refreshToken, DateTime expires)
+        internal OAuthAccessToken(string token, string refreshToken, DateTime? expires)
             : this(token, expires)
         {
             RefreshToken = refreshToken;
@@ -18,6 +18,7 @@ namespace Xamarin.Forms.OAuth
 
         public string Token { get; private set; }
         public string RefreshToken { get; private set; }
-        public DateTime Expires { get; private set; }
+        public DateTime? Expires { get; private set; }
+        public bool IsRefreshable { get { return !string.IsNullOrEmpty(RefreshToken); } }
     }
 }

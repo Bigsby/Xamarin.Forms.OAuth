@@ -8,12 +8,12 @@
                 "https://soundcloud.com/connect",
                 "https://api.soundcloud.com/oauth2/token",
                 "http://api.soundcloud.com/me",
+                null,
                 clientId,
                 clientSecret,
                 redirectUrl,
                 scopes)
             {
-                RequiresCode = true,
                 IncludeRedirectUrlInTokenRequest = true,
                 TokenRequestUrlParameter = "oauth_token",
                 GraphNameProperty = "full_name"

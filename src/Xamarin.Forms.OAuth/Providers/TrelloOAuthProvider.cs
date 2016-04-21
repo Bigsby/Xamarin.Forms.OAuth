@@ -14,12 +14,12 @@ namespace Xamarin.Forms.OAuth.Providers
                 "https://trello.com/1/authorize",
                 "https://trello.com/1/OAuthGetAccessToken",
                 "https://api.trello.com/1/members/me",
+                null,
                 clientId,
                 clientSecret,
                 _redirectUrl,
                 scopes)
             {
-                RequiresCode = true,
                 MandatoryScopes = new[] { "read" },
                 TokenResponseUrlParameter = "token",
                 TokenRequestUrlParameter = "token",

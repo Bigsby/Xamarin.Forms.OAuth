@@ -11,6 +11,7 @@ namespace Xamarin.Forms.OAuth.Providers
                 "https://www.linkedin.com/uas/oauth2/authorization",
                 "https://www.linkedin.com/uas/oauth2/accessToken",
                 "https://api.linkedin.com/v1/people/~",
+                null,
                 clientId,
                 clientSecret,
                 redirectUrl,
@@ -19,12 +20,11 @@ namespace Xamarin.Forms.OAuth.Providers
                 TokenRequestUrlParameter = "oauth2_access_token",
                 ResourceQueryParameters = new[] { new KeyValuePair<string, string>("format", "json") },
                 IncludeStateInAuthorize = true,
-                RequiresCode = true,
                 IncludeRedirectUrlInTokenRequest = true
             })
         { }
 
-        internal override AccountData GetAccountData(string json)
+        internal override AccountData ReadAccountData(string json)
         {
             var jObject = JObject.Parse(json);
 

@@ -2,20 +2,28 @@
 {
     public sealed class AmazonOAuthProvider : OAuthProvider
     {
-        internal AmazonOAuthProvider(string clientId, string redirectUrl, params string[] scopes)
+        internal AmazonOAuthProvider(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
             : base(new OAuthProviderDefinition(
                 "Amazon",
                 "https://www.amazon.com/ap/oa",
-                null,
+                "https://api.amazon.com/auth/o2/token",
+                "https://api.amazon.com/auth/o2/token",
                 "https://api.amazon.com/user/profile",
                 clientId,
-                null,
+                clientSecret,
                 redirectUrl,
                 scopes)
             {
+                AuthorizationType = string.IsNullOrEmpty(clientSecret) ? AuthorizationType.Token : AuthorizationType.Code,
                 MandatoryScopes = new[] { "profile" },
+                IncludeRedirectUrlInTokenRequest = true,
+                TokenType = string.IsNullOrEmpty(clientSecret) ? TokenType.Url : TokenType.Bearer,
                 GraphIdProperty = "user_id",
             })
+        { }
+
+        internal AmazonOAuthProvider(string clientId, string redirectUrl, params string[] scopes)
+            : this(clientId, null, redirectUrl, scopes)
         { }
     }
 }

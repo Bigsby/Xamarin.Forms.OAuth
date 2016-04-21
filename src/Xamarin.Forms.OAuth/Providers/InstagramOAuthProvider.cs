@@ -10,17 +10,17 @@ namespace Xamarin.Forms.OAuth.Providers
                 "https://api.instagram.com/oauth/authorize",
                 "https://api.instagram.com/oauth/access_token",
                 "https://api.instagram.com/v1/users/self",
+                null,
                 clientId,
                 clientSecret,
                 redirectUrl,
                 scopes)
             {
-                RequiresCode = true,
                 IncludeRedirectUrlInTokenRequest = true
             })
         { }
           
-        internal override AccountData GetAccountData(string json)
+        internal override AccountData ReadAccountData(string json)
         {
             var jObject = JObject.Parse(json);
 

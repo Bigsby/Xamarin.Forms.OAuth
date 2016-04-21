@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Xamarin.Forms.OAuth.Providers
 {
@@ -14,13 +13,13 @@ namespace Xamarin.Forms.OAuth.Providers
                 "https://www.reddit.com/api/v1/authorize",
                 "https://www.reddit.com/api/v1/access_token",
                 "https://oauth.reddit.com/api/v1/me",
+                null,
                 clientId,
                 null,
                 redirectUrl,
                 scopes)
             {
                 MandatoryScopes = new[] { "identity" },
-                RequiresCode = true,
                 IncludeStateInAuthorize = true,
                 IncludeRedirectUrlInTokenRequest = true,
                 ExcludeClientIdInTokenRequest = true,

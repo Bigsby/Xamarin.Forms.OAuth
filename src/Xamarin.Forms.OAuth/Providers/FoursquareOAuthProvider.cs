@@ -14,20 +14,20 @@ namespace Xamarin.Forms.OAuth.Providers
                 "https://foursquare.com/oauth2/authenticate",
                 "https://foursquare.com/oauth2/access_token",
                 "https://api.foursquare.com/v2/users/self",
+                null,
                 clientId,
                 clientSecret,
                 redirectUrl,
                 scopes
                 )
             {
-                RequiresCode = true,
                 IncludeRedirectUrlInTokenRequest = true,
                 TokenRequestUrlParameter = "oauth_token",
                 ResourceQueryParameters = new[] { new KeyValuePair<string, string>("v", _version) }
             })
         { }
 
-        internal override AccountData GetAccountData(string json)
+        internal override AccountData ReadAccountData(string json)
         {
             var jObject = JObject.Parse(json);
 

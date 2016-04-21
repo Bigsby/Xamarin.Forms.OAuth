@@ -8,12 +8,12 @@
                 "https://slack.com/oauth/authorize",
                 "https://slack.com/api/oauth.access",
                 "https://slack.com/api/auth.test",
+                null,
                 clientId,
                 clientSecret,
                 redirectUrl,
                 scopes)
             {
-                RequiresCode = true,
                 MandatoryScopes = new[] { "identify" },
                 TokenRequestUrlParameter = "token",
                 GraphIdProperty = "user_id",

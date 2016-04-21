@@ -10,11 +10,13 @@
                 "https://login.salesforce.com/services/oauth2/authorize",
                 "https://login.salesforce.com/services/oauth2/token",
                 "https://login.salesforce.com/services/oauth2/userinfo",
+                null,
                 clientId,
                 clientSecret,
                 _redirectUrl,
                 scopes)
             {
+                AuthorizationType = AuthorizationType.Token,
                 MandatoryScopes = new[] { "id", "openid", "refresh_token" },
                 ScopeSeparator = "%20",
                 TokenRequestUrlParameter = "oauth_token",

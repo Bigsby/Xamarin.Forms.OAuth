@@ -12,12 +12,12 @@ namespace Xamarin.Forms.OAuth.Providers
                 "https://github.com/login/oauth/authorize",
                 "https://github.com/login/oauth/access_token",
                 "https://api.github.com/user",
+                null,
                 clientId,
                 clientSecret,
                 redirectUrl,
                 scopes)
             {
-                RequiresCode = true,
                 TokenResponseSerialization = TokenResponseSerialization.Forms,
                 TokenAuthorizationHeaders = _headers
             })

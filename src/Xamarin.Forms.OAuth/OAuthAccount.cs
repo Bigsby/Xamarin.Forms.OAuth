@@ -17,6 +17,7 @@ namespace Xamarin.Forms.OAuth
         public string Id { get; private set; }
         public string DisplayName { get; private set; }
         public string ProviderName { get { return Provider.Name; } }
+        public bool RefreshesToken { get { return Provider.RefreshesToken(); } }
         public OAuthAccessToken AccessToken { get; private set; }
         private OAuthProvider Provider { get; set; }
 
@@ -32,6 +33,16 @@ namespace Xamarin.Forms.OAuth
             return await Provider.PostResource<T>(resourceUrl, content, AccessToken, queryParameters);
         }
 
+        public async Task<OAuthResponse> RefreshToken()
+        {
+            var result = await Provider.RefreshToken(AccessToken);
+
+            if (result)
+                AccessToken = result.Token;
+
+            return result;
+        }
+
         internal void SetToken(OAuthAccessToken token)
         {
             AccessToken = token;
@@ -41,7 +52,5 @@ namespace Xamarin.Forms.OAuth
         {
             return $"{ProviderName}: {DisplayName} ({Id})";
         }
-
-
     }
 }

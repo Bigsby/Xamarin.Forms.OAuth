@@ -25,9 +25,9 @@ namespace Xamarin.Forms.OAuth.Providers
         {
             _accountDataGetter = getter;
         }
-        internal override AccountData GetAccountData(string json)
+        internal override AccountData ReadAccountData(string json)
         {
-            return null == _accountDataGetter ? base.GetAccountData(json) : _accountDataGetter(json);
+            return null == _accountDataGetter ? base.ReadAccountData(json) : _accountDataGetter(json);
         }
 
         private Func<string> _authorizationUrlGetter;
@@ -45,9 +45,9 @@ namespace Xamarin.Forms.OAuth.Providers
         {
             _oAuthResponseFromUrlGetter = getter;
         }
-        internal override OAuthResponse GetOAuthResponseFromUrl(string url)
+        internal override OAuthResponse ReadOAuthResponseFromUrl(string url)
         {
-            return null == _oAuthResponseFromUrlGetter ? base.GetOAuthResponseFromUrl(url) : _oAuthResponseFromUrlGetter(url);
+            return null == _oAuthResponseFromUrlGetter ? base.ReadOAuthResponseFromUrl(url) : _oAuthResponseFromUrlGetter(url);
         }
 
         private Func<string, OAuthResponse> _tokenResponseGetter;

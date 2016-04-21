@@ -8,14 +8,11 @@
                 "https://account.box.com/api/oauth2/authorize",
                 "https://api.box.com/oauth2/token",
                 "https://api.box.com/2.0/users/me",
+                null,
                 clientId,
                 clientSecret,
                 redirectUrl,
-                scopes)
-            {
-                RequiresCode = true
-            })
+                scopes))
         { }
-
     }
 }

@@ -8,13 +8,14 @@
                 "https://login.live.com/oauth20_authorize.srf",
                 null,
                 "https://apis.live.net/v5.0/me",
+                null,
                 clientId,
                 null,
                 redirectUrl,
                 scopes)
             {
-                MandatoryScopes = new[] { "wl.signin", "wl.basic" },
-
+                AuthorizationType = AuthorizationType.Token,
+                MandatoryScopes = new[] { "wl.signin", "wl.basic" }
             })
         { }
     }

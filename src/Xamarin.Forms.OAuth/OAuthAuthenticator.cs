@@ -122,7 +122,7 @@ namespace Xamarin.Forms.OAuth
                     url => provider.CheckRedirect(url));
                 webView.Done += (s, e) =>
                 {
-                    oAuthResponse = provider.GetOAuthResponseFromUrl(e.Url);
+                    oAuthResponse = provider.ReadOAuthResponseFromUrl(e.Url);
                     _awaiter.Set();
                 };
                 Application.Current.MainPage = webView;

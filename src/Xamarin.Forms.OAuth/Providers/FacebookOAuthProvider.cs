@@ -11,11 +11,15 @@
                 "https://www.facebook.com/dialog/oauth",
                 null,
                 "https://graph.facebook.com/v2.5/me",
+                null,
                 appId,
                 null,
                 _redirectUrl,
                 scopes
-                ))
+                )
+            {
+                AuthorizationType = AuthorizationType.Token
+            })
         { }
     }
 }

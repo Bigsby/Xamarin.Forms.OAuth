@@ -11,6 +11,7 @@ namespace Xamarin.Forms.OAuth.Providers
                 "https://app.vssps.visualstudio.com/oauth2/authorize",
                 "https://app.vssps.visualstudio.com/oauth2/token",
                 "https://app.vssps.visualstudio.com/_apis/profile/profiles/me",
+                null,
                 clientId,
                 clientSecret,
                 redirectUrl,
@@ -19,7 +20,6 @@ namespace Xamarin.Forms.OAuth.Providers
                 ScopeSeparator = " ",
                 AuthorizeResponseType = "Assertion",
                 IncludeStateInAuthorize = true,
-                RequiresCode = true,
                 ResourceQueryParameters = new[] { new KeyValuePair<string, string>("api-version", "1.0") },
                 GraphNameProperty = "displayName",
                 TokenType = TokenType.Bearer

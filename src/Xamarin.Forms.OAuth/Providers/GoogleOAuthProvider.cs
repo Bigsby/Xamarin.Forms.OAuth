@@ -8,11 +8,13 @@
                 "https://accounts.google.com/o/oauth2/v2/auth",
                 null,
                 "https://www.googleapis.com/plus/v1/people/me",
+                null,
                 clientId,
                 null,
                 redirectUrl,
                 scopes)
             {
+                AuthorizationType = AuthorizationType.Token,
                 MandatoryScopes = new[] { "profile" },
                 GraphNameProperty = "displayName"
             })

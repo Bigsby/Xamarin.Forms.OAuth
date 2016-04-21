@@ -8,13 +8,14 @@
                 "https://secure.meetup.com/oauth2/authorize",
                 "https://secure.meetup.com/oauth2/access",
                 "https://api.meetup.com/2/member/self",
+                null,
                 clientId,
                 clientSecret,
                 redirectUrl,
                 scopes)
             {
-                IncludeRedirectUrlInTokenRequest = true,
-                TokenType = TokenType.Bearer
+                AuthorizationType = AuthorizationType.Token,
+                IncludeRedirectUrlInTokenRequest = true
             })
         { }
     }

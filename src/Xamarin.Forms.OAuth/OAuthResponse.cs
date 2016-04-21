@@ -32,36 +32,36 @@
 
         #region Public Properties
         public bool Success { get; private set; }
-        public bool IsCancelled { get; private set; }
-        public bool IsCode { get; private set; }
-        public string Code { get; private set; }
-        public OAuthAccessToken Token { get; private set; }
+        internal bool IsCancelled { get; private set; }
+        internal bool IsCode { get; private set; }
+        internal string Code { get; private set; }
+        internal OAuthAccessToken Token { get; private set; }
         public string Error { get; private set; }
         public string ErrorDescription { get; private set; }
         #endregion
 
-        #region Static Initializers
         public static implicit operator bool(OAuthResponse response)
         {
             return response.Success;
         }
 
-        public static OAuthResponse WithToken(OAuthAccessToken token)
+        #region Static Initializers
+        internal static OAuthResponse WithToken(OAuthAccessToken token)
         {
             return new OAuthResponse(token);
         }
 
-        public static OAuthResponse WithCode(string code)
+        internal static OAuthResponse WithCode(string code)
         {
             return new OAuthResponse(code);
         }
 
-        public static OAuthResponse WithError(string error, string errorDescription)
+        internal static OAuthResponse WithError(string error, string errorDescription)
         {
             return new OAuthResponse(error, errorDescription);
         }
 
-        public static OAuthResponse Cancel()
+        internal static OAuthResponse Cancel()
         {
             return new OAuthResponse(false, false);
         } 
