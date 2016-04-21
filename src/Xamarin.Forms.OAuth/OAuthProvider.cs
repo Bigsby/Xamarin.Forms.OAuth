@@ -320,6 +320,20 @@ namespace Xamarin.Forms.OAuth
                :
                string.Empty);
         }
+
+        protected static KeyValuePair<string, string> BuildBasicAuthenticationHeader(string clientId, string clientSecret)
+        {
+            return new KeyValuePair<string, string>("Authorization", $"Basic {BuildAuthenticationData(clientId, clientSecret)}");
+        }
+
+        protected static string BuildAuthenticationData(string clientId, string clientSecret)
+        {
+            var data = $"{clientId}:{clientSecret}";
+
+            var dataBytes = Encoding.UTF8.GetBytes(data);
+
+            return Convert.ToBase64String(dataBytes);
+        }
         #endregion
 
         #region Private Methods

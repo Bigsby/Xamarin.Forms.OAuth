@@ -27,19 +27,10 @@ namespace Xamarin.Forms.OAuth.Providers
                 TokenType = TokenType.Bearer,
                 TokenAuthorizationHeaders = new[] 
                 {
-                    new KeyValuePair<string, string>("Authorization", $"Basic {BuildAuthenticationData(clientId, null)}")
+                    BuildBasicAuthenticationHeader(clientId, null)
                 }
             })
         { }
-
-        private static string BuildAuthenticationData(string clientId, string clientSecret)
-        {
-            var data = $"{clientId}:{clientSecret}";
-
-            var dataBytes = Encoding.UTF8.GetBytes(data);
-
-            return Convert.ToBase64String(dataBytes);
-        }
 
         internal override IEnumerable<KeyValuePair<string, string>> ResourceHeaders(OAuthAccessToken token)
         {
