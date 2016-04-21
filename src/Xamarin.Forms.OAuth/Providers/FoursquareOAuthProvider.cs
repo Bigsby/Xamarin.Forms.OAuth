@@ -22,7 +22,7 @@ namespace Xamarin.Forms.OAuth.Providers
             {
                 RequiresCode = true,
                 IncludeRedirectUrlInTokenRequest = true,
-                TokeUrlParameter = "oauth_token",
+                TokenRequestUrlParameter = "oauth_token",
                 ResourceQueryParameters = new[] { new KeyValuePair<string, string>("v", _version) }
             })
         { }

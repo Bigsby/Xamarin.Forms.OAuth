@@ -80,6 +80,11 @@ namespace Xamarin.Forms.OAuth
             return new ReddItOAuthProvider(clientId, redirectUrl, scopes);
         }
 
+        public static OAuthProvider Salesforce(string clientId, string clientSecret, params string[] scopes)
+        {
+            return new SalesforceOAuthProvider(clientId, clientSecret, scopes);
+        }
+
         public static OAuthProvider Slack(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
         {
             return new SlackOAuthProvider(clientId, clientSecret, redirectUrl, scopes);

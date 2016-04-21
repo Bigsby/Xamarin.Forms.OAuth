@@ -16,7 +16,7 @@ namespace Xamarin.Forms.OAuth.Providers
                 redirectUrl,
                 scopes)
             {
-                TokeUrlParameter = "oauth2_access_token",
+                TokenRequestUrlParameter = "oauth2_access_token",
                 ResourceQueryParameters = new[] { new KeyValuePair<string, string>("format", "json") },
                 IncludeStateInAuthorize = true,
                 RequiresCode = true,

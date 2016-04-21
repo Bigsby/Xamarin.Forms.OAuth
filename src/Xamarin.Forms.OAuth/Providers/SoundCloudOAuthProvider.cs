@@ -15,7 +15,7 @@
             {
                 RequiresCode = true,
                 IncludeRedirectUrlInTokenRequest = true,
-                TokeUrlParameter = "oauth_token",
+                TokenRequestUrlParameter = "oauth_token",
                 GraphNameProperty = "full_name"
             })
         {

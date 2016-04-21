@@ -57,6 +57,7 @@
     <Compile Include="Providers\MeetupOAuthProvider.cs" />
     <Compile Include="Providers\PayPalOAuthProvider.cs" />
     <Compile Include="Providers\ReddItOAuthProvider.cs" />
+    <Compile Include="Providers\SalesforceOAuthProvider.cs" />
     <Compile Include="Providers\SlackOAuthProvider.cs" />
     <Compile Include="Providers\SoundCloudOAuthProvider.cs" />
     <Compile Include="Providers\StackExchangeOAuthProvider.cs" />

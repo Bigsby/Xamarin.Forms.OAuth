@@ -15,7 +15,7 @@
             {
                 RequiresCode = true,
                 MandatoryScopes = new[] { "identify" },
-                TokeUrlParameter = "token",
+                TokenRequestUrlParameter = "token",
                 GraphIdProperty = "user_id",
                 GraphNameProperty = "user"
             })

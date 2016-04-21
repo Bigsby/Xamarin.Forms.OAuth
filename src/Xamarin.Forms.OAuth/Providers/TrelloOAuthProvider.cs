@@ -21,8 +21,9 @@ namespace Xamarin.Forms.OAuth.Providers
             {
                 RequiresCode = true,
                 MandatoryScopes = new[] { "read" },
-                TokeUrlParameter = "token",
-                ResourceQueryParameters = new[] 
+                TokenResponseUrlParameter = "token",
+                TokenRequestUrlParameter = "token",
+                ResourceQueryParameters = new[]
                 {
                     new KeyValuePair<string, string>("key", clientId)
                 },

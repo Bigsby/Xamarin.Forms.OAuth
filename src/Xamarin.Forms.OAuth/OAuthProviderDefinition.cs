@@ -43,7 +43,8 @@ namespace Xamarin.Forms.OAuth
         public TokenResponseSerialization TokenResponseSerialization { internal get; set; } = TokenResponseSerialization.JSON;
         public bool RequiresCode { internal get; set; } = false;
         public string[] MandatoryScopes { internal get; set; } = new string[0];
-        public string TokeUrlParameter { internal get; set; } = "access_token";
+        public string TokenResponseUrlParameter { internal get; set; } = "access_token";
+        public string TokenRequestUrlParameter { internal get; set; } = "access_token";
         public IEnumerable<KeyValuePair<string, string>> ResourceQueryParameters { internal get; set; } = new KeyValuePair<string, string>[0];
         public ImageSource Logo { internal get; set; } = null;
         public string GraphIdProperty { internal get; set; } = "id";

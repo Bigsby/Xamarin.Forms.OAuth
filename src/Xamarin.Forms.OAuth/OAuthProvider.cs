@@ -76,7 +76,7 @@ namespace Xamarin.Forms.OAuth
                 return OAuthResponse.WithCode(parameters[_codeParameter]);
 
             return OAuthResponse.WithToken(new OAuthAccessToken(
-                    parameters[Definition.TokeUrlParameter],
+                    parameters[Definition.TokenResponseUrlParameter],
                     GetExpireDate(parameters.ContainsKey(_expiresInParameter) ?
                         parameters[_expiresInParameter]
                         :
@@ -353,7 +353,7 @@ namespace Xamarin.Forms.OAuth
                 parameters.AddRange(queryParameters);
 
             if (Definition.TokenType == TokenType.Url)
-                parameters.Add(new KeyValuePair<string, string>(Definition.TokeUrlParameter, token));
+                parameters.Add(new KeyValuePair<string, string>(Definition.TokenRequestUrlParameter, token));
 
             return BuildUrl(url, parameters);
         }
