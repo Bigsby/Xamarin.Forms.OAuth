@@ -152,21 +152,11 @@ namespace Xamarin.Forms.OAuth
             var scopesToInject = GetScopes();
             if (scopesToInject.Any())
                 queryParameters.Add(new KeyValuePair<string, string>("scope", GetScopesString(scopesToInject)));
-            //var scope = scopesToInject.Any() ?
-            //    "&scope=" + string.Join(Definition.ScopeSeparator, scopesToInject)
-            //    :
-            //    string.Empty;
 
             if (Definition.IncludeStateInAuthorize)
                 queryParameters.Add(new KeyValuePair<string, string>("state", "authorization"));
 
-            //var state = Definition.IncludeStateInAuthorize ?
-            //    "&state=authentication"
-            //    :
-            //    string.Empty;
-
             return BuildUrl(Definition.AuthorizeUrl, queryParameters);
-            //return $"{Definition.AuthorizeUrl}?response_type={Definition.AuthorizeResponseType}&client_id={Definition.ClientId}&redirect_uri={WebUtility.UrlEncode(Definition.RedirectUrl)}{scope}{state}";
         }
 
         internal virtual IEnumerable<KeyValuePair<string, string>> BuildTokenRequestHeaders()
@@ -228,7 +218,6 @@ namespace Xamarin.Forms.OAuth
                 if (Definition.TokenAuthorizationHeaders.Any())
                     foreach (var header in Definition.TokenAuthorizationHeaders)
                         tokenClient.DefaultRequestHeaders.Add(header.Key, header.Value);
-                //tokenClient.DefaultRequestHeaders.Add("Authorization", Definition.TokenAuthorizationHeader);
 
                 tokenClient.DefaultRequestHeaders.Add("Accept", "application/json");
 

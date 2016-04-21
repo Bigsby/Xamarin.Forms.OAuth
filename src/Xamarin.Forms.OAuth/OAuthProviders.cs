@@ -85,6 +85,11 @@ namespace Xamarin.Forms.OAuth
             return new SlackOAuthProvider(clientId, clientSecret, redirectUrl, scopes);
         }
 
+        public static OAuthProvider SoundCloud(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
+        {
+            return new SoundCloudOAuthProvider(clientId, clientSecret, redirectUrl, scopes);
+        }
+
         public static OAuthProvider StackExchange(string clientId, string clientSecret, string site, params string[] scopes)
         {
             return new StackExchangeOAuthProvider(clientId, clientSecret, site, scopes);

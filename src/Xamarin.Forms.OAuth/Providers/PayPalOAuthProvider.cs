@@ -18,17 +18,27 @@ namespace Xamarin.Forms.OAuth.Providers
             {
                 RequiresCode = true,
                 TokenType = TokenType.Bearer,
-                MandatoryScopes = new[] { "profile" },
+                MandatoryScopes = new[] {"openid", "profile", "email" },
+                ScopeSeparator = "%20",
                 TokenAuthorizationHeaders = new[]
                 {
                     BuildBasicAuthenticationHeader(clientId, clientSecret)
                 },
-                GraphIdProperty = "email",
+                GraphIdProperty = "user_id",
                 ResourceQueryParameters = new []
                 {
                     new KeyValuePair<string, string>("schema", "openid")
                 }
             })
         { }
+
+        protected override IEnumerable<KeyValuePair<string, string>> BuildTokenRequestFields(string code)
+        {
+            return new Dictionary<string, string>
+            {
+                { "grant_type", "client_credentials" },
+                { "assertion", code }
+            };
+        }
     }
 }
