@@ -83,7 +83,7 @@ var resource = await authenticationResult.Account.GetResource<string>("https://g
 
 # Supported Providers
 
-Here is the list of the OAuth providers suported out-of-the-box (19):
+Here is the list of the OAuth providers suported out-of-the-box (20):
 * Amazon
 * Box
 * Dropbox
@@ -97,6 +97,7 @@ Here is the list of the OAuth providers suported out-of-the-box (19):
 * Microsoft
 * PayPal
 * ReddIt
+* Salesforce
 * Slack
 * SoundCloud
 * StackExchange
@@ -106,8 +107,7 @@ Here is the list of the OAuth providers suported out-of-the-box (19):
 
 # Future Features
 These are the features that will be impleneted next:
-* Implement more providers:
-  * Salesforce
+* Implement more providers (feel free to suggest):
   * Atlassian products (JIRA, Bamboo, Bitbucket)
   * Skype for Business
   * Microsft Graph
