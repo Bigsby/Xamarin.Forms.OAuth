@@ -95,8 +95,10 @@ Here is the list of the OAuth providers suported out-of-the-box (17):
 * Instagram
 * LinkedIn
 * Microsoft
+* PayPal
 * ReddIt
 * Slack
+* SoundCloud
 * StackExchange
 * Visual Studio Online
 * Meetup
