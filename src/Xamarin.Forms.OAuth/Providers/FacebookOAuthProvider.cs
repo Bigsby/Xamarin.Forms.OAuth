@@ -2,6 +2,7 @@
 {
     public sealed class FacebookOAuthProvider : OAuthProvider
     {
+        private const string _tokenUrl = "https://graph.facebook.com/v2.3/oauth/access_token";
         // This URL is provided in documentation as mandatory for desktop apps (Manually retrieved tokens)
         private const string _redirectUrl = "https://www.facebook.com/connect/login_success.html";
 
@@ -9,9 +10,9 @@
             : base(new OAuthProviderDefinition(
                 "Facebook",
                 "https://www.facebook.com/dialog/oauth",
-                null,
+                _tokenUrl,
+                _tokenUrl,
                 "https://graph.facebook.com/v2.5/me",
-                null,
                 appId,
                 null,
                 _redirectUrl,

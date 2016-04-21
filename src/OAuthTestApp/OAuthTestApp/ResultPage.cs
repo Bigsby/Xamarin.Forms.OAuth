@@ -98,7 +98,11 @@ namespace OAuthTestApp
 
         private void SetExpireText()
         {
-            _expireLabel.Text = $"Token Expires: {_account.AccessToken.Expires?.ToString("yyyy-MM-dd HH:mm:ss")}";
+            _expireLabel.Text = $"Token Expires: " 
+                + (_account.AccessToken.Expires.HasValue ?
+                $"{_account.AccessToken.Expires?.ToString("yyyy-MM-dd HH:mm:ss")}"
+                :
+                "N/A");
         }
     }
 }
