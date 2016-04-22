@@ -7,6 +7,7 @@
     <authors>Bigsby</authors>
     <owners>Bigsby</owners>
 	<projectUrl>https://github.com/Bigsby/Xamarin.Forms.OAuth</projectUrl>
+	<licenseUrl>https://github.com/Bigsby/Xamarin.Forms.OAuth/blob/master/LICENSE</licenseUrl>
     <iconUrl>http://xamarin.com/content/images/nuget/xamarin.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Library to authenticate Xamarin Forms apps against OAuth providers</description>
