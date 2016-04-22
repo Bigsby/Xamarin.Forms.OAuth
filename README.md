@@ -74,8 +74,39 @@ else
 ## 4. Resouce Access
 The account in the result can be used to access the provider's result taking care of all the OAuth parameters injection (Post is also available):
 ```cs
+// GET
 var authenticationResult = await OAuthAuthenticator.Authenticate(OAuthProvider.Facebook("FacebookAppId"));
-var resource = await authenticationResult.Account.GetResource<string>("https://graph.facebook.com/v2.5/me");
+var resourceString = await authenticationResult.Account.GetResource<string>("https://graph.facebook.com/v2.5/me");
+// or
+var resourceJObject = await authenticationResult.Account.GetResource<JObject>("https://graph.facebook.com/v2.5/me");
+// or
+var resourceType =  = await authenticationResult.Account.GetResource<ResourceType>("https://graph.facebook.com/v2.5/me");
+
+// or POST
+var httpContent = new StringContent("to send to API"); // can be any type deriving from System.Net.Http.HttpContent
+var resource = await authenticationResult.Account.PostToreResource<string>("resourceUrl", httpContent);
+// same deserialization of response can be handle as above
+```
+
+## 5. Refresh Token
+If the provider supports it and a refresh token was provided, theh access token can be refreshed:
+```cs
+var authenticationResult = await OAuthAuthenticator.Authenticate(OAuthProvider.Facebook("FacebookAppId"));
+if (authenticationResult.Account.RefreshesToken 
+    && authenticationResult.Account.AccessToken.Expires.HasValue 
+    && authenticationResult.Account.AccessToken.Expires.Value - DateTime.Now < TimeSpan.FromMinutes(5))
+  {
+    var response = await result.Account.RefreshToken();
+    if (response)
+    {
+      // if this is reached, result.Account.AccessToken will be updated with new token and expiration DateTime
+    }
+    else
+    {
+      //Handle error using response.Error and response.ErrorDescription
+    }
+  }
+  // 
 ```
 
 # Screenshot
@@ -111,5 +142,4 @@ These are the features that will be impleneted next:
   * Atlassian products (JIRA, Bamboo, Bitbucket)
   * Skype for Business
   * Microsft Graph
-* Implement token refresh
 * Feel free to point buts or any feature or provider you would like implemented on  [![Join the chat at https://gitter.im/Bigsby/Xamarin.Forms.OAuth](https://badges.gitter.im/Bigsby/Xamarin.Forms.OAuth.svg)](https://gitter.im/Bigsby/Xamarin.Forms.OAuth?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
