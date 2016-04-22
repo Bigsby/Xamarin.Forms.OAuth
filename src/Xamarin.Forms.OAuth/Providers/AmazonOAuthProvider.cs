@@ -9,7 +9,6 @@
                 "Amazon",
                 "https://www.amazon.com/ap/oa",
                 _tokenUrl,
-                _tokenUrl,
                 "https://api.amazon.com/user/profile",
                 clientId,
                 clientSecret,
@@ -17,6 +16,7 @@
                 scopes)
             {
                 AuthorizationType = string.IsNullOrEmpty(clientSecret) ? AuthorizationType.Token : AuthorizationType.Code,
+                RefreshTokenUrl = _tokenUrl,
                 MandatoryScopes = new[] { "profile" },
                 IncludeRedirectUrlInTokenRequest = true,
                 TokenType = string.IsNullOrEmpty(clientSecret) ? TokenType.Url : TokenType.Bearer,

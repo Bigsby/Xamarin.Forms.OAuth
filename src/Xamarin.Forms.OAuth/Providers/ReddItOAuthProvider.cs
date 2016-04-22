@@ -12,7 +12,6 @@ namespace Xamarin.Forms.OAuth.Providers
                 "ReddIt",
                 "https://www.reddit.com/api/v1/authorize",
                 "https://www.reddit.com/api/v1/access_token",
-                null,
                 "https://oauth.reddit.com/api/v1/me",
                 clientId,
                 null,

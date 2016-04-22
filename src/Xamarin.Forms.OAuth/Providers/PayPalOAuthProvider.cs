@@ -10,7 +10,6 @@ namespace Xamarin.Forms.OAuth.Providers
                 "PayPal",
                 "https://www.paypal.com/webapps/auth/protocol/openidconnect/v1/authorize",
                 "https://api.paypal.com/v1/oauth2/token",
-                null,
                 "https://api.paypal.com/v1/identity/openidconnect/userinfo/",
                 clientId,
                 clientSecret,

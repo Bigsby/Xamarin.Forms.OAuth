@@ -5,6 +5,7 @@ namespace Xamarin.Forms.OAuth.Providers
 {
     public sealed class FoursquareOAuthProvider : OAuthProvider
     {
+        // does not provide token refreshing
         //TODO: get version from configuration
         private const string _version = "20140806";
 
@@ -13,7 +14,6 @@ namespace Xamarin.Forms.OAuth.Providers
                 "Foursquare",
                 "https://foursquare.com/oauth2/authenticate",
                 "https://foursquare.com/oauth2/access_token",
-                null, // does not provide token refreshing
                 "https://api.foursquare.com/v2/users/self",
                 clientId,
                 clientSecret,

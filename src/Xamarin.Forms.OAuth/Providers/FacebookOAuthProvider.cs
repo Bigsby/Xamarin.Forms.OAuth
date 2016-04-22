@@ -11,7 +11,6 @@
                 "Facebook",
                 "https://www.facebook.com/dialog/oauth",
                 _tokenUrl,
-                _tokenUrl,
                 "https://graph.facebook.com/v2.5/me",
                 appId,
                 null,
@@ -19,7 +18,8 @@
                 scopes
                 )
             {
-                AuthorizationType = AuthorizationType.Token
+                AuthorizationType = AuthorizationType.Token,
+                RefreshTokenUrl = _tokenUrl
             })
         { }
     }

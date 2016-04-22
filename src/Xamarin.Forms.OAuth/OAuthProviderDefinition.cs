@@ -10,7 +10,6 @@ namespace Xamarin.Forms.OAuth
             string name,
             string authorizeUrl,
             string tokenUrl,
-            string refreshTokenUrl,
             string graphUrl,
             string clientId,
             string clientSecret,
@@ -20,7 +19,6 @@ namespace Xamarin.Forms.OAuth
             Name = name;
             AuthorizeUrl = authorizeUrl;
             TokenUrl = tokenUrl;
-            RefreshTokenUrl = refreshTokenUrl;
             GraphUrl = graphUrl;
             ClientId = clientId;
             ClientSecret = clientSecret;
@@ -31,14 +29,16 @@ namespace Xamarin.Forms.OAuth
         internal string Name { get; private set; }
         internal string AuthorizeUrl { get; private set; }
         internal string TokenUrl { get; private set; }
-        internal string RefreshTokenUrl { get; private set; }
+        
         internal string GraphUrl { get; private set; }
         internal string ClientId { get; private set; }
         internal string ClientSecret { get; private set; }
         internal string RedirectUrl { get; private set; }
         internal string[] Scopes { get; private set; }
 
+        
         public AuthorizationType AuthorizationType {internal get; set; } = AuthorizationType.Code;
+        public string RefreshTokenUrl { internal get; set; }
         public bool ExcludeClientIdInTokenRequest { internal get; set; } = false;
         public bool IncludeRedirectUrlInTokenRequest { internal get; set; } = false;
         public bool IncludeStateInAuthorize { internal get; set; } = false;

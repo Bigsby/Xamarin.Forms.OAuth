@@ -14,7 +14,6 @@ namespace Xamarin.Forms.OAuth.Providers
                 "StackExchange",
                 "https://stackexchange.com/oauth/dialog",
                 null,
-                null,
                 "https://api.stackexchange.com/2.0/me",
                 clientId,
                 clientSecret,

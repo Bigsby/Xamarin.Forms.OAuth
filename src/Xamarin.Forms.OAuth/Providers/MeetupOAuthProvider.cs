@@ -7,7 +7,6 @@
                 "Meetup",
                 "https://secure.meetup.com/oauth2/authorize",
                 "https://secure.meetup.com/oauth2/access",
-                null,
                 "https://api.meetup.com/2/member/self",
                 clientId,
                 clientSecret,

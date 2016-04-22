@@ -13,7 +13,6 @@ namespace Xamarin.Forms.OAuth.Providers
                 "Trello",
                 "https://trello.com/1/authorize",
                 "https://trello.com/1/OAuthGetAccessToken",
-                null,
                 "https://api.trello.com/1/members/me",
                 clientId,
                 clientSecret,

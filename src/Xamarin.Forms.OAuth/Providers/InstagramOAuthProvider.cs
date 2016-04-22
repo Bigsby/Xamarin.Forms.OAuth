@@ -9,7 +9,6 @@ namespace Xamarin.Forms.OAuth.Providers
                 "Instagram",
                 "https://api.instagram.com/oauth/authorize",
                 "https://api.instagram.com/oauth/access_token",
-                null,
                 "https://api.instagram.com/v1/users/self",
                 clientId,
                 clientSecret,

@@ -2,12 +2,12 @@
 {
     public sealed class DropboxOAuthProvider : OAuthProvider
     {
+        //does not refresh tokens
         internal DropboxOAuthProvider(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
             : base(new OAuthProviderDefinition(
                 "Dropbox",
                 "https://www.dropbox.com/1/oauth2/authorize",
                 "https://api.dropboxapi.com/1/oauth2/token",
-                null, //does not refresh tokens
                 "https://api.dropbox.com/1/account/info",
                 clientId,
                 clientSecret,

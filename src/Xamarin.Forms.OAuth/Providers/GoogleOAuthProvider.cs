@@ -7,7 +7,6 @@
                 "Google",
                 "https://accounts.google.com/o/oauth2/v2/auth",
                 null,
-                null,
                 "https://www.googleapis.com/plus/v1/people/me",
                 clientId,
                 null,

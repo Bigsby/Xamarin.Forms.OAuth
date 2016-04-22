@@ -7,7 +7,6 @@
                 "Slack",
                 "https://slack.com/oauth/authorize",
                 "https://slack.com/api/oauth.access",
-                null,
                 "https://slack.com/api/auth.test",
                 clientId,
                 clientSecret,

@@ -7,7 +7,6 @@
                 "Microsoft",
                 "https://login.live.com/oauth20_authorize.srf",
                 null,
-                null,
                 "https://apis.live.net/v5.0/me",
                 clientId,
                 null,

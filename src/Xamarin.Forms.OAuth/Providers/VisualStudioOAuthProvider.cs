@@ -10,7 +10,6 @@ namespace Xamarin.Forms.OAuth.Providers
                 "VisualStudio",
                 "https://app.vssps.visualstudio.com/oauth2/authorize",
                 "https://app.vssps.visualstudio.com/oauth2/token",
-                null,
                 "https://app.vssps.visualstudio.com/_apis/profile/profiles/me",
                 clientId,
                 clientSecret,

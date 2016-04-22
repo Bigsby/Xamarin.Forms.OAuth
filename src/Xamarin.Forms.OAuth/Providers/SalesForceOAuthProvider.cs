@@ -9,7 +9,6 @@
                 "Salesforce",
                 "https://login.salesforce.com/services/oauth2/authorize",
                 "https://login.salesforce.com/services/oauth2/token",
-                null,
                 "https://login.salesforce.com/services/oauth2/userinfo",
                 clientId,
                 clientSecret,

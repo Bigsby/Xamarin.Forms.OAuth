@@ -10,7 +10,6 @@ namespace Xamarin.Forms.OAuth.Providers
                 "LinkedIn",
                 "https://www.linkedin.com/uas/oauth2/authorization",
                 "https://www.linkedin.com/uas/oauth2/accessToken",
-                null,
                 "https://api.linkedin.com/v1/people/~",
                 clientId,
                 clientSecret,

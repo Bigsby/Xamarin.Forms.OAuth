@@ -9,12 +9,15 @@
                 "Box",
                 "https://account.box.com/api/oauth2/authorize",
                 _tokenUrl,
-                _tokenUrl,
+
                 "https://api.box.com/2.0/users/me",
                 clientId,
                 clientSecret,
                 redirectUrl,
-                scopes))
+                scopes)
+            {
+                RefreshTokenUrl = _tokenUrl
+            })
         { }
     }
 }

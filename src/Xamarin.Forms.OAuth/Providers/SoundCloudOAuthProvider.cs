@@ -7,7 +7,6 @@
                 "SoundCloud",
                 "https://soundcloud.com/connect",
                 "https://api.soundcloud.com/oauth2/token",
-                null,
                 "http://api.soundcloud.com/me",
                 clientId,
                 clientSecret,

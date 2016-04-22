@@ -9,7 +9,6 @@ namespace Xamarin.Forms.OAuth.Providers
                 "Gitter",
                 "https://gitter.im/login/oauth/authorize",
                 "https://gitter.im/login/oauth/token",
-                null,
                 "https://api.gitter.im/v1/user",
                 clientId,
                 clientSecret,
