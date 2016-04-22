@@ -17,8 +17,7 @@
                 scopes
                 )
             {
-                AuthorizationType = AuthorizationType.Implicit,
-                RefreshesToken = true
+                AuthorizationType = AuthorizationType.Implicit
             })
         { }
     }

@@ -38,10 +38,13 @@ namespace Xamarin.Forms.OAuth
 
         
         public AuthorizationType AuthorizationType {internal get; set; } = AuthorizationType.Code;
+        public IEnumerable<KeyValuePair<string, string>> AuthorizeCustomQueryParameters { internal get; set; } = new KeyValuePair<string, string>[0];
         public bool RefreshesToken { internal get; set; } = false;
         public bool ExcludeClientIdInTokenRequest { internal get; set; } = false;
+        public bool ExcludeClientSecretInTokenRequest { internal get; set; } = false;
         public bool ExcludeClientIdAndSecretInTokenRefresh { internal get; set; } = false;
         public bool IncludeRedirectUrlInTokenRequest { internal get; set; } = false;
+        public bool IncludeRedirectUrlInRefreshTokenRequest { internal get; set; } = false;
         public bool IncludeStateInAuthorize { internal get; set; } = false;
         public string ScopeSeparator { internal get; set; } = ",";
         public TokenType TokenType { internal get; set; } = TokenType.Url;
@@ -56,6 +59,7 @@ namespace Xamarin.Forms.OAuth
         public string GraphIdProperty { internal get; set; } = "id";
         public string GraphNameProperty { internal get; set; } = "name";
         public IEnumerable<KeyValuePair<string, string>> TokenAuthorizationHeaders { internal get; set; } = new KeyValuePair<string, string>[0];
+        public IEnumerable<KeyValuePair<string, string>> RefreshTokenAuthorizationHeaders { internal get; set; } = new KeyValuePair<string, string>[0];
 
         public string AuthorizeResponseType
         {

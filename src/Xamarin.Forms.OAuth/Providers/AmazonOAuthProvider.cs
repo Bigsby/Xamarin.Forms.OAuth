@@ -14,7 +14,7 @@
                 scopes)
             {
                 AuthorizationType = string.IsNullOrEmpty(clientSecret) ? AuthorizationType.Implicit : AuthorizationType.Code,
-                RefreshesToken = true,
+                RefreshesToken = !string.IsNullOrEmpty(clientSecret),
                 MandatoryScopes = new[] { "profile" },
                 IncludeRedirectUrlInTokenRequest = true,
                 TokenType = string.IsNullOrEmpty(clientSecret) ? TokenType.Url : TokenType.Bearer,

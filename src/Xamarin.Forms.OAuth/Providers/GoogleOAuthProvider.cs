@@ -17,7 +17,7 @@
                 MandatoryScopes = new[] { "profile" },
                 IncludeRedirectUrlInTokenRequest = true,
                 TokenType = string.IsNullOrEmpty(clientSecret) ? TokenType.Url : TokenType.Bearer,
-                RefreshesToken = true,
+                RefreshesToken = !string.IsNullOrEmpty(clientSecret),
                 GraphNameProperty = "displayName"
             })
         { }

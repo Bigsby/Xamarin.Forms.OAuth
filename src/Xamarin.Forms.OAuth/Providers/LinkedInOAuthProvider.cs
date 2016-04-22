@@ -17,10 +17,12 @@ namespace Xamarin.Forms.OAuth.Providers
                 scopes)
             {
                 TokenRequestUrlParameter = "oauth2_access_token",
-                RefreshesToken = true,
+                RefreshesToken = false,
+                TokenType = TokenType.Bearer,
                 ResourceQueryParameters = new[] { new KeyValuePair<string, string>("format", "json") },
                 IncludeStateInAuthorize = true,
-                IncludeRedirectUrlInTokenRequest = true
+                IncludeRedirectUrlInTokenRequest = true,
+                IncludeRedirectUrlInRefreshTokenRequest = true
             })
         { }
 

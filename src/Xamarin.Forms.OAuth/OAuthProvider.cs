@@ -165,6 +165,8 @@ namespace Xamarin.Forms.OAuth
             if (Definition.IncludeStateInAuthorize)
                 queryParameters.Add(new KeyValuePair<string, string>("state", "authorization"));
 
+            queryParameters.AddRange(Definition.AuthorizeCustomQueryParameters);
+
             return BuildUrl(Definition.AuthorizeUrl, queryParameters);
         }
 
@@ -181,7 +183,7 @@ namespace Xamarin.Forms.OAuth
         internal virtual IEnumerable<KeyValuePair<string, string>> ResourceHeaders(OAuthAccessToken token)
         {
             return CustomResourceHeaders(token).Union(
-                token.Type == TokenType.Url ?
+                Definition.TokenType == TokenType.Url ?
                 new KeyValuePair<string, string>[0]
                 :
                 new[] { new KeyValuePair<string, string>("Authorization", $"{Definition.BearerTokenType} {token.Token}") });
@@ -222,8 +224,12 @@ namespace Xamarin.Forms.OAuth
                    "Provider does not support token refresh.");
             
             return await GetToken(Definition.TokenUrl,
-                new KeyValuePair<string,string>[0],
-                BuildRefreshTokenRequestFields(token.RefreshToken ?? token.Token));
+                Definition.RefreshTokenAuthorizationHeaders,
+                BuildRefreshTokenRequestFields(
+                    string.IsNullOrEmpty(token.RefreshToken) ?
+                    token.Token
+                    :
+                    token.RefreshToken));
         }
 
         internal bool RefreshesToken()
@@ -259,7 +265,7 @@ namespace Xamarin.Forms.OAuth
 
         protected virtual IEnumerable<KeyValuePair<string, string>> BuildRefreshTokenRequestFields(string code)
         {
-            return BuildRequestFields(GrantType.RefreshToken, Definition.ExcludeClientIdAndSecretInTokenRefresh, code, false);
+            return BuildRequestFields(GrantType.RefreshToken, Definition.ExcludeClientIdAndSecretInTokenRefresh, code, Definition.IncludeRedirectUrlInRefreshTokenRequest);
         }
 
         protected static IDictionary<string, string> ReadResponseParameter(string url)
@@ -352,7 +358,7 @@ namespace Xamarin.Forms.OAuth
                 if (!Definition.ExcludeClientIdInTokenRequest)
                     fields.Add("client_id", Definition.ClientId);
 
-                if (!string.IsNullOrEmpty(Definition.ClientSecret))
+                if (!string.IsNullOrEmpty(Definition.ClientSecret) && !Definition.ExcludeClientSecretInTokenRequest)
                     fields.Add("client_secret", Definition.ClientSecret);
             }
 

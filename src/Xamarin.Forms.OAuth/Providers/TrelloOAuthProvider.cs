@@ -11,7 +11,7 @@ namespace Xamarin.Forms.OAuth.Providers
         private const string _redirectUrl = "https://trelloResponse.com";
         private string _applicationName;
 
-        public TrelloOAuthProvider(string clientId, string clientSecret, string applicationName, params string[] scopes)
+        internal TrelloOAuthProvider(string clientId, string clientSecret, string applicationName, params string[] scopes)
             : base(new OAuthProviderDefinition(
                 "Trello",
                 "https://trello.com/1/authorize",

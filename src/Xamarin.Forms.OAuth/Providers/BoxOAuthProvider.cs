@@ -13,7 +13,8 @@
                 redirectUrl,
                 scopes)
             {
-                RefreshesToken = true
+                RefreshesToken = true,
+                TokenType = TokenType.Bearer
             })
         { }
     }

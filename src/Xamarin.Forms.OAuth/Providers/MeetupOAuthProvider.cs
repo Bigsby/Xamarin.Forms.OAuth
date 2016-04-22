@@ -15,7 +15,7 @@
             {
                 AuthorizationType = string.IsNullOrEmpty(clientSecret) ? AuthorizationType.Implicit : AuthorizationType.Code,
                 TokenType = string.IsNullOrEmpty(clientSecret) ? TokenType.Url : TokenType.Bearer,
-                RefreshesToken = true,
+                RefreshesToken = !string.IsNullOrEmpty(clientSecret),
                 IncludeRedirectUrlInTokenRequest = true,
                 
             })

@@ -25,7 +25,7 @@ namespace Xamarin.Forms.OAuth.Providers
                 {
                     BuildBasicAuthenticationHeader(clientId, clientSecret)
                 },
-                RefreshesToken = true,
+                RefreshesToken = !string.IsNullOrEmpty(clientSecret),
                 GraphIdProperty = "user_id",
                 ResourceQueryParameters = new []
                 {
