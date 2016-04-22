@@ -60,6 +60,11 @@ namespace Xamarin.Forms.OAuth
             return new GoogleOAuthProvider(clientId, redirectUrl, scopes);
         }
 
+        public static OAuthProvider Google(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
+        {
+            return new GoogleOAuthProvider(clientId, clientSecret, redirectUrl, scopes);
+        }
+
         public static OAuthProvider Instagram(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
         {
             return new InstagramOAuthProvider(clientId, clientSecret, redirectUrl, scopes);
@@ -70,6 +75,11 @@ namespace Xamarin.Forms.OAuth
             return new LinkedInOAuthProvider(clientId, clientSecret, redirectUrl, scopes);
         }
 
+        public static OAuthProvider Meetup(string clientId, string redirectUrl, params string[] scopes)
+        {
+            return new MeetupOAuthProvider(clientId, redirectUrl, scopes);
+        }
+
         public static OAuthProvider Meetup(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
         {
             return new MeetupOAuthProvider(clientId, clientSecret, redirectUrl, scopes);
@@ -78,6 +88,11 @@ namespace Xamarin.Forms.OAuth
         public static OAuthProvider Microsoft(string clientId, string redirectUrl, params string[] scopes)
         {
             return new MicrosoftOAuthProvider(clientId, redirectUrl, scopes);
+        }
+
+        public static OAuthProvider Microsoft(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
+        {
+            return new MicrosoftOAuthProvider(clientId, clientSecret, redirectUrl, scopes);
         }
 
         public static OAuthProvider PayPal(string clientId, string clientSecret, string redirectUrl, params string[] scopes)

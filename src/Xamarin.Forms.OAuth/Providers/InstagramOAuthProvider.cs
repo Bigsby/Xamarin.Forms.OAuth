@@ -4,6 +4,8 @@ namespace Xamarin.Forms.OAuth.Providers
 {
     public sealed class InstagramOAuthProvider : OAuthProvider
     {
+        // Does not support refresh token. Needs re-authentication
+        // https://www.instagram.com/developer/authentication/
         internal InstagramOAuthProvider(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
             : base(new OAuthProviderDefinition(
                 "Instagram",

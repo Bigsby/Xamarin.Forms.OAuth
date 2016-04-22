@@ -2,6 +2,7 @@
 
 namespace Xamarin.Forms.OAuth.Providers
 {
+    // Does not support token refresh
     public sealed class GitterOAuthProvider : OAuthProvider
     {
         internal GitterOAuthProvider(string clientId, string clientSecret, string redirectUrl, params string[] scopes)

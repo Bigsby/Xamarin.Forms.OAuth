@@ -13,9 +13,16 @@
                 redirectUrl,
                 scopes)
             {
-                AuthorizationType = AuthorizationType.Token,
-                IncludeRedirectUrlInTokenRequest = true
+                AuthorizationType = string.IsNullOrEmpty(clientSecret) ? AuthorizationType.Implicit : AuthorizationType.Code,
+                TokenType = string.IsNullOrEmpty(clientSecret) ? TokenType.Url : TokenType.Bearer,
+                RefreshesToken = true,
+                IncludeRedirectUrlInTokenRequest = true,
+                
             })
+        { }
+
+        internal MeetupOAuthProvider(string clientId, string redirectUrl, params string[] scopes)
+            : this(clientId, null, redirectUrl, scopes)
         { }
     }
 }

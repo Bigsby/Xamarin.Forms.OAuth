@@ -38,12 +38,14 @@ namespace Xamarin.Forms.OAuth
 
         
         public AuthorizationType AuthorizationType {internal get; set; } = AuthorizationType.Code;
-        public string RefreshTokenUrl { internal get; set; }
+        public bool RefreshesToken { internal get; set; } = false;
         public bool ExcludeClientIdInTokenRequest { internal get; set; } = false;
+        public bool ExcludeClientIdAndSecretInTokenRefresh { internal get; set; } = false;
         public bool IncludeRedirectUrlInTokenRequest { internal get; set; } = false;
         public bool IncludeStateInAuthorize { internal get; set; } = false;
         public string ScopeSeparator { internal get; set; } = ",";
         public TokenType TokenType { internal get; set; } = TokenType.Url;
+        public string BearerTokenType { internal get; set; } = "Bearer";
         public TokenResponseSerialization TokenResponseSerialization { internal get; set; } = TokenResponseSerialization.JSON;
         //public bool RequiresCode { internal get; set; } = false;
         public string[] MandatoryScopes { internal get; set; } = new string[0];
@@ -78,12 +80,12 @@ namespace Xamarin.Forms.OAuth
     public enum TokenResponseSerialization
     {
         JSON,
-        Forms
+        UrlEncoded
     }
 
     public enum AuthorizationType
     {
-        Token,
+        Implicit,
         Code
     }
 }

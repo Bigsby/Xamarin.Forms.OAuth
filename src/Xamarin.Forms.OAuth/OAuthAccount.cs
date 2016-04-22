@@ -30,7 +30,7 @@ namespace Xamarin.Forms.OAuth
         public async Task<T> PostResource<T>(string resourceUrl, HttpContent content, IEnumerable<KeyValuePair<string, string>> queryParameters = null)
             where T : class
         {
-            return await Provider.PostResource<T>(resourceUrl, content, AccessToken, queryParameters);
+            return await Provider.PostToResource<T>(resourceUrl, content, AccessToken, queryParameters);
         }
 
         public async Task<OAuthResponse> RefreshToken()

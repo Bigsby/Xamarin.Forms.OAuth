@@ -6,8 +6,12 @@ namespace Xamarin.Forms.OAuth.Providers
 {
     public sealed class ReddItOAuthProvider : OAuthProvider
     {
+        //TODO: build User-Agent according to documentation
+        //https://github.com/reddit/reddit/wiki/API
+        private static string _userAgentId = Guid.NewGuid().ToString();
+
         //TODO: add duration parameter in Authorize to get refresh_token
-        internal ReddItOAuthProvider(string clientId, string redirectUrl, params string[] scopes)
+        internal ReddItOAuthProvider(string clientId, string redirectUrl, bool implicitFlow, params string[] scopes)
             : base(new OAuthProviderDefinition(
                 "ReddIt",
                 "https://www.reddit.com/api/v1/authorize",
@@ -18,9 +22,12 @@ namespace Xamarin.Forms.OAuth.Providers
                 redirectUrl,
                 scopes)
             {
+                AuthorizationType = implicitFlow ? AuthorizationType.Implicit : AuthorizationType.Code,
                 MandatoryScopes = new[] { "identity" },
                 IncludeStateInAuthorize = true,
                 IncludeRedirectUrlInTokenRequest = true,
+                RefreshesToken = true,
+                ExcludeClientIdAndSecretInTokenRefresh = true,
                 ExcludeClientIdInTokenRequest = true,
                 TokenType = TokenType.Bearer,
                 TokenAuthorizationHeaders = new[] 
@@ -30,13 +37,16 @@ namespace Xamarin.Forms.OAuth.Providers
             })
         { }
 
-        internal override IEnumerable<KeyValuePair<string, string>> ResourceHeaders(OAuthAccessToken token)
+        //TODO: add duration parameter in Authorize to get refresh_token
+        internal ReddItOAuthProvider(string clientId, string redirectUrl, params string[] scopes)
+            :this(clientId, redirectUrl, false, scopes)
+        { }
+
+        internal override IEnumerable<KeyValuePair<string, string>> CustomResourceHeaders(OAuthAccessToken token)
         {
-            return base.ResourceHeaders(token).Union(new[]
+            return base.CustomResourceHeaders(token).Union(new[]
             {
-                //TODO: build User-Agent according to documentation
-                //https://github.com/reddit/reddit/wiki/API
-                new KeyValuePair<string, string>("User-Agent", Guid.NewGuid().ToString()),
+                new KeyValuePair<string, string>("User-Agent", _userAgentId),
             });
         }
     }

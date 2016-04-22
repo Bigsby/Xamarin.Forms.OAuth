@@ -17,12 +17,14 @@ namespace Xamarin.Forms.OAuth.Providers
                 redirectUrl,
                 scopes)
             {
-                TokenResponseSerialization = TokenResponseSerialization.Forms,
-                TokenAuthorizationHeaders = _headers
+                TokenResponseSerialization = TokenResponseSerialization.UrlEncoded,
+                TokenAuthorizationHeaders = _headers,
+                TokenType = TokenType.Bearer,
+                BearerTokenType = "token"
             })
         { }
 
-        internal override IEnumerable<KeyValuePair<string, string>> ResourceHeaders(OAuthAccessToken token)
+        internal override IEnumerable<KeyValuePair<string, string>> CustomResourceHeaders(OAuthAccessToken token)
         {
             //TODO: Find correct way in documentation and remove this workaround
             return _headers;

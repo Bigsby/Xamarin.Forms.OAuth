@@ -14,7 +14,7 @@
                 redirectUrl,
                 scopes)
             {
-                AuthorizationType = string.IsNullOrEmpty(clientSecret) ? AuthorizationType.Token : AuthorizationType.Code,
+                AuthorizationType = string.IsNullOrEmpty(clientSecret) ? AuthorizationType.Implicit : AuthorizationType.Code,
                 TokenType = string.IsNullOrEmpty(clientSecret) ? TokenType.Url : TokenType.Bearer,
                 IncludeRedirectUrlInTokenRequest = true,
                 GraphIdProperty = "uid",

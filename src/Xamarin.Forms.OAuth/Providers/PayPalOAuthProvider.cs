@@ -9,13 +9,15 @@ namespace Xamarin.Forms.OAuth.Providers
             : base(new OAuthProviderDefinition(
                 "PayPal",
                 "https://www.paypal.com/webapps/auth/protocol/openidconnect/v1/authorize",
-                "https://api.paypal.com/v1/oauth2/token",
+                "https://www.paypal.com/webapps/auth/protocol/openidconnect/v1/tokenservice",
+                //"https://api.paypal.com/v1/oauth2/token",
                 "https://api.paypal.com/v1/identity/openidconnect/userinfo/",
                 clientId,
                 clientSecret,
                 redirectUrl,
                 scopes)
             {
+                AuthorizationType = string.IsNullOrEmpty(clientSecret) ? AuthorizationType.Implicit : AuthorizationType.Code,
                 TokenType = TokenType.Bearer,
                 MandatoryScopes = new[] {"openid", "profile", "email" },
                 ScopeSeparator = "%20",
@@ -23,6 +25,7 @@ namespace Xamarin.Forms.OAuth.Providers
                 {
                     BuildBasicAuthenticationHeader(clientId, clientSecret)
                 },
+                RefreshesToken = true,
                 GraphIdProperty = "user_id",
                 ResourceQueryParameters = new []
                 {
@@ -31,13 +34,26 @@ namespace Xamarin.Forms.OAuth.Providers
             })
         { }
 
+        internal PayPalOAuthProvider(string clientId, string redirectUrl, params string[] scopes)
+            : this(clientId, null, redirectUrl, scopes)
+        { }
+
         protected override IEnumerable<KeyValuePair<string, string>> BuildTokenRequestFields(string code)
         {
             return new Dictionary<string, string>
             {
-                { "grant_type", "client_credentials" },
-                { "assertion", code }
+                { "grant_type", "authorization_code" },
+                { "code", code }
             };
         }
+
+        //protected override IEnumerable<KeyValuePair<string, string>> BuildTokenRequestFields(string code)
+        //{
+        //    return new Dictionary<string, string>
+        //    {
+        //        { "grant_type", "client_credentials" },
+        //        { "assertion", code }
+        //    };
+        //}
     }
 }

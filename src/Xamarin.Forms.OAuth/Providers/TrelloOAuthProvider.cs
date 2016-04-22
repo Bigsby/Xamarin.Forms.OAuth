@@ -5,6 +5,9 @@ namespace Xamarin.Forms.OAuth.Providers
 {
     public sealed class TrelloOAuthProvider : OAuthProvider
     {
+        // Does not support refreshing
+        //TODO: Add expiration from configuration configuration
+        // https://developers.trello.com/authorize
         private const string _redirectUrl = "https://trelloResponse.com";
         private string _applicationName;
 

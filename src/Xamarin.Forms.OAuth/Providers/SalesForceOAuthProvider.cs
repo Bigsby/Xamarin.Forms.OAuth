@@ -15,9 +15,10 @@
                 _redirectUrl,
                 scopes)
             {
-                AuthorizationType = AuthorizationType.Token,
+                AuthorizationType = AuthorizationType.Implicit,
                 MandatoryScopes = new[] { "id", "openid", "refresh_token" },
                 ScopeSeparator = "%20",
+                RefreshesToken = true,
                 TokenRequestUrlParameter = "oauth_token",
                 GraphIdProperty = "user_id"
             })

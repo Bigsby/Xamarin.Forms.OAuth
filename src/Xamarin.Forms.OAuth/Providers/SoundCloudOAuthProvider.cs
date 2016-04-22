@@ -14,6 +14,7 @@
                 scopes)
             {
                 IncludeRedirectUrlInTokenRequest = true,
+                RefreshesToken = true,
                 TokenRequestUrlParameter = "oauth_token",
                 GraphNameProperty = "full_name"
             })

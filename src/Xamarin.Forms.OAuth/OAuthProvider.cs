@@ -111,14 +111,14 @@ namespace Xamarin.Forms.OAuth
             }
         }
 
-        internal virtual async Task<T> PostResource<T>(string resourceUrl, HttpContent content, OAuthAccessToken token, IEnumerable<KeyValuePair<string, string>> queryParameters = null)
+        internal virtual async Task<T> PostToResource<T>(string resourceUrl, HttpContent content, OAuthAccessToken token, IEnumerable<KeyValuePair<string, string>> queryParameters = null)
             where T : class
         {
             var url = BuildResourceTokenUrl(resourceUrl, token, queryParameters);
 
             using (var client = new HttpClient())
             {
-                var graphHeaders = ResourceHeaders(token);
+                var graphHeaders = CustomResourceHeaders(token);
 
                 foreach (var header in graphHeaders)
                     client.DefaultRequestHeaders.Add(header.Key, header.Value);
@@ -135,7 +135,7 @@ namespace Xamarin.Forms.OAuth
             {
                 case TokenResponseSerialization.JSON:
                     return GetOAuthResponseFromJson(response);
-                case TokenResponseSerialization.Forms:
+                case TokenResponseSerialization.UrlEncoded:
                     return ReadOAuthResponseFromUrl("http://abc.com?" + response);
                 default:
                     return OAuthResponse.WithError("TokenResponseError", "Unknow serialization.");
@@ -173,12 +173,18 @@ namespace Xamarin.Forms.OAuth
             return new KeyValuePair<string, string>[0];
         }
 
+        internal virtual IEnumerable<KeyValuePair<string, string>> CustomResourceHeaders(OAuthAccessToken token)
+        {
+            return new KeyValuePair<string, string>[0];
+        }
+
         internal virtual IEnumerable<KeyValuePair<string, string>> ResourceHeaders(OAuthAccessToken token)
         {
-            return token.Type == TokenType.Url ?
+            return CustomResourceHeaders(token).Union(
+                token.Type == TokenType.Url ?
                 new KeyValuePair<string, string>[0]
                 :
-                new[] { new KeyValuePair<string, string>("Authorization", $"Bearer {token.Token}") };
+                new[] { new KeyValuePair<string, string>("Authorization", $"{Definition.BearerTokenType} {token.Token}") });
         }
 
         internal virtual async Task PreAuthenticationProcess() { await Task.FromResult(0); }
@@ -211,18 +217,18 @@ namespace Xamarin.Forms.OAuth
 
         internal async Task<OAuthResponse> RefreshToken(OAuthAccessToken token)
         {
-            if (string.IsNullOrEmpty(Definition.RefreshTokenUrl))
-                return OAuthResponse.WithError("BadImplementation",
-                   "Provider does not have refresh token URL defined.");
+            if (!Definition.RefreshesToken)
+                return OAuthResponse.WithError("NotSupported",
+                   "Provider does not support token refresh.");
             
-            return await GetToken(Definition.RefreshTokenUrl,
+            return await GetToken(Definition.TokenUrl,
                 new KeyValuePair<string,string>[0],
                 BuildRefreshTokenRequestFields(token.RefreshToken ?? token.Token));
         }
 
         internal bool RefreshesToken()
         {
-            return !string.IsNullOrEmpty(Definition.RefreshTokenUrl);
+           return Definition.RefreshesToken;
         }
 
         internal async Task<AccountData> GetAccountData(OAuthAccessToken token)
@@ -248,12 +254,12 @@ namespace Xamarin.Forms.OAuth
 
         protected virtual IEnumerable<KeyValuePair<string, string>> BuildTokenRequestFields(string code)
         {
-            return BuildRequestFields(GrantType.AuthorizationCode, code, Definition.IncludeRedirectUrlInTokenRequest);
+            return BuildRequestFields(GrantType.AuthorizationCode, false, code, Definition.IncludeRedirectUrlInTokenRequest);
         }
 
         protected virtual IEnumerable<KeyValuePair<string, string>> BuildRefreshTokenRequestFields(string code)
         {
-            return BuildRequestFields(GrantType.RefreshToken, code, false);
+            return BuildRequestFields(GrantType.RefreshToken, Definition.ExcludeClientIdAndSecretInTokenRefresh, code, false);
         }
 
         protected static IDictionary<string, string> ReadResponseParameter(string url)
@@ -330,7 +336,7 @@ namespace Xamarin.Forms.OAuth
             }
         }
 
-        private IEnumerable<KeyValuePair<string, string>> BuildRequestFields(GrantType grantType, string code, bool includeRedirectUrl)
+        private IEnumerable<KeyValuePair<string, string>> BuildRequestFields(GrantType grantType, bool excludeClientIdAndSecret, string code, bool includeRedirectUrl)
         {
             var fields = new Dictionary<string, string>
             {
@@ -341,11 +347,14 @@ namespace Xamarin.Forms.OAuth
             if (includeRedirectUrl)
                 fields.Add("redirect_uri", WebUtility.UrlEncode(Definition.RedirectUrl));
 
-            if (!Definition.ExcludeClientIdInTokenRequest)
-                fields.Add("client_id", Definition.ClientId);
+            if (!excludeClientIdAndSecret)
+            {
+                if (!Definition.ExcludeClientIdInTokenRequest)
+                    fields.Add("client_id", Definition.ClientId);
 
-            if (!string.IsNullOrEmpty(Definition.ClientSecret))
-                fields.Add("client_secret", Definition.ClientSecret);
+                if (!string.IsNullOrEmpty(Definition.ClientSecret))
+                    fields.Add("client_secret", Definition.ClientSecret);
+            }
 
             return fields;
         }
