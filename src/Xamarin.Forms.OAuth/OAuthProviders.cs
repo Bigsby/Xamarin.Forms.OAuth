@@ -35,14 +35,19 @@ namespace Xamarin.Forms.OAuth
             return new DropboxOAuthProvider(clientId, clientSecret, redirectUrl, scopes);
         }
 
-        public static OAuthProvider Facebook(string appId, params string[] scopes)
+        public static OAuthProvider Facebook(string clientId, params string[] scopes)
         {
-            return new FacebookOAuthProvider(appId, scopes);
+            return new FacebookOAuthProvider(clientId, scopes);
         }
 
         public static OAuthProvider Foursquare(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
         {
             return new FoursquareOAuthProvider(clientId, clientSecret, redirectUrl, scopes);
+        }
+
+        public static OAuthProvider Foursquare(string clientId, string clientSecret, string redirectUrl, string version, params string[] scopes)
+        {
+            return new FoursquareOAuthProvider(clientId, clientSecret, redirectUrl, version, scopes);
         }
 
         public static OAuthProvider GitHub(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
@@ -95,9 +100,19 @@ namespace Xamarin.Forms.OAuth
             return new MicrosoftOAuthProvider(clientId, clientSecret, redirectUrl, scopes);
         }
 
+        public static OAuthProvider Microsoft(string clientId, string clientSecret, string redirectUrl, bool offlineAccess, params string[] scopes)
+        {
+            return new MicrosoftOAuthProvider(clientId, clientSecret, redirectUrl, offlineAccess, scopes);
+        }
+
         public static OAuthProvider PayPal(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
         {
             return new PayPalOAuthProvider(clientId, clientSecret, redirectUrl, scopes);
+        }
+
+        public static OAuthProvider PayPal(string clientId, string clientSecret, string redirectUrl, bool sandbox, params string[] scopes)
+        {
+            return new PayPalOAuthProvider(clientId, clientSecret, redirectUrl, sandbox, scopes);
         }
 
         public static OAuthProvider ReddIt(string clientId, string clientSecret, string redirectUrl, params string[] scopes)
@@ -125,9 +140,14 @@ namespace Xamarin.Forms.OAuth
             return new SoundCloudOAuthProvider(clientId, clientSecret, redirectUrl, scopes);
         }
 
-        public static OAuthProvider StackExchange(string clientId, string clientSecret, string site, params string[] scopes)
+        public static OAuthProvider StackExchange(string clientId, string clientSecret, string redirectUrl, string key, string site, params string[] scopes)
         {
-            return new StackExchangeOAuthProvider(clientId, clientSecret, site, scopes);
+            return new StackExchangeOAuthProvider(clientId, clientSecret, redirectUrl, key, site, scopes);
+        }
+
+        public static OAuthProvider StackExchange(string clientId, string clientSecret, string key, string site, params string[] scopes)
+        {
+            return new StackExchangeOAuthProvider(clientId, clientSecret, key, site, scopes);
         }
 
         public static OAuthProvider Trello(string clientId, string clientSecret, string applicationName, params string[] scopes)

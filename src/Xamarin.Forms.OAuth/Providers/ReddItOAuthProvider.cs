@@ -11,7 +11,7 @@ namespace Xamarin.Forms.OAuth.Providers
         private static string _userAgentId = Guid.NewGuid().ToString();
 
         //TODO: add duration parameter in Authorize to get refresh_token
-        internal ReddItOAuthProvider(string clientId, string clientSecret, string redirectUrl, bool implicitFlow, params string[] scopes)
+        private ReddItOAuthProvider(string clientId, string clientSecret, string redirectUrl, bool implicitAuthorization, params string[] scopes)
             : base(new OAuthProviderDefinition(
                 "ReddIt",
                 "https://www.reddit.com/api/v1/authorize",
@@ -22,7 +22,7 @@ namespace Xamarin.Forms.OAuth.Providers
                 redirectUrl,
                 scopes)
             {
-                AuthorizationType = implicitFlow ? AuthorizationType.Implicit : AuthorizationType.Code,
+                AuthorizationType = implicitAuthorization ? AuthorizationType.Implicit : AuthorizationType.Explicit,
                 AuthorizeCustomQueryParameters = AuthorizaQueryParameters(clientSecret),
                 MandatoryScopes = new[] { "identity" },
                 IncludeStateInAuthorize = true,
@@ -43,7 +43,7 @@ namespace Xamarin.Forms.OAuth.Providers
         { }
 
         internal ReddItOAuthProvider(string clientId, string redirectUrl, params string[] scopes)
-            :this(clientId, null, redirectUrl, false, scopes)
+            :this(clientId, null, redirectUrl, true, scopes)
         { }
 
         internal override IEnumerable<KeyValuePair<string, string>> CustomResourceHeaders(OAuthAccessToken token)

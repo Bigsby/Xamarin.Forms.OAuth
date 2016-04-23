@@ -37,7 +37,7 @@ namespace Xamarin.Forms.OAuth
         internal string[] Scopes { get; private set; }
 
         
-        public AuthorizationType AuthorizationType {internal get; set; } = AuthorizationType.Code;
+        public AuthorizationType AuthorizationType {internal get; set; } = AuthorizationType.Explicit;
         public IEnumerable<KeyValuePair<string, string>> AuthorizeCustomQueryParameters { internal get; set; } = new KeyValuePair<string, string>[0];
         public bool RefreshesToken { internal get; set; } = false;
         public bool ExcludeClientIdInTokenRequest { internal get; set; } = false;
@@ -50,6 +50,7 @@ namespace Xamarin.Forms.OAuth
         public TokenType TokenType { internal get; set; } = TokenType.Url;
         public string BearerTokenType { internal get; set; } = "Bearer";
         public TokenResponseSerialization TokenResponseSerialization { internal get; set; } = TokenResponseSerialization.JSON;
+        public string ExpiresParameter { internal get; set; } = "expires_in";
         //public bool RequiresCode { internal get; set; } = false;
         public string[] MandatoryScopes { internal get; set; } = new string[0];
         public string TokenResponseUrlParameter { internal get; set; } = "access_token";
@@ -66,7 +67,7 @@ namespace Xamarin.Forms.OAuth
             internal get
             {
                 return string.IsNullOrEmpty(_authorizeResponseType) ?
-                     AuthorizationType == AuthorizationType.Code ? "code" : "token"
+                     AuthorizationType == AuthorizationType.Explicit ? "code" : "token"
                      :
                      _authorizeResponseType;
             }
@@ -90,6 +91,6 @@ namespace Xamarin.Forms.OAuth
     public enum AuthorizationType
     {
         Implicit,
-        Code
+        Explicit
     }
 }

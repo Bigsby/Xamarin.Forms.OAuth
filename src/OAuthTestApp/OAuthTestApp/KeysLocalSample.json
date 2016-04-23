@@ -1,88 +1,162 @@
 ﻿{
-  // Links for the app management for each provider in repository wiki in GitHub
-  // https://github.com/Bigsby/Xamarin.Forms.OAuth/wiki
-  "Amazon": {
-    "ClientId": "clientId",
-    "RedirectUrl": "redirectUrl"
+  "Amazon": { 
+    "clientId": "",
+    "clientSecret": "",
+    "redirectUrl": ""
+  },
+  "Amazon_": {
+    "name": "Amazon Implicit",
+    "clientId": "",
+    "redirectUrl": ""
   },
   "Box": {
-    "ClientId": "clientId",
-    "ClientSecret": "clientSecret",
-    "RedirectUrl": "redirectUrl"
+    "clientId": "",
+    "clientSecret": "",
+    "redirectUrl": ""
   },
   "Dropbox": {
-    "ClientId": "clientId",
-    "RedirectUrl": "redirectUrl"
+    "clientId": "",
+    "clientSecret": "",
+    "redirectUrl": ""
+  },
+  "Dropbox_": {
+    "name": "Dropbox Implicit",
+    "clientId": "",
+    "redirectUrl": ""
   },
   "Facebook": {
-    "ClientId": "clientId"
+    "clientId": ""
   },
   "Foursquare": {
-    "ClientId": "clientId",
-    "ClientSecret": "clientSecret",
-    "RedirectUrl": "redirectUrl"
+    "clientId": "",
+    "clientSecret": "",
+    "redirectUrl": ""
+  },
+  "Foursquare_": {
+    "name": "Foursquare Version",
+    "clientId": "",
+    "clientSecret": "",
+    "version": "",
+    "redirectUrl": ""
   },
   "GitHub": {
-    "ClientId": "clientId",
-    "ClientSecret": "clientSecret",
-    "RedirectUrl": "redirectUrl"
+    "clientId": "",
+    "clientSecret": "",
+    "redirectUrl": ""
   },
   "Gitter": {
-    "ClientId": "clientId",
-    "ClientSecret": "clientSecret",
-    "RedirectUrl": "redirectUrl"
+    "clientId": "",
+    "clientSecret": "",
+    "redirectUrl": ""
   },
   "Google": {
-    "ClientId": "clientId",
-    "RedirectUrl": "redirectUrl"
+    "clientId": "",
+    "clientSecret": "",
+    "redirectUrl": ""
+  },
+  "Google_": {
+    "name": "Google Implicit",
+    "clientId": "",
+    "redirectUrl": ""
   },
   "Instagram": {
-    "ClientId": "clientId",
-    "ClientSecret": "clientSecret",
-    "RedirectUrl": "redirectUrl"
+    "clientId": "",
+    "clientSecret": "",
+    "redirectUrl": ""
   },
   "LinkedIn": {
-    "ClientId": "clientId",
-    "ClientSecret": "clientSecret",
-    "RedirectUrl": "redirectUrl"
+    "clientId": "",
+    "clientSecret": "",
+    "redirectUrl": ""
   },
   "Meetup": {
-    "ClientId": "clientId",
-    "ClientSecret": "clientSecret",
-    "RedirectUrl": "redirectUrl"
+    "clientId": "",
+    "clientSecret": "",
+    "redirectUrl": ""
+  },
+  "Meetup_": {
+    "name": "Meetup Implicit",
+    "clientId": "",
+    "redirectUrl": ""
+  },
+  "Microsoft_": {
+    "clientId": "",
+    "clientSecret": "",
+    "redirectUrl": ""
   },
   "Microsoft": {
-    "ClientId": "clientId",
-    "RedirectUrl": "redirectUrl"
+    "name": "Microsoft Implicit",
+    "clientId": "",
+    "redirectUrl": ""
   },
-  "ReddIt": {
-    "ClientId": "clientId",
-    "RedirectUrl": "redirectUrl"
+  "Microsoft__": {
+    "name": "Microsoft Offline",
+    "clientId": "",
+    "clientSecret": "",
+    "offlineAccess": true,
+    "redirectUrl": ""
+  },
+  "PayPal": {
+    "clientId": "",
+    "clientSecret": "",
+    "redirectUrl": ""
+  },
+  "PayPal_": {
+    "name": "PayPal Sandbox",
+    "clientId": "",
+    "clientSecret": "",
+    "redirectUrl": "",
+    "sandbox": true
+  },
+  "ReddIt": { //Web App
+    "clientId": "",
+    "clientSecret": "",
+    "redirectUrl": ""
+  },
+  "ReddIt_": {
+    "name": "Reddit Implicit", //Installed App
+    "clientId": "",
+    "redirectUrl": ""
+  },
+  "Salesforce": {
+    "clientId": "",
+    "clientSecret": ""
   },
   "Slack": {
-    "ClientId": "clientId",
-    "ClientSecret": "clientSecret",
-    "RedirectUrl": "redirectUrl"
+    "clientId": "",
+    "clientSecret": "",
+    "redirectUrl": ""
+  },
+  "SoundCloud": {
+    "clientId": "",
+    "clientSecret": "",
+    "redirectUrl": ""
   },
   "StackExchange": {
-    "ClientId": "clientId",
-    "ClientSecret": "clientSecret",
-    "RedirectUrl": "stackoverflow" //will be used as site parameter
+    "clientId": "", // Server auth flow
+    "clientSecret": "",
+    "redirectUrl": "",
+    "key": "",
+    "site": ""
+  },
+  "StackExchange_": {
+    "name": "StackExchange Client",
+    "clientId": "", // Client auth flow
+    "clientSecret": "",
+    "key": "",
+    "site": ""
   },
   "Trello": {
-    "ClientId": "clientId",
-    "ClientSecret": "clientSecret",
-    "RedirectUrl": "applicationName" //will be user as application name parameter
+    "clientId": "",
+    "clientSecret": "",
+    "applicationName": ""
   },
   "VisualStudio": {
-    "ClientId": "clientId",
-    "ClientSecret": "clientSecret",
-    "RedirectUrl": "redirectUrl",
-    "Scopes": [
-      // The scopes bellow are purely e.g.
-      // This list has to match precisely the list configured for the app
-      "vso.build_execute",
-      "vso.chat_manage"
+    "clientId": "",
+    "clientSecret": "",
+    "redirectUrl": "",
+    "scopes": [
+      // must match the exact list registered for the application
     ]
   }
 }

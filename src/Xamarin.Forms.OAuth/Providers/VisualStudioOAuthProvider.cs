@@ -21,7 +21,7 @@ namespace Xamarin.Forms.OAuth.Providers
                 AuthorizeResponseType = "Assertion",
                 IncludeStateInAuthorize = true,
                 RefreshesToken = true,
-                ResourceQueryParameters = new[] { new KeyValuePair<string, string>("api-version", "1.0") },
+                //ResourceQueryParameters = new[] { new KeyValuePair<string, string>("api-version", "1.0") },
                 GraphNameProperty = "displayName",
                 TokenType = TokenType.Bearer
             })

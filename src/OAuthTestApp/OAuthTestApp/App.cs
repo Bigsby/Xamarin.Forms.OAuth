@@ -1,8 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using Xamarin.Forms;
 using Xamarin.Forms.OAuth;
 using Xamarin.Forms.OAuth.Views;
@@ -11,12 +7,6 @@ namespace OAuthTestApp
 {
     public class App : Application
     {
-        private const string _facebook = "Facebook";
-        private const string _google = "Google";
-        private const string _microsoft = "Microsoft";
-
-        private static Dictionary<string, AppConfig> _providerConfigs;
-
         public App()
         {
             LoadProviders();
@@ -25,70 +15,11 @@ namespace OAuthTestApp
             MainPage = new StartPage();
         }
 
-        private static void LoadProviders()
+        private async static void LoadProviders()
         {
             var assembly = typeof(App).GetTypeInfo().Assembly;
-            var json = new StreamReader(assembly.GetManifestResourceStream(assembly.GetName().Name + ".KeysLocal.json")).ReadToEnd();
-            _providerConfigs = JsonConvert.DeserializeObject<Dictionary<string, AppConfig>>(json);
-
-            if (null == _providerConfigs || !_providerConfigs.Any())
-                return;
-
-            AddProvidersDynamically();
-        }
-
-        private static TypeInfo _providersType;
-
-        private static void AddProvidersDynamically()
-        {
-            _providersType = typeof(OAuthProviders).GetTypeInfo();
-
-            foreach (var config in _providerConfigs)
-            {
-                var mis = _providersType.GetDeclaredMethods(config.Key);
-
-                var args = new List<object> { config.Value.ClientId };
-
-                if (!string.IsNullOrEmpty(config.Value.ClientSecret))
-                    args.Add(config.Value.ClientSecret);
-
-                if (!string.IsNullOrEmpty(config.Value.TokenSecret))
-                    args.Add(config.Value.TokenSecret);
-
-                if (!string.IsNullOrEmpty(config.Value.RedirectUrl))
-                    args.Add(config.Value.RedirectUrl);
-
-                args.Add(config.Value.Scopes);
-
-                var mi = GetMethodToRun(mis, args);
-
-                var provider = mi?.Invoke(null, args.ToArray()) as OAuthProvider;
-
-                if (null != provider)
-                    OAuthAuthenticator.AddPRovider(provider);
-            }
-        }
-
-        private static MethodInfo GetMethodToRun(IEnumerable<MethodInfo> methods, IEnumerable<object> parameters)
-        {
-            if (!methods.Any())
-                return null;
-
-            if (methods.Count() == 1)
-                return methods.First();
-
-            var parameterCount = parameters.Count();
-
-            foreach (var method in methods)
-                if (method.GetParameters().Count() == parameterCount)
-                    return method;
-
-            return null;
-        }
-        
-        private static MethodInfo GetProviderMethod(string name)
-        {
-            return _providersType.GetDeclaredMethod(name);
+            var stream = assembly.GetManifestResourceStream(assembly.GetName().Name + ".KeysLocal.json");
+            await OAuthAuthenticator.LoadConfiguration(stream);
         }
 
         public static bool HandleBackButton()
@@ -98,24 +29,6 @@ namespace OAuthTestApp
 
             (Current.MainPage as IBackHandlingView).HandleBack();
             return true;
-
         }
-
-        internal static AppConfig GetProviderConfig(string providerName)
-        {
-            return _providerConfigs.ContainsKey(providerName) ?
-                _providerConfigs[providerName]
-                :
-                null;
-        }
-    }
-
-    internal class AppConfig
-    {
-        public string ClientId { get; set; }
-        public string ClientSecret { get; set; }
-        public string RedirectUrl { get; set; }
-        public string TokenSecret { get; set; }
-        public string[] Scopes { get; set; }
     }
 }

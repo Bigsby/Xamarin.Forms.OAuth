@@ -13,7 +13,7 @@
                 redirectUrl,
                 scopes)
             {
-                AuthorizationType = string.IsNullOrEmpty(clientSecret) ? AuthorizationType.Implicit : AuthorizationType.Code,
+                AuthorizationType = string.IsNullOrEmpty(clientSecret) ? AuthorizationType.Implicit : AuthorizationType.Explicit,
                 TokenType = string.IsNullOrEmpty(clientSecret) ? TokenType.Url : TokenType.Bearer,
                 RefreshesToken = !string.IsNullOrEmpty(clientSecret),
                 IncludeRedirectUrlInTokenRequest = true,

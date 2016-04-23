@@ -24,25 +24,28 @@ namespace Xamarin.Forms.OAuth
         private const string _refreshTokenParameter = "refresh_token";
         private const string _expiresInParameter = "expires_in";
         private static Regex _urlParameterExpression = new Regex("(.*)=(.*)");
+        private string _name;
         private readonly OAuthProviderDefinition _definition;
+        private readonly string _originalName;
         #endregion
 
         #region Constructor
         protected OAuthProvider(OAuthProviderDefinition definition)
         {
             _definition = definition;
+            _name = _originalName = definition.Name;
         }
         #endregion
 
         #region Public Members
         public const string NameProperty = "Name";
         public const string LogoProperty = "Logo";
-        public string Name { get { return Definition.Name; } }
+        public string Name { get { return _name; } }
         public ImageSource Logo
         {
             get
             {
-                return Definition.Logo ?? ImageSource.FromResource($"{GetType().Namespace}.Logos.{Name}.png", GetType().GetTypeInfo().Assembly);
+                return Definition.Logo ?? ImageSource.FromResource($"{GetType().Namespace}.Logos.{_originalName}.png", GetType().GetTypeInfo().Assembly);
             }
         }
 
@@ -56,6 +59,11 @@ namespace Xamarin.Forms.OAuth
             }
             public string Id { get; private set; }
             public string Name { get; private set; }
+        }
+
+        public void SetName(string name)
+        {
+            _name = name;
         }
         #endregion
 
@@ -86,8 +94,8 @@ namespace Xamarin.Forms.OAuth
                     TokenType.Bearer
                     :
                     TokenType.Url,
-                    GetExpireDate(parameters.ContainsKey(_expiresInParameter) ?
-                        parameters[_expiresInParameter]
+                    GetExpireDate(parameters.ContainsKey(Definition.ExpiresParameter) ?
+                        parameters[Definition.ExpiresParameter]
                         :
                         string.Empty)
                 ));
@@ -134,7 +142,7 @@ namespace Xamarin.Forms.OAuth
             switch (Definition.TokenResponseSerialization)
             {
                 case TokenResponseSerialization.JSON:
-                    return GetOAuthResponseFromJson(response);
+                    return ReadOAuthResponseFromJson(response);
                 case TokenResponseSerialization.UrlEncoded:
                     return ReadOAuthResponseFromUrl("http://abc.com?" + response);
                 default:
@@ -222,7 +230,7 @@ namespace Xamarin.Forms.OAuth
             if (!Definition.RefreshesToken)
                 return OAuthResponse.WithError("NotSupported",
                    "Provider does not support token refresh.");
-            
+
             return await GetToken(Definition.TokenUrl,
                 Definition.RefreshTokenAuthorizationHeaders,
                 BuildRefreshTokenRequestFields(
@@ -234,7 +242,7 @@ namespace Xamarin.Forms.OAuth
 
         internal bool RefreshesToken()
         {
-           return Definition.RefreshesToken;
+            return Definition.RefreshesToken;
         }
 
         internal async Task<AccountData> GetAccountData(OAuthAccessToken token)
@@ -338,7 +346,7 @@ namespace Xamarin.Forms.OAuth
 
                 var tokenResponseString = await tokenResponse.Content.ReadAsStringAsync();
 
-                return GetOAuthResponseFromJson(tokenResponseString);
+                return GetTokenResponse(tokenResponseString);
             }
         }
 
@@ -371,7 +379,7 @@ namespace Xamarin.Forms.OAuth
             return new StringContent(content, Encoding.UTF8, "application/x-www-form-urlencoded");
         }
 
-        private OAuthResponse GetOAuthResponseFromJson(string json)
+        private OAuthResponse ReadOAuthResponseFromJson(string json)
         {
             var jObject = JObject.Parse(json);
 

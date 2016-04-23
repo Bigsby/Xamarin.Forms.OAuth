@@ -1,6 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms.OAuth.ViewModels;
@@ -14,6 +18,7 @@ namespace Xamarin.Forms.OAuth
         private static readonly ICollection<OAuthProvider> _providers = new List<OAuthProvider>();
         private static readonly ManualResetEvent _awaiter = new ManualResetEvent(false);
         private static string _providerSelectText = "Select Provider";
+        private static TypeInfo _providersType;
         #endregion
 
         #region Public Methods
@@ -28,9 +33,10 @@ namespace Xamarin.Forms.OAuth
             ProviderButton.SetBackgroundButton(color);
         }
 
-        public static void AddPRovider(OAuthProvider provider)
+        public static OAuthProvider AddPRovider(OAuthProvider provider)
         {
             _providers.Add(provider);
+            return provider;
         }
 
         public static async Task<AuthenticatonResult> Authenticate(OAuthProvider provider = null)
@@ -80,6 +86,57 @@ namespace Xamarin.Forms.OAuth
                 }
             });
         }
+
+        public static async Task LoadConfiguration(Stream stream)
+        {
+            _providersType = typeof(OAuthProviders).GetTypeInfo();
+
+            var json = string.Empty;
+            JObject providerConfigs = null;
+
+            try
+            {
+                json = await new StreamReader(stream).ReadToEndAsync();
+                providerConfigs = JObject.Parse(json);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            foreach (var jToken in providerConfigs)
+                try
+                {
+                    var config = jToken.Value as JObject;
+
+                    var mis = _providersType.GetDeclaredMethods(jToken.Key.TrimEnd('_'));
+
+                    if (!mis.Any())
+                        continue;
+
+                    var mi = PickMethodToCall(mis, config);
+
+                    if (null == mi)
+                        continue;
+
+                    var args = BuildParameters(mi, config);
+                    var provider = mi?.Invoke(null, args) as OAuthProvider;
+
+                    var nameOverride = config.GetStringValue("name");
+
+                    if (null != provider)
+                    {
+                        if (!string.IsNullOrEmpty(nameOverride))
+                            provider.SetName(nameOverride);
+
+                        AddPRovider(provider);
+                    }
+                }
+                catch
+                {
+                }
+        }
+
         #endregion
 
         #region Internal Members
@@ -87,6 +144,59 @@ namespace Xamarin.Forms.OAuth
         #endregion
 
         #region Private Methods
+
+        private static object[] BuildParameters(MethodInfo mi, JObject configs)
+        {
+            var parameters = mi.GetParameters();
+            var result = new object[parameters.Length];
+
+            for (int paramterIndex = 0; paramterIndex < parameters.Length; paramterIndex++)
+            {
+                var parameter = parameters[paramterIndex];
+
+                var jValue = configs[parameter.Name];
+                var value = null == jValue ? null : jValue.ToObject(parameter.ParameterType);
+
+                result[paramterIndex] = value;
+            }
+
+            return result.ToArray();
+        }
+
+        private static MethodInfo PickMethodToCall(IEnumerable<MethodInfo> methods, JObject parameters)
+        {
+            if (methods.Count() == 1)
+                return methods.First();
+
+            var hasName = !string.IsNullOrEmpty(parameters.GetStringValue("name"));
+            var hasScopes = !string.IsNullOrEmpty(parameters.GetStringValue("scopes"));
+
+            var expectedParameterCount = parameters.Count
+                + (hasName ? -1 : 0)
+                + (hasScopes ? 0 : 1);
+
+            var mi = methods.First(m => m.GetParameters().Count() == expectedParameterCount);
+
+            return mi;
+        }
+
+        private static MethodInfo GetMethodToRun(IEnumerable<MethodInfo> methods, IDictionary<string, object> parameters)
+        {
+            if (!methods.Any())
+                return null;
+
+            if (methods.Count() == 1)
+                return methods.First();
+
+            var parameterCount = parameters.Count();
+
+            foreach (var method in methods)
+                if (method.GetParameters().Count() == parameterCount)
+                    return method;
+
+            return null;
+        }
+
         private static Task<OAuthProvider> SelectProviderFromList()
         {
             _awaiter.Reset();
