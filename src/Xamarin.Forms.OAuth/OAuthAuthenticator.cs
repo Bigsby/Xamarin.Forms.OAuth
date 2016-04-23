@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,7 +29,12 @@ namespace Xamarin.Forms.OAuth
 
         public static void SetProviderButtonBackground(Color color)
         {
-            ProviderButton.SetBackgroundButton(color);
+            ProviderButton.SetBackground(color);
+        }
+
+        public static void SetProviderButtonTextColor(Color color)
+        {
+            ProviderButton.SetTextColor(color);
         }
 
         public static OAuthProvider AddPRovider(OAuthProvider provider)

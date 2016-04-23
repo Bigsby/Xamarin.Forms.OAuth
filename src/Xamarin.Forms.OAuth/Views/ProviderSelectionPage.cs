@@ -84,7 +84,7 @@ namespace Xamarin.Forms.OAuth.Views
         private readonly Image _image;
         private const double _imageMargin = 2;
         private static Color _background = Color.FromHex("CCCCCC");
-
+        private static Color _textColor = Color.FromHex("000000");
         public ProviderButton()
         {
             BackgroundColor = _background;
@@ -93,9 +93,10 @@ namespace Xamarin.Forms.OAuth.Views
             {
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.Start,
+                TextColor = _textColor,
                 InputTransparent = true
             };
-            var fontSize = Device.GetNamedSize(NamedSize.Large, _text);
+            var fontSize = Device.GetNamedSize(NamedSize.Medium, _text);
             _text.FontSize = fontSize;
             var imageSize = (fontSize * 2) - _imageMargin;
 
@@ -113,7 +114,7 @@ namespace Xamarin.Forms.OAuth.Views
             {
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.Center,
-                Spacing = fontSize * 2,
+                Spacing = fontSize,
                 Orientation = StackOrientation.Horizontal
             };
 
@@ -141,9 +142,14 @@ namespace Xamarin.Forms.OAuth.Views
 
         public ICommand Command { get; set; }
 
-        internal static void SetBackgroundButton(Color color)
+        internal static void SetBackground(Color color)
         {
             _background = color;
+        }
+
+        internal static void SetTextColor(Color color)
+        {
+            _textColor = color;
         }
 
         protected override void OnBindingContextChanged()
