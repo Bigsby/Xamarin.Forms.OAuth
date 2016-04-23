@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Xamarin.Forms.OAuth</id>
-    <version>1.1.2</version>
+    <version>1.2.0</version>
     <title>Xamarin Forms OAuth</title>
     <authors>Bigsby</authors>
     <owners>Bigsby</owners>
@@ -11,7 +11,7 @@
     <iconUrl>http://xamarin.com/content/images/nuget/xamarin.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Library to authenticate Xamarin Forms apps against OAuth providers</description>
-    <releaseNotes>Implemented several OAuth providers.</releaseNotes>
+    <releaseNotes>Implemented refreshing tokens.</releaseNotes>
     <copyright>Bigsby © Copyright 2016</copyright>
     <tags>Xamarin Xamarin.Forms OAuth Amazon Box Dropbox Facebook Foursquare GitHub Gitter Google Instagram LinkedIn Meetup Microsoft Microsoft.Live PayPal Reddit Salesforce Slack SoundCloud StackExchange StackOverflow Trello Visual Studio VisualStudio Online</tags>
   </metadata>
