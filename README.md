@@ -112,6 +112,26 @@ if (authenticationResult.Account.RefreshesToken
   // 
 ```
 
+# Customization
+A set of customizations are provided. Here is their usage.
+
+## Select Provider Text
+```cs
+OAuthAuthenticator.SetProviderSelectText("Pick one:"));
+```
+
+## Back Button Text
+```cs
+OAuthAuthenticator.SetBackButtonText("Go Back!"));
+```
+
+## Provider's Button Styling
+```cs
+OAuthAuthenticator.SetProviderButtonBackground(Color.Red));
+OAuthAuthenticator.SetProviderButtonTextColor(Color.FromHex("FFFF00")));
+OAuthAuthenticator.SetProviderButtonFontSize(38));
+```
+
 # Screenshot
 ![alt text](Screenshots/W10MobileScreenshot.png "Windows 10 Mobile")
 
