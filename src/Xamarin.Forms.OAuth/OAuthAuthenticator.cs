@@ -37,6 +37,11 @@ namespace Xamarin.Forms.OAuth
             ProviderButton.SetTextColor(color);
         }
 
+        public static void SetProviderButtonFontSize(double size)
+        {
+            ProviderButton.SetFontSize(size);
+        }
+
         public static OAuthProvider AddPRovider(OAuthProvider provider)
         {
             _providers.Add(provider);

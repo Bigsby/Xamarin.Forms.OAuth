@@ -85,6 +85,8 @@ namespace Xamarin.Forms.OAuth.Views
         private const double _imageMargin = 2;
         private static Color _background = Color.FromHex("CCCCCC");
         private static Color _textColor = Color.FromHex("000000");
+        private static double _fontSize = Device.GetNamedSize(NamedSize.Medium, new Label());
+
         public ProviderButton()
         {
             BackgroundColor = _background;
@@ -96,9 +98,9 @@ namespace Xamarin.Forms.OAuth.Views
                 TextColor = _textColor,
                 InputTransparent = true
             };
-            var fontSize = Device.GetNamedSize(NamedSize.Medium, _text);
-            _text.FontSize = fontSize;
-            var imageSize = (fontSize * 2) - _imageMargin;
+            //var fontSize = Device.GetNamedSize(NamedSize.Medium, _text);
+            _text.FontSize = _fontSize;
+            var imageSize = (_fontSize * 2) - _imageMargin;
 
             _image = new Image
             {
@@ -114,7 +116,7 @@ namespace Xamarin.Forms.OAuth.Views
             {
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.Center,
-                Spacing = fontSize,
+                Spacing = _fontSize,
                 Orientation = StackOrientation.Horizontal
             };
 
@@ -150,6 +152,11 @@ namespace Xamarin.Forms.OAuth.Views
         internal static void SetTextColor(Color color)
         {
             _textColor = color;
+        }
+
+        internal static void SetFontSize(double size)
+        {
+            _fontSize = size;
         }
 
         protected override void OnBindingContextChanged()
