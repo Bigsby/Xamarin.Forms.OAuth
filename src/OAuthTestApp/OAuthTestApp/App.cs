@@ -13,6 +13,23 @@ namespace OAuthTestApp
 
             // The root page of your application
             MainPage = new StartPage();
+            Resources = new ResourceDictionary
+            {
+                new Style(typeof(ContentPage))
+                {
+                    Setters =
+                    {
+                        new Setter
+                        {
+                            Property = ContentPage.PaddingProperty,
+                            Value = Device.OnPlatform(
+                                new Thickness(0, 20, 0, 0),
+                                new Thickness(0, 5, 0, 0),
+                                new Thickness(0, 10, 0, 0))
+                        }
+                    }
+                }
+            };
         }
 
         private async static void LoadProviders()
