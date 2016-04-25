@@ -16,15 +16,18 @@ namespace Xamarin.Forms.OAuth
         #region Private Fields
         private static readonly ICollection<OAuthProvider> _providers = new List<OAuthProvider>();
         private static readonly ManualResetEvent _awaiter = new ManualResetEvent(false);
-        private static string _providerSelectText = "Select Provider";
         private static TypeInfo _providersType;
         #endregion
 
         #region Public Methods
         public static void SetProviderSelectText(string text)
         {
-            if (!string.IsNullOrEmpty(text))
-                _providerSelectText = text;
+            ProviderSelectText = text;
+        }
+
+        public static void SetBackButtonText(string text)
+        {
+            BackButtonText = text;
         }
 
         public static void SetProviderButtonBackground(Color color)
@@ -149,7 +152,8 @@ namespace Xamarin.Forms.OAuth
         #endregion
 
         #region Internal Members
-        internal static string ProviderSelectText { get { return _providerSelectText; } }
+        internal static string ProviderSelectText { get; private set; } = "Select Provider";
+        internal static string BackButtonText { get; private set; } = "Back";
         #endregion
 
         #region Private Methods

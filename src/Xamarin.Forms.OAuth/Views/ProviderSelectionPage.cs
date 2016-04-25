@@ -23,7 +23,7 @@ namespace Xamarin.Forms.OAuth.Views
 
             grid.Children.Add(new Button
             {
-                Text = "Back",
+                Text = OAuthAuthenticator.BackButtonText,
                 Command = viewModel.Cancel
             });
 
