@@ -132,8 +132,11 @@ OAuthAuthenticator.SetProviderButtonTextColor(Color.FromHex("FFFF00")));
 OAuthAuthenticator.SetProviderButtonFontSize(38));
 ```
 
-# Screenshot
-![alt text](Screenshots/W10MobileScreenshot.png "Windows 10 Mobile")
+# Screenshots
+![Android](Screenshots/XFOAuth.Android.png "Andoird")
+![iOS](Screenshots/XFOAuth.iOS.png "iOS")
+![Windows 10 Mobile](Screenshots/XFOAuth.Android.png "Windows 10 Mobile")
+!["Windows 10"](Screenshots/XFOAuth.Android.png "Windows 10")
 
 # Supported Providers
 
