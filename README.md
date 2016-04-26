@@ -135,8 +135,8 @@ OAuthAuthenticator.SetProviderButtonFontSize(38));
 # Screenshots
 ![Android](Screenshots/XFOAuth.Android.png "Andoird")
 ![iOS](Screenshots/XFOAuth.iOS.png "iOS")
-![Windows 10 Mobile](Screenshots/XFOAuth.Android.png "Windows 10 Mobile")
-!["Windows 10"](Screenshots/XFOAuth.Android.png "Windows 10")
+![Windows 10 Mobile](Screenshots/XFOAuth.WinPhone.png "Windows 10 Mobile")
+!["Windows 10"](Screenshots/XFOAuth.Win.png "Windows 10")
 
 # Supported Providers
 
