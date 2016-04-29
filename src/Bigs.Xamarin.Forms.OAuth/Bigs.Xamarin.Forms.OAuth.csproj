@@ -1,0 +1,264 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3F44652D-50EB-4214-BC90-297BCA005142}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Bigs.Xamarin.Forms.OAuth</RootNamespace>
+    <AssemblyName>Bigs.Xamarin.Forms.OAuth</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\Bigs.OAuth.Core\AuthenticationResult.cs">
+      <Link>AuthenticationResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\Extensions.cs">
+      <Link>Extensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\OAuthAccessToken.cs">
+      <Link>OAuthAccessToken.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\OAuthAccount.cs">
+      <Link>OAuthAccount.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\OAuthAuthenticator.cs">
+      <Link>OAuthAuthenticator.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\OAuthProvider.cs">
+      <Link>OAuthProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\OAuthProviderDefinition.cs">
+      <Link>OAuthProviderDefinition.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\OAuthProviders.cs">
+      <Link>OAuthProviders.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\OAuthResponse.cs">
+      <Link>OAuthResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\Providers\AmazonOAuthProvider.cs">
+      <Link>Providers\AmazonOAuthProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\Providers\BoxOAuthProvider.cs">
+      <Link>Providers\BoxOAuthProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\Providers\CustomOAuthProvider.cs">
+      <Link>Providers\CustomOAuthProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\Providers\DropboxOAuthProvider.cs">
+      <Link>Providers\DropboxOAuthProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\Providers\FacebookOAuthProvider.cs">
+      <Link>Providers\FacebookOAuthProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\Providers\FoursquareOAuthProvider.cs">
+      <Link>Providers\FoursquareOAuthProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\Providers\GitHubOAuthProvider.cs">
+      <Link>Providers\GitHubOAuthProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\Providers\GitterOAuthProvider.cs">
+      <Link>Providers\GitterOAuthProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\Providers\GoogleOAuthProvider.cs">
+      <Link>Providers\GoogleOAuthProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\Providers\InstagramOAuthProvider.cs">
+      <Link>Providers\InstagramOAuthProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\Providers\LinkedInOAuthProvider.cs">
+      <Link>Providers\LinkedInOAuthProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\Providers\MeetupOAuthProvider.cs">
+      <Link>Providers\MeetupOAuthProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\Providers\MicrosoftOAuthProvider.cs">
+      <Link>Providers\MicrosoftOAuthProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\Providers\PayPalOAuthProvider.cs">
+      <Link>Providers\PayPalOAuthProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\Providers\ReddItOAuthProvider.cs">
+      <Link>Providers\ReddItOAuthProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\Providers\SlackOAuthProvider.cs">
+      <Link>Providers\SlackOAuthProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\Providers\SoundCloudOAuthProvider.cs">
+      <Link>Providers\SoundCloudOAuthProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\Providers\StackExchangeOAuthProvider.cs">
+      <Link>Providers\StackExchangeOAuthProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\Providers\TrelloOAuthProvider.cs">
+      <Link>Providers\TrelloOAuthProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\Providers\VisualStudioOAuthProvider.cs">
+      <Link>Providers\VisualStudioOAuthProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\ViewModels\BaseViewModel.cs">
+      <Link>ViewModels\BaseViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\Bigs.OAuth.Core\ViewModels\ProviderSelectionViewModel.cs">
+      <Link>ViewModels\ProviderSelectionViewModel.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\BaseView.cs" />
+    <Compile Include="Views\ProviderSelectionPage.cs" />
+    <Compile Include="Views\WebOAuthPage.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Bigs.OAuth.Core\Providers\Logos\Amazon.png">
+      <Link>Providers\Logos\Amazon.png</Link>
+    </Content>
+    <Content Include="..\Bigs.OAuth.Core\Providers\Logos\Box.png">
+      <Link>Providers\Logos\Box.png</Link>
+    </Content>
+    <Content Include="..\Bigs.OAuth.Core\Providers\Logos\Dropbox.png">
+      <Link>Providers\Logos\Dropbox.png</Link>
+    </Content>
+    <Content Include="..\Bigs.OAuth.Core\Providers\Logos\Facebook.png">
+      <Link>Providers\Logos\Facebook.png</Link>
+    </Content>
+    <Content Include="..\Bigs.OAuth.Core\Providers\Logos\Foursquare.png">
+      <Link>Providers\Logos\Foursquare.png</Link>
+    </Content>
+    <Content Include="..\Bigs.OAuth.Core\Providers\Logos\GitHub.png">
+      <Link>Providers\Logos\GitHub.png</Link>
+    </Content>
+    <Content Include="..\Bigs.OAuth.Core\Providers\Logos\Gitter.png">
+      <Link>Providers\Logos\Gitter.png</Link>
+    </Content>
+    <Content Include="..\Bigs.OAuth.Core\Providers\Logos\Google.png">
+      <Link>Providers\Logos\Google.png</Link>
+    </Content>
+    <Content Include="..\Bigs.OAuth.Core\Providers\Logos\Instagram.png">
+      <Link>Providers\Logos\Instagram.png</Link>
+    </Content>
+    <Content Include="..\Bigs.OAuth.Core\Providers\Logos\LinkedIn.png">
+      <Link>Providers\Logos\LinkedIn.png</Link>
+    </Content>
+    <Content Include="..\Bigs.OAuth.Core\Providers\Logos\Meetup.png">
+      <Link>Providers\Logos\Meetup.png</Link>
+    </Content>
+    <Content Include="..\Bigs.OAuth.Core\Providers\Logos\Microsoft.png">
+      <Link>Providers\Logos\Microsoft.png</Link>
+    </Content>
+    <Content Include="..\Bigs.OAuth.Core\Providers\Logos\Office.png">
+      <Link>Providers\Logos\Office.png</Link>
+    </Content>
+    <Content Include="..\Bigs.OAuth.Core\Providers\Logos\PayPal.png">
+      <Link>Providers\Logos\PayPal.png</Link>
+    </Content>
+    <Content Include="..\Bigs.OAuth.Core\Providers\Logos\ReddIt.png">
+      <Link>Providers\Logos\ReddIt.png</Link>
+    </Content>
+    <Content Include="..\Bigs.OAuth.Core\Providers\Logos\Salesforce.png">
+      <Link>Providers\Logos\Salesforce.png</Link>
+    </Content>
+    <Content Include="..\Bigs.OAuth.Core\Providers\Logos\SkypeBusiness.png">
+      <Link>Providers\Logos\SkypeBusiness.png</Link>
+    </Content>
+    <Content Include="..\Bigs.OAuth.Core\Providers\Logos\Slack.png">
+      <Link>Providers\Logos\Slack.png</Link>
+    </Content>
+    <Content Include="..\Bigs.OAuth.Core\Providers\Logos\SoundCloud.png">
+      <Link>Providers\Logos\SoundCloud.png</Link>
+    </Content>
+    <Content Include="..\Bigs.OAuth.Core\Providers\Logos\StackExchange.png">
+      <Link>Providers\Logos\StackExchange.png</Link>
+    </Content>
+    <Content Include="..\Bigs.OAuth.Core\Providers\Logos\Trello.png">
+      <Link>Providers\Logos\Trello.png</Link>
+    </Content>
+    <Content Include="..\Bigs.OAuth.Core\Providers\Logos\Twitter.png">
+      <Link>Providers\Logos\Twitter.png</Link>
+    </Content>
+    <Content Include="..\Bigs.OAuth.Core\Providers\Logos\VisualStudio.png">
+      <Link>Providers\Logos\VisualStudio.png</Link>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Extensions, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xamarin.Forms.2.1.0.6529\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xamarin.Forms.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xamarin.Forms.2.1.0.6529\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Platform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xamarin.Forms.Xaml, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xamarin.Forms.2.1.0.6529\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Xaml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Zlib.Portable, Version=1.11.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Zlib.Portable.1.11.0\lib\portable-net4+sl5+wp8+win8+wpa81+MonoTouch+MonoAndroid\Zlib.Portable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <Import Project="..\packages\Xamarin.Forms.2.1.0.6529\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.1.0.6529\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Xamarin.Forms.2.1.0.6529\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Xamarin.Forms.2.1.0.6529\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets'))" />
+  </Target>
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
