@@ -53,7 +53,7 @@ if (authenticationResult)
 }
 else
 {
-  var errorMessage = authenticationResult.ErrorMessage;
+  var errorDescription = authenticationResult.ErrorDescription;
   // ...
 }
 ```
@@ -74,7 +74,7 @@ else
 }
 ```
 
-## 4. Resouce Access
+## 4. Resource Access
 The account in the result can be used to access the provider's result taking care of all the OAuth parameters injection (Post is also available):
 ```cs
 // GET
